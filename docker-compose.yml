@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_bem_digital
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bem_digital
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bem_digital_net
+
+volumes:
+  postgres_data:
+
+networks:
+  bem_digital_net:
