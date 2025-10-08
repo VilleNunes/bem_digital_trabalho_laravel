@@ -4,8 +4,10 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,19 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'is_active',
+        'cpf',
+        'phone',
+        'adress_city',
+        'adress_state',
+        'adress_zip',
+        'address_road',
+        'address_neighborhood',
+        'address_complement',
+        'address_number',
+        'rule_id',
+        'institution_id',
     ];
 
     /**
@@ -44,5 +59,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function scopeUsersUnit( $query){
+        return $query->where('institution_id',Auth::user()->institution_id);
     }
 }
