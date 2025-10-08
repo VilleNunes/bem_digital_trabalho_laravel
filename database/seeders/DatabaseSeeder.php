@@ -2,9 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Institution;
+use App\Models\Module;
+use App\Models\Rule;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,9 +19,37 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        Institution::create([
+            'fantasy_name' => 'Instituto Esperança',
+            'cnpj' => '12.345.678/0001-90',
+            'phone' => '(11) 98765-4321',
+            'email' => 'contato@institutoesperanca.org',
+            'is_active' => true,
+            'adress_city' => 'São Paulo',
+            'adress_state' => 'SP',
+            'adress_zip' => '01234-567',
+        ]);
+
+        Rule::create(['name'=>'admin']);
+        Rule::create(['name'=>'donor']);
+        Rule::create(['name'=>'user']);
+
+        Module::create(['title'=>'Usuarios']);
+        Module::create(['title'=>'Doacoes']);
+        Module::create(['title'=>'Estoque']);
+
+        $rule = Rule::query()->where('name','admin')->first();
+        $instituion = Institution::query()->first();
+
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'rule_id'=>$rule->id,
+            'institution_id'=>$instituion->id
+
         ]);
+
+       
+        
     }
 }
