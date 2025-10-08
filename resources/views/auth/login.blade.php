@@ -68,17 +68,17 @@
             </div>
         </div>
 
-        <!--  Fundo Escuro qq -->
+        <!--  3/4 -->
         <div class="w-1/2 h-full bg-[#0e1523] flex flex-col justify-center items-center text-white px-10 border-2 border-orange-500">
             <h2 class="text-3xl font-bold mb-2 text-center">Espaço do(a)<br>Doador(a)</h2>
             <p class="text-center text-gray-300 mb-6">
                 Para uma melhor experiência, acesse seu painel de controle de um computador.
             </p>
-            <img src="{{ asset('public/icone-planta.png') }}" alt="Ícone" class="h-20">
+            <img src="{{ asset('icone-planta.png') }}" alt="Ícone" class="h-20">
         </div>
 
     </div>
 </div>
 
 @endsection
-```
+
