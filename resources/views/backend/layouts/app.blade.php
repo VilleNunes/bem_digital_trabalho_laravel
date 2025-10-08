@@ -15,10 +15,11 @@
     <div class="flex-1 flex flex-col">
         @include('backend.partials.topbar')
         <!-- Conteúdo -->
-        <main class="p-6 space-y-6">
+        <main class="p-6 space-y-6 text-gray-600">
             @yield('content')
         </main>
     </div>
+    @stack('scripts')
 </body>
 
 </html>
