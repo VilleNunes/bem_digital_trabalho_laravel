@@ -1,6 +1,19 @@
 @extends('backend.layouts.app')
 
 @section('content')
+
+<h1 class="text-2xl font-bold mb-2">Você está aqui</h1>
+
+<nav class="text-sm text-gray-500" aria-label="Breadcrumb">
+  <ol class="list-reset flex">
+    <li>
+      <a href="{{ route('users.create') }}" class="text-blue-600 hover:underline">Usuários</a>
+      <span class="mx-2">/</span>
+    </li>
+    <li class="text-gray-700 font-semibold">Criar Usuários</li>
+  </ol>
+</nav>
+
 <x-card class="space-y-6">
 
     <!-- Nome e Telefone -->
@@ -102,11 +115,9 @@
         <x-button color='green'>
             Cadastrar
         </x-button>
-       
     </div>
 
 </x-card>
-
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -118,13 +129,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!cepInput) return;
 
+    let alertShown = false;
+
     cepInput.addEventListener('input', function() {
         this.value = this.value.replace(/\D/g, '').slice(0, 8);
-
         if (this.value.length === 8) {
             fetchCEP(this.value);
         } else {
             clearAddressFields();
+            alertShown = false; // reset para novo CEP
         }
     });
 
@@ -139,7 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.erro) {
-                alert('CEP não encontrado');
+                if (!alertShown) alert('CEP não encontrado');
+                alertShown = true;
                 clearAddressFields();
                 return;
             }
@@ -148,9 +162,11 @@ document.addEventListener('DOMContentLoaded', function() {
             cityInput.value = data.localidade;
             neighborhoodInput.value = data.bairro;
             roadInput.value = data.logradouro;
+            alertShown = false; // CEP válido, permite alert novo no próximo erro
 
-        } catch (error) {
-            alert('Erro ao buscar o CEP');
+        } catch {
+            if (!alertShown) alert('Erro ao buscar o CEP');
+            alertShown = true;
             clearAddressFields();
         }
     }
@@ -164,5 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
+
 
 @endsection
