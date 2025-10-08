@@ -109,7 +109,7 @@
     </div>
 
     <div class="flex justify-end gap-3">
-         <x-button-link>
+         <x-button-link :href="route('users.index')">
             Cancelar
         </x-button-link>
         <x-button color='green'>
