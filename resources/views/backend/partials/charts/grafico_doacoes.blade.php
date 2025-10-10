@@ -1,38 +1,50 @@
-<div class="bg-white rounded-2xl p-6 shadow-sm">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">Gráfico de número de doações (período)</h3>
-    <canvas id="graficoDoacoes"></canvas>
-</div>
+<canvas id="graficoDoacoes" class="w-full h-64 md:h-80"></canvas>
+
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const ctx = document.getElementById('graficoDoacoes');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-            datasets: [{
-                label: 'Doações',
-                data: [120, 150, 90, 180, 220, 260],
-                backgroundColor: 'rgba(79, 70, 229, 0.7)',
-                borderRadius: 8,
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+    document.addEventListener("DOMContentLoaded", () => {
+        const canvas = document.getElementById('graficoDoacoes');
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                datasets: [{
+                    label: 'Doações',
+                    data: [120, 150, 90, 180, 220, 260],
+                    backgroundColor: '#E2725B',
+                    borderRadius: 8,
+                }]
             },
-            plugins: {
-                legend: {
-                    display: false
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#F8FAFC',
+                            ticks: {
+                                color: '#2E7D32'
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#2E7D32'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 }
             }
-        }
+        });
     });
-});
 </script>
 @endpush
