@@ -5,13 +5,13 @@
 
 @push('scripts')
 <script>
-let count = 0;
-const contador = document.getElementById('contadorVisitantes');
-setInterval(() => {
-    if (count < 237) { // valor estático simulado
-        count += 1;
-        contador.textContent = count;
-    }
-}, 15);
+    let count = 0;
+    const contador = document.getElementById('contadorVisitantes');
+    setInterval(() => {
+        if (count < 237) { // valor estático simulado
+            count += 1;
+            contador.textContent = count;
+        }
+    }, 15);
 </script>
 @endpush
