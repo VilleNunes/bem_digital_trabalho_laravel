@@ -14,10 +14,20 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                salmao: {
+                    dark: '#E2725B', // salmão escuro
+                },
+                gelo: '#F8FAFC',   // branco gelo
+                verde: {
+                    DEFAULT: '#2E7D32', // verde principal
+                    claro: '#4CAF50',   // verde claro
+                },
+            },
         },
     },
     plugins: [
         forms,
-        daisyui 
+        daisyui
     ],
 };

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>Document</title>
+    <title>Dashboard</title>
 </head>
 
 <body class="flex min-h-screen bg-gray-100">
@@ -15,10 +15,15 @@
     <div class="flex-1 flex flex-col">
         @include('backend.partials.topbar')
         <!-- Conteúdo -->
-        <main class="p-6 space-y-6 text-gray-600">
-            @yield('content')
+        <main class="p-6 space-y-6">
+            <div class="max-w-7xl mx-auto w-full">
+                @yield('content')
+            </div>
         </main>
     </div>
+
+    <!-- Load Chart.js once for the app -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @stack('scripts')
 </body>
 
