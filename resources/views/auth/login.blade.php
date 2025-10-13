@@ -75,6 +75,7 @@
                 Para uma melhor experiência, acesse seu painel de controle de um computador.
             </p>
             <img src="{{ asset('icone-planta.png') }}" alt="Ícone" class="h-20">
+            
         </div>
 
     </div>
