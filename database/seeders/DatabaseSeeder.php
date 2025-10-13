@@ -25,9 +25,6 @@ class DatabaseSeeder extends Seeder
             'phone' => '(11) 98765-4321',
             'email' => 'contato@institutoesperanca.org',
             'is_active' => true,
-            'adress_city' => 'São Paulo',
-            'adress_state' => 'SP',
-            'adress_zip' => '01234-567',
         ]);
 
         Rule::create(['name'=>'admin']);

@@ -9,14 +9,14 @@
     <title>Dashboard</title>
 </head>
 
-<body class="flex min-h-screen bg-gray-100">
+<body class="flex min-h-screen bg-gray-100 text-gray-800">
     @include('backend.partials.navbar')
     <!-- Conteúdo principal -->
     <div class="flex-1 flex flex-col">
         @include('backend.partials.topbar')
         <!-- Conteúdo -->
-        <main class="p-6 space-y-6">
-            <div class="max-w-7xl mx-auto w-full">
+        <main class="py-6 px-2 space-y-6">
+            <div class="px-5 mx-auto w-full">
                 @yield('content')
             </div>
         </main>
