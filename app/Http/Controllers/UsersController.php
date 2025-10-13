@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
+use App\Models\Address;
 use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,9 +32,30 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        dd(request());
+  
+        $data = $request->validated();
+
+        if(isset($data['address'])){
+            $address = $data['address'];
+            unset($data['address']);
+        }
+
+        $addresModel = Address::create($address ?? []);
+        $data['address_id'] = $addresModel->id;
+        $data['password'] = bcrypt($data['password']);
+        $data['institution_id'] = auth()->user()->institution_id;
+        
+        if(isset($data['modules'])){
+            $modules = $data['modules'];
+            unset($data['modules']);
+        }
+        
+    
+        $user = User::create($data);
+        $user->modules()->sync($modules ?? []);
+        return redirect()->route('users.index')->with('success','Usuário criado com sucesso!');
     }
 
     /**

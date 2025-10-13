@@ -20,7 +20,11 @@ Route::middleware('auth')->group(function () {
     // Routes users
     Route::get('/users',[UsersController::class,'index'])->name('users.index');
     Route::get('/users/create',[UsersController::class,'create'])->name('users.create');
+    Route::get('/users/{id}/show',[UsersController::class,'show'])->name('users.show');
     Route::post('/users/create',[UsersController::class,'store'])->name('users.store');
+    Route::get('/users/{user}/edit',[UsersController::class,'edit'])->name('users.edit');
+    Route::put('/users/{user}/edit',[UsersController::class,'update'])->name('users.update');
+    Route::delete('/users/{user}/delete',[UsersController::class,'destroy'])->name('users.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -61,7 +61,7 @@
                         }" class="inline-block relative">
                             <button @click="toggle($event)"
                                 class="px-2 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded text-sm">
-                                ⋮
+                                Acoes
                             </button>
 
                             <template x-teleport="body">
