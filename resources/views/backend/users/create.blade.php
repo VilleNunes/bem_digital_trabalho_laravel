@@ -6,16 +6,19 @@
 
 <nav class="text-sm text-gray-500 mb-5" aria-label="Breadcrumb">
   <ol class="list-reset flex">
+    <li class="text-gray-700 font-semibold">Conteúdo <span class="mx-2">/</span></li>
     <li>
-      <a href="{{ route('users.create') }}" class="text-blue-600 hover:underline">Usuários</a>
+      <a href="{{ route('users.index') }}" class="text-blue-600 hover:underline">Usuários</a>
       <span class="mx-2">/</span>
     </li>
     <li class="text-gray-700 font-semibold">Criar Usuários</li>
   </ol>
 </nav>
-
+@php
+    var_dump($errors->all());
+@endphp
 <x-card>
-    <form action="{{route('users.store')}}" class="space-y-5" method="post">
+    <form action="{{ route('users.store') }}" class="space-y-5" method="post">
         @csrf
         <!-- Nome e Telefone -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -51,43 +54,44 @@
             </div>
         </div>
 
-        <!-- Endereço completo -->
+        <!-- Endereço -->
+        <h2 class="text-xl mb-2 font-semibold">Endereço</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
             <div>
                 <x-input-label for="address_zip" value="CEP" />
-                <x-text-input id="address_zip" class="block mt-1 w-full" type="text" name="address_zip" :value="old('address_zip')" required />
-                <x-input-error :messages="$errors->get('address_zip')" class="mt-2" />
+                <x-text-input id="address_zip" class="block mt-1 w-full" type="text" name="address[zip]" :value="old('address.zip')" required />
+                <x-input-error :messages="$errors->get('address.zip')" class="mt-2" />
             </div>
             <div>
                 <x-input-label for="address_state" value="Estado" />
-                <x-text-input id="address_state" class="block mt-1 w-full" type="text" name="address_state" :value="old('address_state')" required />
-                <x-input-error :messages="$errors->get('address_state')" class="mt-2" />
+                <x-text-input id="address_state" class="block mt-1 w-full" type="text" name="address[state]" :value="old('address.state')" required />
+                <x-input-error :messages="$errors->get('address.state')" class="mt-2" />
             </div>
             <div>
                 <x-input-label for="address_city" value="Cidade" />
-                <x-text-input id="address_city" class="block mt-1 w-full" type="text" name="address_city" :value="old('address_city')" required />
-                <x-input-error :messages="$errors->get('address_city')" class="mt-2" />
+                <x-text-input id="address_city" class="block mt-1 w-full" type="text" name="address[city]" :value="old('address.city')" required />
+                <x-input-error :messages="$errors->get('address.city')" class="mt-2" />
             </div>
             <div>
                 <x-input-label for="address_neighborhood" value="Bairro" />
-                <x-text-input id="address_neighborhood" class="block mt-1 w-full" type="text" name="address_neighborhood" :value="old('address_neighborhood')" required />
-                <x-input-error :messages="$errors->get('address_neighborhood')" class="mt-2" />
+                <x-text-input id="address_neighborhood" class="block mt-1 w-full" type="text" name="address[neighborhood]" :value="old('address.neighborhood')" required />
+                <x-input-error :messages="$errors->get('address.neighborhood')" class="mt-2" />
             </div>
 
             <div>
                 <x-input-label for="address_road" value="Rua" />
-                <x-text-input id="address_road" class="block mt-1 w-full" type="text" name="address_road" :value="old('address_road')" required />
-                <x-input-error :messages="$errors->get('address_road')" class="mt-2" />
+                <x-text-input id="address_road" class="block mt-1 w-full" type="text" name="address[road]" :value="old('address.road')" required />
+                <x-input-error :messages="$errors->get('address.road')" class="mt-2" />
             </div>
             <div>
                 <x-input-label for="address_number" value="Número" />
-                <x-text-input id="address_number" class="block mt-1 w-full" type="text" name="address_number" :value="old('address_number')" required />
-                <x-input-error :messages="$errors->get('address_number')" class="mt-2" />
+                <x-text-input id="address_number" class="block mt-1 w-full" type="text" name="address[number]" :value="old('address.number')" required />
+                <x-input-error :messages="$errors->get('address.number')" class="mt-2" />
             </div>
             <div class="col-span-2">
                 <x-input-label for="address_complement" value="Complemento" />
-                <x-text-input id="address_complement" class="block mt-1 w-full" type="text" name="address_complement" :value="old('address_complement')" />
-                <x-input-error :messages="$errors->get('address_complement')" class="mt-2" />
+                <x-text-input id="address_complement" class="block mt-1 w-full" type="text" name="address[complement]" :value="old('address.complement')" />
+                <x-input-error :messages="$errors->get('address.complement')" class="mt-2" />
             </div>
         </div>
 
@@ -100,7 +104,8 @@
                         <input id="module_{{ $module->id }}" type="checkbox"
                             class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                             name="modules[]"
-                            value="{{ $module->id }}">
+                            value="{{ $module->id }}"
+                            {{ in_array($module->id, old('modules', [])) ? 'checked' : '' }}>
                         <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">
                             {{ $module->title }}
                         </span>
@@ -119,6 +124,7 @@
         </div>
     </form>
 </x-card>
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -138,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             fetchCEP(this.value);
         } else {
             clearAddressFields();
-            alertShown = false; // reset para novo CEP
+            alertShown = false;
         }
     });
 
@@ -163,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cityInput.value = data.localidade;
             neighborhoodInput.value = data.bairro;
             roadInput.value = data.logradouro;
-            alertShown = false; // CEP válido, permite alert novo no próximo erro
+            alertShown = false;
 
         } catch {
             if (!alertShown) alert('Erro ao buscar o CEP');
@@ -181,6 +187,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endpush
-
 
 @endsection

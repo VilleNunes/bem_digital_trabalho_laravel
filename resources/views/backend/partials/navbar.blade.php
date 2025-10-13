@@ -1,9 +1,9 @@
-<aside class="w-64 bg-salmao-dark text-white p-4 flex flex-col">
+<aside class="w-64 bg-gray-800 text-white p-4 flex flex-col">
     <div class="text-2xl font-bold mb-8">Logo</div>
     <nav class="flex-1">
         <ul class="space-y-2">
             <li>
-                <a href="#" class="block p-2 rounded bg-verde hover:bg-verde-claro">
+                <a href="#" class="block p-2 rounded bg-gray-500 hover:bg-verde-claro">
                     Dashboard
                 </a>
             </li>

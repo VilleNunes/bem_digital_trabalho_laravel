@@ -61,7 +61,20 @@ class User extends Authenticatable
         ];
     }
 
+    public function institution(){
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function modules(){
+        return $this->belongsToMany(Module::class);
+    }
+
+    public function address(){
+        return $this->hasOne(Address::class);
+    }
+
     public function scopeUsersUnit( $query){
         return $query->where('institution_id',Auth::user()->institution_id);
     }
+
 }

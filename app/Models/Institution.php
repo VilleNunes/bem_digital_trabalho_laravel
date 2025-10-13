@@ -24,4 +24,8 @@ class Institution extends Model
     {
         return $this->hasOne(Address::class, 'address_id');
     }
+
+    public function users(){
+        return $this->hasMany(User::class);
+    }
 }
