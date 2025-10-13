@@ -73,7 +73,7 @@
                                             class="block px-4 py-2 hover:bg-gray-100">Editar</a>
                                     @endif
                                     @if (isset($delete))
-                                        <form class="w-full" action="{{ route($delete, $item) }}" method="post">
+                                        <form class="w-full" onsubmit="return confirm('Tem certeza que deseja excluir este item?');" action="{{ route($delete, $item) }}" method="post">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

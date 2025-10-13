@@ -14,9 +14,10 @@ class UserStoreRequest extends FormRequest
 
     public function rules(): array
     {
+        $userId = $this->route('user') ?? '';
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users,email,'. $userId,
             'password' => 'required|string|min:6|confirmed',
             'modules' => 'required|array',
             'modules.*' => 'integer|exists:modules,id',

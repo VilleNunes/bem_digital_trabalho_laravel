@@ -27,13 +27,7 @@ class User extends Authenticatable
         'is_active',
         'cpf',
         'phone',
-        'adress_city',
-        'adress_state',
-        'adress_zip',
-        'address_road',
-        'address_neighborhood',
-        'address_complement',
-        'address_number',
+        'address_id',
         'rule_id',
         'institution_id',
     ];
@@ -70,7 +64,7 @@ class User extends Authenticatable
     }
 
     public function address(){
-        return $this->hasOne(Address::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function scopeUsersUnit( $query){

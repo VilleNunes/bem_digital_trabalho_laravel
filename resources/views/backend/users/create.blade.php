@@ -14,9 +14,6 @@
     <li class="text-gray-700 font-semibold">Criar Usuários</li>
   </ol>
 </nav>
-@php
-    var_dump($errors->all());
-@endphp
 <x-card>
     <form action="{{ route('users.store') }}" class="space-y-5" method="post">
         @csrf
@@ -124,68 +121,5 @@
         </div>
     </form>
 </x-card>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const cepInput = document.getElementById('address_zip');
-    const stateInput = document.getElementById('address_state');
-    const cityInput = document.getElementById('address_city');
-    const neighborhoodInput = document.getElementById('address_neighborhood');
-    const roadInput = document.getElementById('address_road');
-
-    if (!cepInput) return;
-
-    let alertShown = false;
-
-    cepInput.addEventListener('input', function() {
-        this.value = this.value.replace(/\D/g, '').slice(0, 8);
-        if (this.value.length === 8) {
-            fetchCEP(this.value);
-        } else {
-            clearAddressFields();
-            alertShown = false;
-        }
-    });
-
-    async function fetchCEP(cep) {
-        stateInput.value = '...';
-        cityInput.value = '...';
-        neighborhoodInput.value = '...';
-        roadInput.value = '...';
-
-        try {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data = await response.json();
-
-            if (data.erro) {
-                if (!alertShown) alert('CEP não encontrado');
-                alertShown = true;
-                clearAddressFields();
-                return;
-            }
-
-            stateInput.value = data.uf;
-            cityInput.value = data.localidade;
-            neighborhoodInput.value = data.bairro;
-            roadInput.value = data.logradouro;
-            alertShown = false;
-
-        } catch {
-            if (!alertShown) alert('Erro ao buscar o CEP');
-            alertShown = true;
-            clearAddressFields();
-        }
-    }
-
-    function clearAddressFields() {
-        stateInput.value = '';
-        cityInput.value = '';
-        neighborhoodInput.value = '';
-        roadInput.value = '';
-    }
-});
-</script>
-@endpush
 
 @endsection

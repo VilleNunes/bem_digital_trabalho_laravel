@@ -15,7 +15,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::query()->usersUnit()->paginate(10);
+        $users = User::query()->usersUnit()->orderBy('created_at','DESC')->paginate(10);
         return view('backend.users.index',['users'=>$users]);
     }
 
@@ -35,15 +35,17 @@ class UsersController extends Controller
     public function store(UserStoreRequest $request)
     {
   
-        $data = $request->validated();
-
+      try {
+        $data = $request->all();
+        
+      
         if(isset($data['address'])){
             $address = $data['address'];
             unset($data['address']);
+            $addresModel = Address::create($address ?? []);
+            $data['address_id'] = $addresModel->id;
         }
 
-        $addresModel = Address::create($address ?? []);
-        $data['address_id'] = $addresModel->id;
         $data['password'] = bcrypt($data['password']);
         $data['institution_id'] = auth()->user()->institution_id;
         
@@ -56,6 +58,11 @@ class UsersController extends Controller
         $user = User::create($data);
         $user->modules()->sync($modules ?? []);
         return redirect()->route('users.index')->with('success','Usuário criado com sucesso!');
+      } catch (\Throwable $th) {
+
+        return redirect()->route('users.index')->with('error','Erro ao criar usuário!');
+
+      }
     }
 
     /**
@@ -69,10 +76,12 @@ class UsersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $modules = Module::all();
+        return view('backend.users.edit',['user'=>$user,'modules'=>$modules]);
     }
+ 
 
     /**
      * Update the specified resource in storage.
@@ -85,8 +94,15 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('users.index')->with('success','Usuário deletado com sucesso!');
+    }
+
+    public function active(User $user){
+        $user->is_active = request()->has('active');
+        $user->save();
+        return redirect()->route('users.index')->with('success','Status atualizado com sucesso!');
     }
 }
