@@ -23,4 +23,9 @@ class Address extends Model
     {
         return $this->hasOne(Institution::class, 'address_id');
     }
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
+    }
 }

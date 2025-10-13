@@ -3,7 +3,6 @@
 
 @section('content')
     <h1 class="text-2xl font-bold mb-2">Você está aqui</h1>
-
     <nav class="text-sm text-gray-500 mb-5" aria-label="Breadcrumb">
         <ol class="list-reset flex">
             <li>
@@ -24,6 +23,7 @@
             "edit"=>'users.edit',
             "delete"=>'users.destroy',
             "show"=>'users.show',
+            "active"=>'users.active'
         ])
     </x-card>
 @endsection

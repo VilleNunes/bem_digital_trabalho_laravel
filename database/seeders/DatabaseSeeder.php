@@ -44,9 +44,6 @@ class DatabaseSeeder extends Seeder
             'rule_id'=>$rule->id,
             'institution_id'=>$instituion->id
 
-        ]);
-
-       
-        
+        ]);        
     }
 }

@@ -26,7 +26,6 @@ return new class extends Migration
             $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
             $table->timestamps();
         });
-        
     }
 
     /**
