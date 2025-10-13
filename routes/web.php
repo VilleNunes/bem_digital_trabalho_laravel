@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -29,5 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/users/{user}/delete',[UsersController::class,'destroy'])->name('users.destroy');
     ROute::put('/users/{user}/active',[UsersController::class,'active'])->name('users.active');
 });
+
+
 
 require __DIR__.'/auth.php';
