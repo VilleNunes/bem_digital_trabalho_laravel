@@ -4,8 +4,10 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'is_active',
+        'cpf',
+        'phone',
+        'address_id',
+        'rule_id',
+        'institution_id',
     ];
 
     /**
@@ -45,4 +54,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function institution(){
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function modules(){
+        return $this->belongsToMany(Module::class);
+    }
+
+    public function address(){
+        return $this->belongsTo(Address::class);
+    }
+
+    public function scopeUsersUnit( $query){
+        return $query->where('institution_id',Auth::user()->institution_id);
+    }
+
 }
