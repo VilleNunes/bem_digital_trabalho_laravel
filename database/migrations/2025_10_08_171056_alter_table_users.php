@@ -16,20 +16,17 @@ return new class extends Migration
             $table->boolean('is_active')->default(false);
             $table->string('cpf',50)->nullable();
             $table->string('phone',20)->nullable();
-            $table->string('adress_city',100)->nullable();
-            $table->string('adress_state',100)->nullable();
-            $table->string('adress_zip',100)->nullable();
-            $table->string('address_road',100)->nullable();
-            $table->string('address_neighborhood',100)->nullable();
-            $table->string('address_complement',100)->nullable();
-            $table->string('address_number',100)->nullable();
-
+          
             $table->unsignedBigInteger('rule_id')->unique();
             $table->unsignedBigInteger('institution_id')->unique();
+            $table->unsignedBigInteger('address_id')->unique()->nullable();
 
             $table->foreign('rule_id')->references('id')->on('rules');
+            $table->foreign('address_id')->references('id')->on('addresses');
             $table->foreign('institution_id')->references('id')->on('institutions');
         });
+
+        
     }
 
     /**

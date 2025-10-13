@@ -32,7 +32,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd(request());
     }
 
     /**
