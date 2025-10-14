@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\Address;
 use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -15,8 +17,16 @@ class UsersController extends Controller
      */
     public function index()
     {
+        $userActive = User::query()->usersUnit()->where('is_active',true)->count();
+        $userInactive = User::query()->usersUnit()->where('is_active',false)->count();
+        $totalUser= User::query()->usersUnit()->count();
         $users = User::query()->usersUnit()->orderBy('created_at','DESC')->paginate(10);
-        return view('backend.users.index',['users'=>$users]);
+        return view('backend.users.index',
+        ['users'=>$users,
+        'totalUser'=>$totalUser,
+        'userInactive'=>$userInactive,
+        'userActive'=>$userActive
+        ]);
     }
 
     /**
@@ -36,7 +46,7 @@ class UsersController extends Controller
     {
   
       try {
-        $data = $request->all();
+        $data = request()->all();
         
       
         if(isset($data['address'])){
@@ -46,7 +56,7 @@ class UsersController extends Controller
             $data['address_id'] = $addresModel->id;
         }
 
-        $data['password'] = bcrypt($data['password']);
+        $data['password'] = Hash::make($data['password']);
         $data['institution_id'] = auth()->user()->institution_id;
         
         if(isset($data['modules'])){
@@ -86,9 +96,29 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $data = $request->validated();
+
+        if(isset($data['address'])){
+            $address = $data['address'];
+            unset($data['address']);
+        }
+
+        $user->address()->update($address);
+
+        if(isset($data['modules'])){
+            $modules = $data['modules'];
+            unset($data['modules']);
+        }
+
+      
+
+        $user->modules()->sync($modules);
+
+        $user->update($data);
+
+        return back()->with('success','Usuário atualizado com sucesso!');
     }
 
     /**
@@ -101,7 +131,7 @@ class UsersController extends Controller
     }
 
     public function active(User $user){
-        $user->is_active = request()->has('active');
+        $user->is_active = request('active') ? true : false;
         $user->save();
         return redirect()->route('users.index')->with('success','Status atualizado com sucesso!');
     }

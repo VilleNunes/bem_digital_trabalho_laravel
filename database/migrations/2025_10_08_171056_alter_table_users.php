@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('cpf',50)->nullable();
             $table->string('phone',20)->nullable();
           
-            $table->unsignedBigInteger('rule_id')->default(1);
+            $table->unsignedBigInteger('rule_id')->default(2);
             $table->unsignedBigInteger('institution_id');
             $table->unsignedBigInteger('address_id')->unique()->nullable();
 
