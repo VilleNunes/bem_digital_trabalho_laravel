@@ -12,7 +12,8 @@ $colors = [
 $colorClass = $colors[$color] ?? $colors['green'];
 @endphp
 
-<button {{ $attributes->merge(['type' => 'submit', 'class' => "inline-flex items-center px-3 py-2 font-bold rounded
+<button {{ $attributes->merge(['type' => 'submit', 'class' => "inline-flex items-center px-4 py-2 font-bold text-xs
+    rounded
     $colorClass"]) }}>
     {{ $slot }}
 </button>

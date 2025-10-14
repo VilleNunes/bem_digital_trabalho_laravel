@@ -10,4 +10,8 @@ class Rule extends Model
         'name'
      
     ];
+
+    function users(){
+        return $this->hasMany(User::class);
+    }
 }
