@@ -1,4 +1,4 @@
-<div class="bg-white p-6 font-semibold mb-5">
+<x-card class="mb-5">
     <p class="text-gray-700">Filtro de Usuários</p>
     <form action="">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mt-3 content-center">
@@ -33,4 +33,4 @@
         </div>
     </form>
 
-</div>
+</x-card>
