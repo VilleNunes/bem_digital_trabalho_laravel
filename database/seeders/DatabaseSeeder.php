@@ -44,6 +44,11 @@ class DatabaseSeeder extends Seeder
             'rule_id'=>$rule->id,
             'institution_id'=>$instituion->id
 
-        ]);        
+        ]);    
+        
+        User::factory(50)->create([
+            'rule_id'=>3,
+            'institution_id'=>$instituion->id
+        ]);
     }
 }

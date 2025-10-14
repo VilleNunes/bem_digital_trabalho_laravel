@@ -20,7 +20,14 @@ class UsersController extends Controller
         $userActive = User::query()->usersUnit()->where('is_active',true)->count();
         $userInactive = User::query()->usersUnit()->where('is_active',false)->count();
         $totalUser= User::query()->usersUnit()->count();
-        $users = User::query()->usersUnit()->orderBy('created_at','DESC')->paginate(10);
+        $users = User::query()
+        ->usersUnit()
+        ->email(request()->email)
+        ->name(request()->name)
+        ->phone(request()->phone)
+        ->active(request()->active)
+        ->orderBy('created_at','DESC')
+        ->paginate(10);
         return view('backend.users.index',
         ['users'=>$users,
         'totalUser'=>$totalUser,
