@@ -68,7 +68,7 @@ class User extends Authenticatable
     }
 
     public function scopeUsersUnit( $query){
-        return $query->where('institution_id',Auth::user()->institution_id);
+        return $query->where('institution_id',Auth::user()->institution_id)->where('rule_id',1);
     }
 
 }
