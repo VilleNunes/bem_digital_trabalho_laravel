@@ -25,15 +25,7 @@
 
 </head>
 
-<body class="flex min-h-screen text-gray-800 flex-row">
-
-
-    <div class="bg-gray-200 top-0 bottom-[67%] left-0 right-0 absolute -z-40">
-
-    </div>
-    <div class="bg-gray-100 bottom-0 top-[33%] left-0 right-0 absolute -z-40">
-
-    </div>
+<body class="flex  text-gray-800 flex-row  bg-gray-100 min-h-screen">
 
     @include('backend.partials.navbar')
     <!-- Conteúdo principal -->
