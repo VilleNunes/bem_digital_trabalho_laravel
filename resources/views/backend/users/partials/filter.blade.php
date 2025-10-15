@@ -1,7 +1,7 @@
 <x-card class="mb-5">
     <p class="text-gray-700">Filtro de Usuários</p>
     <form action="">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 mt-3 content-center">
+        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-4 gap-5 mt-3 content-center">
             <div>
                 <x-input-label for="name" value="Nome" />
                 <x-text-input id="name" placeholder="Nome do Usuário" class="block mt-1 w-full" type="text"
