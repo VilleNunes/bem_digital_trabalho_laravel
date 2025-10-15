@@ -44,7 +44,7 @@
                 <li x-data="{ openSub: {{ request()->routeIs('users.*') ? 'true' : 'false' }} }">
                     <button @click="openSub = !openSub"
                         class="w-full flex justify-between items-center p-2 rounded transition
-                            {{ request()->routeIs('users.*') ? 'bg-verde-claro text-white' : 'hover:bg-white hover:text-salmao-dark' }}">
+                            {{ request()->routeIs('users.*') ? 'bg-verde-claro text-white' : 'hover:bg-gray-700 hover:text-white' }}">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-users"></i>
                             <span>Usuários</span>
@@ -76,7 +76,7 @@
                 <li>
                     <a href="{{ route('profile.edit') }}"
                         class="flex items-center gap-2 p-2 rounded transition
-                            {{ request()->routeIs('profile.*') ? 'bg-verde-claro text-white' : 'hover:bg-white hover:text-salmao-dark' }}">
+                            {{ request()->routeIs('profile.*') ? 'bg-verde-claro text-white' : 'hover:bg-gray-700 hover:text-white' }}">
                         <i class="fa-solid fa-user"></i>
                         <span>Perfil</span>
                     </a>
@@ -84,7 +84,7 @@
 
                 <!-- Configurações -->
                 <li>
-                    <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-white hover:text-salmao-dark">
+                    <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700 hover:text-white">
                         <i class="fa-solid fa-gear"></i>
                         <span>Configurações</span>
                     </a>
@@ -92,7 +92,7 @@
 
                 <!-- Relatórios -->
                 <li>
-                    <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-white hover:text-salmao-dark">
+                    <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700 hover:text-white">
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Relatórios</span>
                     </a>
