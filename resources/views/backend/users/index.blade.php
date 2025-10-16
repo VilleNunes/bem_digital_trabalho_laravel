@@ -30,7 +30,7 @@
 <x-card>
     {{-- Tabela --}}
     @include('backend.partials.table',[
-    "fields"=>['id','nome','email','Telefone'],
+    "fields"=>['id','nome','email','Equipe'],
     "keys"=>['id','name','email','phone'],
     "items"=>$users,
     "title"=>'Lista de Usuarios',
