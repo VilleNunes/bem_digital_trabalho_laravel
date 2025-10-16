@@ -20,7 +20,7 @@ $colors = [
 $classes = $colors[$color] ?? $colors['blue'];
 @endphp
 
-<div class="relative flex items-center justify-between p-4 rounded shadow-md 
+<div class="relative flex items-center justify-between p-3 rounded shadow-md 
            bg-gradient-to-br {{ $classes }}
            hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-out overflow-hidden">
     <div class="z-10">
