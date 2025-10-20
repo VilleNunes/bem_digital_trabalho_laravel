@@ -28,7 +28,6 @@
     </div>
 
     <x-card>
-        {{-- Tabela no mesmo padrão do users --}}
         @include('backend.partials.table', [
             "fields" => ['id', 'Nome Fantasia', 'CNPJ', 'Telefone', 'Email'],
             "keys" => ['id', 'fantasy_name', 'cnpj', 'phone', 'email'],
@@ -37,7 +36,6 @@
             "edit" => 'institutions.edit',
             "delete" => 'institutions.destroy',
             "active" => 'institutions.active'
-            // Se você tiver rota de ativação, pode passar "active" => 'institutions.active'
         ])
     </x-card>
 @endsection
