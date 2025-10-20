@@ -7,7 +7,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+
 
 class ProfileController extends Controller
 {
@@ -26,15 +28,46 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Upload da imagem (se existir)
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+
+            // Apagar avatar antigo se existir
+            if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
+                Storage::delete('public/' . $user->avatar);
+            }
+
+            // Armazenar o novo arquivo
+            $path = $avatar->store('avatars', 'public');
+            $validated['avatar'] = $path;
         }
 
-        $request->user()->save();
+        // Atualizar dados
+        $user->update($validated);
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'Perfil atualizado com sucesso!');
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        if ($user->foto && Storage::exists('public/' . $user->foto)) {
+            Storage::delete('public/' . $user->foto);
+        }
+
+        $path = $request->file('foto')->store('avatars', 'public');
+        $user->foto = $path;
+        $user->save();
+
+        return back()->with('success', 'Foto atualizada com sucesso!');
     }
 
     /**
