@@ -71,7 +71,19 @@
                         </li>
                     </ul>
                 </li>
+                <!-- Instituições (dropdown) -->
+                <li x-data="{ openInst: {{ request()->routeIs('institutions.*') ? 'true' : 'false' }} }">
+                    <button @click="openInst = !openInst"
+                        class="w-full flex justify-between items-center p-2 rounded transition
+                        {{ request()->routeIs('institutions.*') ? 'bg-verde-claro text-white' : 'hover:bg-white hover:text-salmao-dark' }}">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-building"></i>
+                            <span>Instituições</span>
+                        </div>
+                        <i :class="openInst ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-sm"></i>
+                    </button>
 
+<<<<<<< HEAD
                 <!-- Perfil -->
                 <li>
                     <a href="{{ route('profile.edit') }}"
@@ -88,6 +100,28 @@
                         <i class="fa-solid fa-gear"></i>
                         <span>Configurações</span>
                     </a>
+=======
+                    <ul x-show="openInst" x-transition class="ml-4 mt-1 space-y-1 text-sm">
+                        <li>
+                            <a href="{{ route('institutions.index') }}" class="block p-1 rounded flex items-center gap-2
+                            {{ request()->routeIs('institutions.index') ? 'bg-gray-700 text-white' : 'hover:underline' }}">
+                                <i class="fa-solid fa-list"></i>
+                                <span>Listar Instituições</span>
+                            </a>
+                        </li>
+
+                        @auth
+                                <li>
+                                    <a href="{{ route('institutions.edit', auth()->user()?->institution_id ?? auth()->user()?->institution?->id) }}"
+                                        class="block p-1 rounded flex items-center gap-2
+                            {{ request()->routeIs('institutions.edit') ? 'bg-gray-700 text-white' : 'hover:underline' }}">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        <span>Editar Instituição</span>
+                                    </a>
+                                </li>
+                        @endauth
+                    </ul>
+>>>>>>> f8c31f51b59d4e932605aab49ffa722f5ec7a351
                 </li>
 
                 <!-- Relatórios -->

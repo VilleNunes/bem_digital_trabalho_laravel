@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'name', 
         'email',
         'password',
         'avatar',
@@ -79,7 +79,7 @@ class User extends Authenticatable
 
     public function scopeName($query,$name){
         if($name){
-            return $query->where('name',$name);
+            return $query->where('name','LIKE',"%$name%");
         }
 
         return $query;
@@ -87,14 +87,14 @@ class User extends Authenticatable
 
     public function scopeEmail($query,$email){
         if($email){
-            return $query->where('email',$email);
+            return $query->where('email','LIKE',"%$email%");
         }
         return $query;
     }
 
     public function scopePhone($query,$tel){
         if($tel){
-            return $query->where('phone',$tel);
+            return $query->where('phone','LIKE',"%$tel%");
         }
 
         return $query;

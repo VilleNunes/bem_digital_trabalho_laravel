@@ -13,7 +13,17 @@ class InstitutionController extends Controller
      */
     public function index()
     {
-        //
+        $query = request()->input('q');
+        $institutions = Institution::query()
+            ->when($query, function ($q) use ($query) {
+                $q->where('fantasy_name', 'like', "%{$query}%")
+                    ->orWhere('email', 'like', "%{$query}%");
+            })
+            ->orderByDesc('id')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('backend.institutions.index', compact('institutions', 'query'));
     }
 
     /**
@@ -45,7 +55,7 @@ class InstitutionController extends Controller
      */
     public function edit(Institution $institution)
     {
-        //
+        return view('backend.institutions.edit', compact('institution'));
     }
 
     /**
@@ -53,7 +63,17 @@ class InstitutionController extends Controller
      */
     public function update(UpdateInstitutionRequest $request, Institution $institution)
     {
-        //
+        $data = $request->validate([
+            'fantasy_name' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'is_active' => ['nullable'],
+        ]);
+
+        $data['is_active'] = $request->boolean('is_active');
+
+        $institution->update($data);
+
+        return redirect()->route('institutions.index')->with('success', 'Instituição atualizada com sucesso!');
     }
 
     /**
@@ -61,6 +81,15 @@ class InstitutionController extends Controller
      */
     public function destroy(Institution $institution)
     {
-        //
+        $institution->delete();
+        return redirect()->route('institutions.index')->with('success', 'Instituição removida com sucesso!');
+    }
+
+    public function active(\App\Models\Institution $institution)
+    {
+        $institution->is_active = !$institution->is_active;
+        $institution->save();
+
+        return back()->with('success', 'Status da instituição atualizado!');
     }
 }
