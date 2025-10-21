@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}/edit', [UsersController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}/delete', [UsersController::class, 'destroy'])->name('users.destroy');
-    ROute::put('/users/{user}/active', [UsersController::class, 'active'])->name('users.active');
+    Route::put('/users/{user}/active', [UsersController::class, 'active'])->name('users.active');
 
     //Routes Institution
     Route::get('/institutions', [InstitutionController::class, 'index'])->name('institutions.index');
@@ -44,21 +44,18 @@ Route::middleware('auth')->group(function () {
     Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
         ->name('institutions.active');
   
-     //Rotas de Doadores - Donors
-    Route::get('/donors',[DonorsController::class,'index'])->name('donors.index');
-    Route::get('/donors/create',[DonorsController::class,'create'])->name('donors.create');
-    Route::get('/donors/{donors}/show',[DonorsController::class,'show'])->name('donors.show');
-    Route::post('/donors/store',[DonorsController::class,'store'])->name('donors.store');
-    Route::get('/donors/{donors}/edit',[DonorsController::class,'edit'])->name('donors.edit');
-    Route::put('/donors/{donors}/edit',[DonorsController::class,'update'])->name('donors.update');
-    Route::delete('/donors/{donors}/delete',[DonorsController::class,'destroy'])->name('donors.destroy');
-    ROute::put('/donors/{donors}/active',[DonorsController::class,'active'])->name('donors.active');
-});
+    // Rotas de Doadores - Donors
+    Route::get('/donors', [DonorsController::class, 'index'])->name('donors.index');
+    Route::get('/donors/create', [DonorsController::class, 'create'])->name('donors.create');
+    Route::post('/donors/store', [DonorsController::class, 'store'])->name('donors.store');
+    Route::get('/donors/{donor}/show', [DonorsController::class, 'show'])->name('donors.show');
+    Route::get('/donors/{donor}/edit', [DonorsController::class, 'edit'])->name('donors.edit');
+    Route::put('/donors/{donor}/edit', [DonorsController::class, 'update'])->name('donors.update');
+    Route::delete('/donors/{donor}/delete', [DonorsController::class, 'destroy'])->name('donors.destroy');
+    Route::put('/donors/{donor}/active', [DonorsController::class, 'active'])->name('donors.active');
 
-});
 
-    require __DIR__ . '/auth.php';
+  });  
 
-    
-
+  require __DIR__ . '/auth.php';
    

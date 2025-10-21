@@ -9,8 +9,6 @@
     </div>
 @endif
 
-<!--{{ dd(users) }}-->
-
 <nav class="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
     <ol class="list-reset flex">
         <li>
@@ -33,18 +31,18 @@
     <x-card-metrics value="{{ $donorInactive }}" color="red" label="Total de Doadores Desativados" />
 </div>
 
-@include('backend.donors.partials.filter')
+@include('backend.components.filter')
 
 <x-card>
-    @include('backend.partials.table', [
-        "fields" => ['ID', 'Nome', 'Email', 'Telefone'],
-        "keys" => ['id', 'name', 'email', 'phone'],
-        "items" => $donors,
-        "title" => 'Lista de Doadores',
-        "edit" => 'donors.edit',
-        "delete" => 'donors.destroy',
-        "show" => 'donors.show',
-        "active" => 'donors.active'
-    ])
+     @include('backend.components.table', [
+        'fields' => ['id', 'nome', 'email', 'telefone'],
+        'keys' => ['id', 'name', 'email', 'phone'],
+        'items' => $donors,
+        'title' => 'Lista de Doadores',
+        'edit' => 'donors.edit',
+        'delete' => 'donors.destroy',
+        'show' => 'donors.show'
+])
+
 </x-card>
 @endsection
