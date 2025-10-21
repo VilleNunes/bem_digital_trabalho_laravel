@@ -37,15 +37,13 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
     
             $table->dropForeign(['rule_id']);
+            $table->dropForeign(['address_id']);
             $table->dropForeign(['institution_id']);
 
             $table->dropColumn([
                 'avatar',
                 'is_active',
                 'phone',
-                'adress_city',
-                'adress_state',
-                'adress_zip',
                 'rule_id',
                 'institution_id',
             ]);
