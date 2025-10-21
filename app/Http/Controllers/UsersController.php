@@ -27,7 +27,8 @@ class UsersController extends Controller
         ->phone(request()->phone)
         ->active(request()->active)
         ->orderBy('created_at','DESC')
-        ->paginate(10);
+        ->paginate(10)
+        ->appends(request()->query());
         return view('backend.users.index',
         ['users'=>$users,
         'totalUser'=>$totalUser,

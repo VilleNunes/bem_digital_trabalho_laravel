@@ -19,7 +19,7 @@
     </x-button-link>
 </div>
 
-<div class="grid grid-cols-4 gap-3 mb-5">
+<div class="grid grid-cols-1  sm:grid-cols-1 md:grid-cols-4 gap-3 mb-5">
     <x-card-metrics value="{{ $totalUser }}" color="green" label="Total de Usuários" />
     <x-card-metrics value="{{ $userActive }}" color="blue" label="Total de Usuários Ativos" />
     <x-card-metrics value="{{ $userInactive }}" color="red" label="Total de Usuarios Desativados" />
@@ -30,7 +30,7 @@
 <x-card>
     {{-- Tabela --}}
     @include('backend.partials.table',[
-    "fields"=>['id','nome','email','Telefone'],
+    "fields"=>['id','nome','email','Equipe'],
     "keys"=>['id','name','email','phone'],
     "items"=>$users,
     "title"=>'Lista de Usuarios',

@@ -1,8 +1,8 @@
 <header class="bg-gelo shadow px-6  flex justify-between items-center">
-    <!-- Título -->
-    <h1 class="font-semibold text-xl text-gray-950">
+    <!-- Título (link para dashboard) -->
+    <a href="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-950 hover:opacity-90">
         Plataforma <span class="text-verde-claro">Bem Digital</span>
-    </h1>
+    </a>
 
     <!-- Menu do usuário -->
     <div x-data="{ open: false }" class="relative">
@@ -14,10 +14,18 @@
                 <p class="text-xs text-gray-500">adicionar tipo de usuario</p>
             </div>
             <div class="relative">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name)}}&background=10b981&color=fff"
-                    alt="Avatar do usuário" class="w-10 h-10 rounded-full border-2 border-verde-claro shadow-sm">
-
+                @php
+                $avatarPath = Auth::user()->avatar ?? Auth::user()->foto ?? null;
+                @endphp
+                @if($avatarPath)
+                <img src="{{ asset('storage/' . $avatarPath) }}" alt="Foto de perfil"
+                    class="w-10 h-10 rounded-full border-2 border-verde-claro shadow-sm">
+                @else
+                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=10b981&color=fff"
+                    alt="Avatar padrão" class="w-10 h-10 rounded-full border-2 border-verde-claro shadow-sm">
+                @endif
             </div>
+
         </button>
 
         <!-- Dropdown -->
