@@ -16,8 +16,23 @@ services:
     networks:
       - bem_digital_net
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - bem_digital_net
+
 volumes:
   postgres_data:
 
 networks:
   bem_digital_net:
+    driver: bridge
