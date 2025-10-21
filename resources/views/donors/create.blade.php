@@ -5,6 +5,7 @@
 
 <h1 class="text-2xl font-bold mb-2">Você está aqui</h1>
 
+
 <nav class="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
     <ol class="list-reset flex">
         <li class="text-gray-700 font-semibold">Conteúdo <span class="mx-2">/</span></li>
@@ -31,7 +32,7 @@
             </div>
              <div>
                 <x-input-label for="cpf" value="Cpf" />
-                <x-text-input id="cpf" class="block mt-1 w-full" type="text" name="cpf" :value="old('cpf')"
+                <x-text-input id="cpf" class="block mt-1 w-full" type="text" name="cpf" :value="old('cpf')"> <!--p/ manter-->
                     required />
                 <x-input-error :messages="$errors->get('cpf')" class="mt-2" />
             </div>

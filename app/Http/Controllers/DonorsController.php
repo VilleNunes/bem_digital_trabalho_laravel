@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class DonorsController extends Controller
 {
-   5 public function index()
+    public function index()
     {
         $userActive = User::query()->usersUnit()->where('is_active',true)->count();
         $userInactive = User::query()->usersUnit()->where('is_active',false)->count();
@@ -21,13 +21,14 @@ class DonorsController extends Controller
         ->orderBy('created_at','DESC')
         ->paginate(10);
 
-     return view('backend.donors.index',
-        ['donors'=>$Donors,
-        'totalDonor'=>$totalDonor,
-        'donorInactive'=>$DonorInactive,
-        'donorActive'=>$DonorActive
-        ]);
-    }
+       return view('backend.donors.index',
+       ['donors'=>$Donors,
+       'totalDonor'=>$totalDonor,
+       'donorInactive'=>$DonorInactive,
+       'donorActive'=>$DonorActive
+    ]);
+
+}
 
     public function create() 
     {
@@ -35,9 +36,21 @@ class DonorsController extends Controller
 
     }
 
-    public function store(
-         {
-            
-         }
-    )
+    public function store(DonorsRequest $request)
+    {
+        //validar o forms
+        $request->validated();
+
+        //verifica c está recebendo os dados de forma correta
+       // dd($request);
+
+       User::create([
+        'name' => $request->name,
+        'cpf' => $request->cpf,
+        'phone' => $request->phone
+        
+       ]);
+
+       return redirect()->route(donors.index)->with('sucesso, Usuário cadastrado com sucesso!')
+    }
 }
