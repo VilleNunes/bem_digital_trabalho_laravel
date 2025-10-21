@@ -47,13 +47,11 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+    'email_verified_at' => 'datetime',
+    'password' => 'hashed',
+];
+
 
     public function institution(){
         return $this->belongsTo(Institution::class);
@@ -63,9 +61,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Module::class);
     }
 
-    public function address(){
+      public function address()
+    {
         return $this->belongsTo(Address::class);
     }
+
 
     public function rule(){
         return $this->belongsTo(Rule::class);
@@ -108,5 +108,6 @@ class User extends Authenticatable
         $status = (bool)$active;
         return $query->where('is_active',$status);
     }
+
 
 }
