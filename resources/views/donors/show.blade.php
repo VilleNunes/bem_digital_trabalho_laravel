@@ -4,15 +4,25 @@
 
 <h1 class="text-2xl font-bold mb-4">Detalhes do Doador</h1>
 
+<nav class="text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
+    <ol class="list-reset flex">
+        <li>
+            <a href="{{ route('donors.index') }}" class="text-gray-700 hover:underline">Doadores</a>
+        </li>
+        <span class="mx-2">/</span>
+        <li class="text-gray-700 font-semibold">{{ $donor->name }}</li>
+    </ol>
+</nav>
+
 <!-- Breadcrumb -->
 <nav class="text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
     <ol class="list-reset flex">
         <li class="text-gray-700 font-semibold">Conteúdo <span class="mx-2">/</span></li>
         <li>
-            <a href="{{ route('donors.index') }}" class="text-blue-600 hover:underline">Doadores</a>
+            <a href="{{ route('users.index') }}" class="text-blue-600 hover:underline">Usuários</a>
             <span class="mx-2">/</span>
         </li>
-        <li class="text-gray-700 font-semibold">{{ $donor->name }}</li>
+        <li class="text-gray-700 font-semibold">{{ $user->name }}</li>
     </ol>
 </nav>
 
@@ -38,7 +48,7 @@
         </div>
         @endif
 
-        @if($donor->is_active !== null)
+        @if($user->is_active !== null)
         <div>
             <span class="font-medium text-gray-700">Status:</span>
             <p class="text-gray-800">{{ $donor->is_active ? 'Ativo' : 'Inativo' }}</p>
@@ -47,7 +57,7 @@
     </div>
 
     <!-- Endereço -->
-    @if($donor->address)
+    @if($user->address)
     <div>
         <h3 class="text-lg font-semibold mb-2">Endereço</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -100,7 +110,7 @@
     <!-- Botões -->
     <div class="flex justify-between mt-6">
         <x-button-link color='blue' href="{{ route('donors.index') }}">Voltar</x-button-link>
-        <x-button-link href="{{ route('donors.edit', $donor->id) }}">Editar</x-button-link>
+        <x-button-link href="{{ route('users.edit', $user->id) }}">Editar</x-button-link>
     </div>
 </x-card>
 

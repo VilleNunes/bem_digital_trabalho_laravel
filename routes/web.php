@@ -4,7 +4,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DonorsController;
-use Illuminate\Support\Facades\Route;
 
 // Página inicial
 Route::get('/', function () {
