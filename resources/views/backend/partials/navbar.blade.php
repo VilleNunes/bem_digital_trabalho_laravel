@@ -15,10 +15,10 @@
         class="fixed md:static top-[70px] md:top-0 left-0 h-full w-64 bg-gray-800 text-white p-4 flex flex-col z-40 md:z-0 shadow-lg md:shadow-md">
         <!-- Cabeçalho do menu -->
         <div class="text-2xl font-bold mb-8 flex items-center justify-between">
-            <div class="flex items-center gap-2">
+            <a href="{{ route('dashboard') }}" class="flex items-center gap-2 hover:opacity-90">
                 <i class="fa-solid fa-seedling text-verde-claro"></i>
                 <span>Bem Digital</span>
-            </div>
+            </a>
 
             <!-- Botão fechar -->
             <button @click="open = false" class="md:hidden text-white text-2xl" aria-label="Fechar menu">
