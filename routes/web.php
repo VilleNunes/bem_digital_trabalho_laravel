@@ -19,18 +19,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update.photo');
+
 
     // Routes users
-    Route::get('/users',[UsersController::class,'index'])->name('users.index');
-    Route::get('/users/create',[UsersController::class,'create'])->name('users.create');
-    Route::get('/users/{user}/show',[UsersController::class,'show'])->name('users.show');
-    Route::post('/users/create',[UsersController::class,'store'])->name('users.store');
-    Route::get('/users/{user}/edit',[UsersController::class,'edit'])->name('users.edit');
-    Route::put('/users/{user}/edit',[UsersController::class,'update'])->name('users.update');
-    Route::delete('/users/{user}/delete',[UsersController::class,'destroy'])->name('users.destroy');
-    ROute::put('/users/{user}/active',[UsersController::class,'active'])->name('users.active');
+    Route::get('/users', [UsersController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+    Route::get('/users/{user}/show', [UsersController::class, 'show'])->name('users.show');
+    Route::post('/users/create', [UsersController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [UsersController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}/edit', [UsersController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}/delete', [UsersController::class, 'destroy'])->name('users.destroy');
+    ROute::put('/users/{user}/active', [UsersController::class, 'active'])->name('users.active');
 });
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
