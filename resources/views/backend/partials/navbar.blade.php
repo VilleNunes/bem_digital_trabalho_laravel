@@ -15,10 +15,10 @@
         class="fixed md:static top-[70px] md:top-0 left-0 h-full w-64 bg-gray-800 text-white p-4 flex flex-col z-40 md:z-0 shadow-lg md:shadow-md">
         <!-- Cabeçalho do menu -->
         <div class="text-2xl font-bold mb-8 flex items-center justify-between">
-            <div class="flex items-center gap-2">
+            <a href="{{ route('dashboard') }}" class="flex items-center gap-2 hover:opacity-90">
                 <i class="fa-solid fa-seedling text-verde-claro"></i>
                 <span>Bem Digital</span>
-            </div>
+            </a>
 
             <!-- Botão fechar -->
             <button @click="open = false" class="md:hidden text-white text-2xl" aria-label="Fechar menu">
@@ -44,7 +44,7 @@
                 <li x-data="{ openSub: {{ request()->routeIs('users.*') ? 'true' : 'false' }} }">
                     <button @click="openSub = !openSub"
                         class="w-full flex justify-between items-center p-2 rounded transition
-                            {{ request()->routeIs('users.*') ? 'bg-verde-claro text-white' : 'hover:bg-white hover:text-salmao-dark' }}">
+                            {{ request()->routeIs('users.*') ? 'bg-verde-claro text-white' : 'hover:bg-gray-700 hover:text-white' }}">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-users"></i>
                             <span>Usuários</span>
@@ -83,6 +83,24 @@
                         <i :class="openInst ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-sm"></i>
                     </button>
 
+<<<<<<< HEAD
+                <!-- Perfil -->
+                <li>
+                    <a href="{{ route('profile.edit') }}"
+                        class="flex items-center gap-2 p-2 rounded transition
+                            {{ request()->routeIs('profile.*') ? 'bg-verde-claro text-white' : 'hover:bg-gray-700 hover:text-white' }}">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+
+                <!-- Configurações -->
+                <li>
+                    <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700 hover:text-white">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Configurações</span>
+                    </a>
+=======
                     <ul x-show="openInst" x-transition class="ml-4 mt-1 space-y-1 text-sm">
                         <li>
                             <a href="{{ route('institutions.index') }}" class="block p-1 rounded flex items-center gap-2
@@ -103,11 +121,12 @@
                                 </li>
                         @endauth
                     </ul>
+>>>>>>> f8c31f51b59d4e932605aab49ffa722f5ec7a351
                 </li>
 
                 <!-- Relatórios -->
                 <li>
-                    <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-white hover:text-salmao-dark">
+                    <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-700 hover:text-white">
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Relatórios</span>
                     </a>
