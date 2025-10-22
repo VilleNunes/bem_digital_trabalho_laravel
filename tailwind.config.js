@@ -9,6 +9,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
+    
     theme: {
         extend: {
             fontFamily: {
@@ -30,4 +31,7 @@ export default {
         forms,
         daisyui
     ],
+    daisyui: {
+        themes: ["light"], // só o tema claro
+    },
 };
