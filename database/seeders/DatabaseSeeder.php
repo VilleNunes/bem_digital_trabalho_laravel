@@ -27,28 +27,30 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Rule::create(['name'=>'admin']);
-        Rule::create(['name'=>'donor']);
-        Rule::create(['name'=>'user']);
+        Rule::create(['name' => 'admin']);
+        Rule::create(['name' => 'donor']);
+        Rule::create(['name' => 'user']);
 
-        Module::create(['title'=>'Usuarios']);
-        Module::create(['title'=>'Doacoes']);
-        Module::create(['title'=>'Estoque']);
+        Module::create(['title' => 'Usuarios']);
+        Module::create(['title' => 'Doacoes']);
+        Module::create(['title' => 'Estoque']);
 
-        $rule = Rule::query()->where('name','admin')->first();
+        $rule = Rule::query()->where('name', 'admin')->first();
         $instituion = Institution::query()->first();
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'rule_id'=>$rule->id,
-            'institution_id'=>$instituion->id
+            'rule_id' => $rule->id,
+            'institution_id' => $instituion->id
 
-        ]);    
-        
-        User::factory(50)->create([
-            'rule_id'=>3,
-            'institution_id'=>$instituion->id
         ]);
+
+        User::factory(50)->create([
+            'rule_id' => 3,
+            'institution_id' => $instituion->id
+        ]);
+
+        $this->call(InstitutionSeeder::class);
     }
 }
