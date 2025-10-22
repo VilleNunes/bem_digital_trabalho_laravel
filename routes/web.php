@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
@@ -37,7 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/institutions/{institution}', [InstitutionController::class, 'update'])->name('institutions.update');
     Route::delete('/institutions/{institution}', [InstitutionController::class, 'destroy'])->name('institutions.destroy');
     Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
-        ->name('institutions.active');
+    ->name('institutions.active');
+
+    Route::get('/campaign/create',[CampaignController::class,'create'])->name('campaign');
 });
 
 
