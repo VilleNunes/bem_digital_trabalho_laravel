@@ -1,4 +1,3 @@
-{{-- resources/views/profile/edit.blade.php --}}
 @extends('backend.layouts.app')
 
 @section('content')
@@ -11,10 +10,17 @@
     </div>
 
     <div class="py-2">
-        <div class="max-w-4xl mx-auto space-y-6">
+        <div class="max-w-7xl mx-auto space-y-6">
             <nav class="text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
-                <ol class="list-reset flex">
-                    <li class="text-gray-700 font-semibold">Perfil <span class="mx-2">/</span></li>
+                <ol class="list-reset flex items-center gap-1">
+                    <li>
+                        <a href="{{ route('dashboard') }}" class="text-gray-700 hover:underline">Dashboard</a>
+                        <span class="mx-2">/</span>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-700 hover:underline">Perfil</a>
+                        <span class="mx-2">/</span>
+                    </li>
                     <li class="text-gray-700 font-semibold">Editar Perfil</li>
                 </ol>
             </nav>
@@ -36,42 +42,41 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Informações Pessoais</h3>
 
                 <div class="flex flex-col md:flex-row gap-6">
-                    {{-- Coluna da Foto --}}
-                    <div class="md:w-1/3">
-                        {{-- Preview da Foto --}}
-                        <div class="flex flex-col items-center">
-                            <div class="relative w-32 h-32 mb-4">
-                                <img id="avatar-preview"
-                                    src="{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=10b981&color=fff' }}"
-                                    alt="Foto de perfil"
-                                    class="w-32 h-32 rounded-full object-cover border-4 border-verde-claro shadow-md">
-                                @if(!$user->avatar)
-                                <div class="absolute inset-0 flex items-center justify-center text-white text-2xl">
-                                    <i class="fa-solid fa-user"></i>
-                                </div>
-                                @endif
-                            </div>
-
-                            {{-- Formulário de Upload de Foto --}}
-                            <form action="{{ route('profile.update.photo') }}" method="POST"
-                                enctype="multipart/form-data" class="w-full">
-                                @csrf
-                                @method('PATCH')
-
-                                <x-input-label for="foto" value="Alterar foto de perfil" class="text-center" />
-
-                                <input type="file" name="foto" id="foto" accept="image/*"
-                                    class="mt-2 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-verde-claro file:text-white hover:file:bg-verde-medio"
-                                    onchange="previewImage(event)">
-
-                                <x-input-error :messages="$errors->get('foto')" class="mt-1" />
-
-                                <button type="submit"
-                                    class="mt-3 w-full px-4 py-2 bg-verde-claro text-white rounded-lg hover:bg-verde-medio transition duration-200 font-medium">
-                                    <i class="fa-solid fa-upload mr-2"></i>Salvar Foto
-                                </button>
-                            </form>
+                    <div x-data="{
+        preview: '{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=10b981&color=fff' }}'
+    }" class="flex flex-col items-center space-y-4">
+                        <!-- Preview com fade -->
+                        <div class="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-verde-claro shadow-md">
+                            <img :src="preview" alt="Preview do avatar"
+                                class="object-cover w-full h-full transition duration-200" x-transition.opacity>
                         </div>
+
+                        <!-- Formulário de Upload -->
+                        <form action="{{ route('profile.update.avatar') }}" method="POST" enctype="multipart/form-data"
+                            class="w-full space-y-3">
+                            @csrf
+                            @method('PATCH')
+
+                            <x-input-label for="avatar" value="Alterar foto de perfil" class="text-center" />
+
+                            <input type="file" name="avatar" id="avatar" accept="image/*" class="mt-2 block w-full text-sm text-gray-700
+                   file:mr-4 file:py-2 file:px-4 file:rounded-full
+                   file:border-0 file:text-sm file:font-semibold
+                   file:bg-verde-claro file:text-white
+                   hover:file:bg-verde-medio" @change="
+                const file = $event.target.files[0];
+                if (file) {
+                    preview = URL.createObjectURL(file);
+                }
+            ">
+
+                            <x-input-error :messages="$errors->get('avatar')" class="mt-1" />
+
+                            <button type="submit" class="mt-3 w-full px-4 py-2 bg-verde-claro text-white rounded-lg
+                   hover:bg-verde-medio transition duration-200 font-medium">
+                                <i class="fa-solid fa-upload mr-2"></i>Salvar Foto
+                            </button>
+                        </form>
                     </div>
 
                     {{-- Coluna do Formulário --}}
@@ -98,10 +103,10 @@
 
                             {{-- Telefone --}}
                             <div>
-                                <x-input-label for="telefone" value="Telefone" />
-                                <x-text-input id="telefone" name="telefone" type="text" class="mt-1 block w-full"
-                                    :value="old('telefone', $user->telefone ?? '')" placeholder="(00) 00000-0000" />
-                                <x-input-error :messages="$errors->get('telefone')" class="mt-1" />
+                                <x-input-label for="phone" value="Telefone" />
+                                <x-text-input id="phone" name="telefone" type="text" class="mt-1 block w-full"
+                                    :value="old('phone', $user->phone ?? '')" placeholder="(00) 00000-0000" />
+                                <x-input-error :messages="$errors->get('phone')" class="mt-1" />
                             </div>
 
                             {{-- CPF/CNPJ --}}
@@ -197,103 +202,12 @@
                 </div>
             </x-card>
 
-            {{-- Card Preferências de Doação --}}
-            <x-card class="p-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Preferências de Doação</h3>
-                <p class="text-sm text-gray-600 mb-4">Selecione as causas que mais se identificam para receber campanhas
-                    relacionadas.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {{-- Causas de Interesse --}}
-                    <div class="md:col-span-2">
-                        <x-input-label value="Causas de Interesse" />
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="educacao"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Educação</span>
-                            </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="saude"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Saúde</span>
-                            </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="meio-ambiente"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Meio Ambiente</span>
-                            </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="animais"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Animais</span>
-                            </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="combate-fome"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Combate à Fome</span>
-                            </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="criancas"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Crianças</span>
-                            </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="idosos"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Idosos</span>
-                            </label>
-                            <label class="flex items-center space-x-2 cursor-pointer">
-                                <input type="checkbox" name="causes[]" value="emergencias"
-                                    class="rounded border-gray-300 text-verde focus:ring-verde">
-                                <span class="text-sm text-gray-700">Emergências</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    {{-- Frequência de Doação --}}
-                    <div>
-                        <x-input-label for="donation_frequency" value="Frequência Preferida de Doação" />
-                        <select id="donation_frequency" name="donation_frequency"
-                            class="mt-1 block w-full border-gray-300 rounded-lg focus:border-verde focus:ring-verde">
-                            <option value="">Selecione...</option>
-                            <option value="unique"
-                                {{ old('donation_frequency', $user->donation_frequency ?? '') == 'unique' ? 'selected' : '' }}>
-                                Única</option>
-                            <option value="monthly"
-                                {{ old('donation_frequency', $user->donation_frequency ?? '') == 'monthly' ? 'selected' : '' }}>
-                                Mensal</option>
-                            <option value="quarterly"
-                                {{ old('donation_frequency', $user->donation_frequency ?? '') == 'quarterly' ? 'selected' : '' }}>
-                                Trimestral</option>
-                            <option value="yearly"
-                                {{ old('donation_frequency', $user->donation_frequency ?? '') == 'yearly' ? 'selected' : '' }}>
-                                Anual</option>
-                        </select>
-                    </div>
-
-                    {{-- Valor Sugerido --}}
-                    <div>
-                        <x-input-label for="suggested_amount" value="Valor Sugerido (R$)" />
-                        <x-text-input id="suggested_amount" name="suggested_amount" type="number"
-                            class="mt-1 block w-full" :value="old('suggested_amount', $user->suggested_amount ?? '')"
-                            placeholder="0,00" step="0.01" />
-                    </div>
-                </div>
-
-                <div class="flex justify-end mt-4">
-                    <button type="button"
-                        class="px-6 py-2 bg-verde-claro text-white rounded-lg hover:bg-verde-medio transition duration-200 font-medium">
-                        <i class="fa-solid fa-heart mr-2"></i>Salvar Preferências
-                    </button>
-                </div>
-            </x-card>
-
             {{-- Card Exclusão de Conta --}}
             <x-card class="p-6 border-l-4 border-l-red-500">
                 <h3 class="text-lg font-semibold text-red-600 mb-2">Excluir Conta</h3>
                 <p class="text-sm text-gray-600 mb-4">
-                    Esta ação é permanente. Todos os seus dados, doações e histórico serão removidos permanentemente.
+                    Esta ação é permanente. Todos os seus dados, doações e histórico serão removidos
+                    permanentemente.
                 </p>
 
                 <form method="POST" action="{{ route('profile.destroy') }}"
@@ -317,78 +231,4 @@
             </x-card>
         </div>
     </div>
-
-    {{-- Script para Preview da Imagem e Máscaras --}}
-    @push('scripts')
-    <script>
-    function previewImage(event) {
-        const preview = document.getElementById('avatar-preview');
-        const file = event.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                // Se for um elemento <div> transformado em img, use o id correto
-                const current = document.getElementById('avatar-preview');
-                if (current && current.tagName === 'IMG') {
-                    current.src = e.target.result;
-                    current.classList.remove('border-verde-claro');
-                    current.classList.add('border-verde');
-                }
-            }
-
-            reader.readAsDataURL(file);
-        }
-    }
-
-    // Máscaras do sistema (copiadas do users/create.blade.php)
-    document.addEventListener('DOMContentLoaded', function() {
-        // Máscara para telefone
-        const phoneInput = document.getElementById('telefone');
-        if (phoneInput) {
-            phoneInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length <= 11) {
-                    value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                    e.target.value = value;
-                }
-            });
-        }
-
-        // Máscara para CPF/CNPJ
-        const cpfInput = document.getElementById('cpf');
-        if (cpfInput) {
-            cpfInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length <= 11) {
-                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-                } else {
-                    value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-                    value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-                    value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
-                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
-                }
-                e.target.value = value;
-            });
-        }
-
-        // Máscara para CEP
-        const cepInput = document.getElementById('address_zip');
-        if (cepInput) {
-            cepInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 5) {
-                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                }
-                e.target.value = value;
-            });
-        }
-    });
-    </script>
-    @endpush
-
     @endsection
