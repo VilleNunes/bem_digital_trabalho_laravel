@@ -16,7 +16,7 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function show(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
@@ -31,43 +31,34 @@ class ProfileController extends Controller
         $user = $request->user();
         $validated = $request->validated();
 
-        // Upload da imagem (se existir)
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-
-            // Apagar avatar antigo se existir
-            if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
-                Storage::delete('public/' . $user->avatar);
-            }
-
-            // Armazenar o novo arquivo
-            $path = $avatar->store('avatars', 'public');
-            $validated['avatar'] = $path;
-        }
-
-        // Atualizar dados
+        // Atualizar apenas dados do usuário (sem imagem)
         $user->update($validated);
 
         return Redirect::route('profile.edit')->with('status', 'Perfil atualizado com sucesso!');
     }
 
-    public function updatePhoto(Request $request)
+    /**
+     * Atualiza apenas o avatar do usuário
+     */
+    public function updateAvatar(Request $request): RedirectResponse
     {
         $request->validate([
-            'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png'],
         ]);
 
         $user = $request->user();
 
-        if ($user->foto && Storage::exists('public/' . $user->foto)) {
-            Storage::delete('public/' . $user->foto);
+        // Apagar avatar antigo se existir
+        if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
+            Storage::delete('public/' . $user->avatar);
         }
 
-        $path = $request->file('foto')->store('avatars', 'public');
-        $user->foto = $path;
+        // Salvar o novo
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $user->avatar = $path;
         $user->save();
 
-        return back()->with('success', 'Foto atualizada com sucesso!');
+        return back()->with('success', 'Foto de perfil atualizada com sucesso!');
     }
 
     /**
@@ -75,7 +66,7 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
+        $request->validate([
             'password' => ['required', 'current_password'],
         ]);
 
@@ -88,6 +79,6 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return Redirect::to('/')->with('status', 'Conta excluída com sucesso!');
     }
 }
