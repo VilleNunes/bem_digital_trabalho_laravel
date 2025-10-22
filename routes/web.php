@@ -18,9 +18,11 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     // Routes profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update.avatar');
+
 
     // Routes users
     Route::get('/users', [UsersController::class, 'index'])->name('users.index');

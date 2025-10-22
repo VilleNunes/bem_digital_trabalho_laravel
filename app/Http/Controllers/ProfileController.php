@@ -7,14 +7,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function show(Request $request): View
     {
         return view('profile.edit', [
             'user' => $request->user(),
@@ -26,15 +28,37 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $validated = $request->validated();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Atualizar apenas dados do usuário (sem imagem)
+        $user->update($validated);
+
+        return Redirect::route('profile.edit')->with('status', 'Perfil atualizado com sucesso!');
+    }
+
+    /**
+     * Atualiza apenas o avatar do usuário
+     */
+    public function updateAvatar(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png'],
+        ]);
+
+        $user = $request->user();
+
+        // Apagar avatar antigo se existir
+        if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
+            Storage::delete('public/' . $user->avatar);
         }
 
-        $request->user()->save();
+        // Salvar o novo
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $user->avatar = $path;
+        $user->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return back()->with('success', 'Foto de perfil atualizada com sucesso!');
     }
 
     /**
@@ -42,7 +66,7 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
+        $request->validate([
             'password' => ['required', 'current_password'],
         ]);
 
@@ -55,6 +79,6 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return Redirect::to('/')->with('status', 'Conta excluída com sucesso!');
     }
 }
