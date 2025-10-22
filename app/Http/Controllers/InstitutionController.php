@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreInstitutionRequest;
 use App\Http\Requests\UpdateInstitutionRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Institution;
 
 class InstitutionController extends Controller
@@ -39,7 +40,25 @@ class InstitutionController extends Controller
      */
     public function store(StoreInstitutionRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('institutions', 'public');
+        }
+
+        \App\Models\Institution::create([
+            'fantasy_name' => $data['fantasy_name'],
+            'cnpj' => $data['cnpj'],
+            'phone' => $data['phone'],
+            'email' => $data['email'],
+            'is_active' => $data['is_active'] ?? false,
+            'description' => $data['description'] ?? null,
+            'photo_path' => $data['photo_path'] ?? null,
+            // 'address_id' se for setado aqui
+        ]);
+
+        return redirect()->route('institutions.index')
+            ->with('success', 'Instituição criada com sucesso!');
     }
 
     /**
@@ -63,17 +82,51 @@ class InstitutionController extends Controller
      */
     public function update(UpdateInstitutionRequest $request, Institution $institution)
     {
-        $data = $request->validate([
-            'fantasy_name' => ['required', 'string', 'max:255'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'is_active' => ['nullable'],
-        ]);
+        $data = $request->validated();
+        if (isset($data['address']) && is_array($data['address'])) {
+            $addressData = $data['address'];
+            unset($data['address']);
 
-        $data['is_active'] = $request->boolean('is_active');
 
-        $institution->update($data);
+            if ($institution->address) {
+                $institution->address->update($addressData);
+            } else {
 
-        return redirect()->route('institutions.index')->with('success', 'Instituição atualizada com sucesso!');
+                $newAddress = \App\Models\Address::create($addressData);
+                $institution->update(['address_id' => $newAddress->id]);
+            }
+        }
+
+        $payload = [
+            'fantasy_name' => $data['fantasy_name'],
+            'cnpj' => $data['cnpj'],
+            'phone' => $data['phone'],
+            'email' => $data['email'],
+            'is_active' => $data['is_active'] ?? false,
+            'description' => $data['description'] ?? null,
+        ];
+
+        if ($request->boolean('remove_photo') && $institution->photo_path) {
+            $old = str_replace('/storage/', '', $institution->photo_path);
+            Storage::disk('public')->delete($old);
+            $payload['photo_path'] = null;
+        }
+
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('institutions', 'public');
+
+
+            if ($institution->photo_path) {
+                $old = str_replace('/storage/', '', $institution->photo_path);
+                Storage::disk('public')->delete($old);
+            }
+            $payload['photo_path'] = Storage::url($path);
+        }
+
+        $institution->update($payload);
+
+        return redirect()->route('institutions.index')
+            ->with('success', 'Instituição atualizada com sucesso!');
     }
 
     /**
