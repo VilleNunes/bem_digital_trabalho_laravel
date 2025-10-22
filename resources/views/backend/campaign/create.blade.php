@@ -31,6 +31,12 @@
             @click="abaAtiva = 'ponto'">
             Ponto de Coleta
         </button>
+          <button
+            class="px-4 py-2 -mb-px border-b-2 font-semibold"
+            :class="abaAtiva === 'fotos' ? 'border-blue-500 text-blue-500' : 'border-transparent text-gray-500'"
+            @click="abaAtiva = 'fotos'">
+            Fotos
+        </button>
     </div>
 
     <form action="{{ route('users.store') }}" method="post" class="space-y-5">
@@ -143,51 +149,120 @@
             <div x-data="horariosApp()" class="mt-6">
                 <h2 class="text-xl font-semibold mb-4">Horários de Funcionamento</h2>
 
-                <div class="grid grid-cols-7 gap-4 mb-6 text-center">
+                <!-- Preview dos Horários -->
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <h3 class="font-semibold mb-3 text-gray-700">Preview dos Horários</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
+                        <template x-for="(dia, index) in dias" :key="index">
+                            <div class="flex justify-between items-center p-2 bg-white rounded border">
+                                <span class="font-medium" x-text="dia"></span>
+                                <span class="text-gray-600" 
+                                      x-text="getHorarioDisplay(dia)"
+                                      :class="{ 'text-red-500': isFechado(dia) }"></span>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="mt-3 text-xs text-gray-500">
+                        <span x-show="Object.keys(horarios).length === 0">Nenhum horário definido - ponto será marcado como não aberto</span>
+                    </div>
+                </div>
+
+                <!-- Seleção de Dias -->
+                <div class="grid grid-cols-7 gap-2 mb-6 text-center">
                     <template x-for="(dia, index) in dias" :key="index">
-                        <div class="border rounded p-3 cursor-pointer"
-                             :class="{'bg-blue-100 border-blue-500': diaSelecionado === dia}"
+                        <div class="border rounded p-2 cursor-pointer transition-colors"
+                             :class="{
+                                 'bg-blue-100 border-blue-500': diaSelecionado === dia,
+                                 'bg-green-50 border-green-300': hasHorario(dia) && !isFechado(dia),
+                                 'bg-red-50 border-red-300': isFechado(dia)
+                             }"
                              @click="selecionarDia(dia)">
-                            <span x-text="dia" class="font-semibold"></span>
-                            <div class="mt-2 text-sm">
-                                <span x-text="formatHorario(horarios[dia]?.abertura)"></span>
-                                -
-                                <span x-text="formatHorario(horarios[dia]?.fechamento)"></span>
+                            <span x-text="dia" class="font-semibold block"></span>
+                            <div class="mt-1 text-xs">
+                                <template x-if="hasHorario(dia) && !isFechado(dia)">
+                                    <span x-text="formatHorario(horarios[dia]?.abertura) + ' - ' + formatHorario(horarios[dia]?.fechamento)"></span>
+                                </template>
+                                <template x-if="isFechado(dia)">
+                                    <span class="text-red-500">Fechado</span>
+                                </template>
+                                <template x-if="!hasHorario(dia)">
+                                    <span class="text-gray-400">--:--</span>
+                                </template>
                             </div>
                         </div>
                     </template>
                 </div>
 
-                <div x-show="diaSelecionado" class="bg-white shadow p-6 rounded mb-6">
-                    <h3 class="font-semibold mb-4" x-text="'Editar Horário - ' + diaSelecionado"></h3>
+                <!-- Editor de Horários -->
+                <div x-show="diaSelecionado" class="bg-white shadow p-6 rounded mb-6 border">
+                    <h3 class="font-semibold mb-4 text-lg" x-text="'Configurar Horário - ' + diaSelecionado"></h3>
 
                     <div class="mb-4">
-                        <label class="inline-flex items-center">
+                        <label class="inline-flex items-center cursor-pointer">
                             <input type="checkbox" x-model="fechado" class="mr-2">
-                            Não abre neste dia
+                            <span class="text-red-600 font-medium">Não abre neste dia</span>
                         </label>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4" x-show="!fechado">
                         <div>
-                            <label class="block font-semibold mb-1">Abertura</label>
-                            <input type="time" x-model="horarioAbertura" class="w-full border rounded p-2">
+                            <label class="block font-semibold mb-1 text-gray-700">Horário de Abertura</label>
+                            <input type="time" x-model="horarioAbertura" class="w-full border rounded p-2 focus:border-blue-500 focus:ring focus:ring-blue-200">
                         </div>
                         <div>
-                            <label class="block font-semibold mb-1">Fechamento</label>
-                            <input type="time" x-model="horarioFechamento" class="w-full border rounded p-2">
+                            <label class="block font-semibold mb-1 text-gray-700">Horário de Fechamento</label>
+                            <input type="time" x-model="horarioFechamento" class="w-full border rounded p-2 focus:border-blue-500 focus:ring focus:ring-blue-200">
                         </div>
                     </div>
 
-                    <button type="button"
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        @click="salvarHorario()"
-                        :disabled="!fechado && (!horarioAbertura || !horarioFechamento)">
-                        Salvar
-                    </button>
+                    <div class="flex gap-2">
+                        <button type="button"
+                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            @click="salvarHorario()"
+                            :disabled="!fechado && (!horarioAbertura || !horarioFechamento)">
+                            Salvar Horário
+                        </button>
+                        <button type="button"
+                            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+                            @click="limparHorario()"
+                            x-show="hasHorario(diaSelecionado)">
+                            Limpar Horário
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Inputs ocultos para envio dos horários -->
+                <template x-for="dia in dias" :key="dia">
+                    <input type="hidden" :name="'horarios[' + dia + '][abertura]'" :value="horarios[dia]?.abertura || ''">
+                    <input type="hidden" :name="'horarios[' + dia + '][fechamento]'" :value="horarios[dia]?.fechamento || ''">
+                </template>
             </div>
 
+        </div>
+
+        <!-- Aba Fotos -->
+        <div x-show="abaAtiva === 'fotos'" x-data="uploadFotos()">
+            <h2 class="text-xl font-semibold mb-4">Upload de Fotos</h2>
+
+            <input type="file" multiple accept="image/*" @change="handleFiles($event)" class="mb-4" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <template x-for="(file, index) in files" :key="index">
+                    <div class="border rounded p-2 relative">
+                        <button type="button" class="absolute top-1 right-1 text-red-500 hover:text-red-700" @click="removeFile(index)">×</button>
+                        <img :src="file.url" class="w-full h-40 object-cover rounded mb-2" />
+                        <div class="text-sm">
+                            <div x-text="file.name"></div>
+                            <div x-text="formatSize(file.size)"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Inputs ocultos para enviar para o backend -->
+            <template x-for="file in files" :key="file.name">
+                <input type="hidden" name="photos[]" :value="file.data">
+            </template>
         </div>
 
         <div class="flex justify-end gap-3 mt-6">
@@ -234,6 +309,15 @@ function horariosApp() {
         fechado: false,
         horarios: {},
 
+        init() {
+            // Inicializar com todos os dias sem horário definido
+            this.dias.forEach(dia => {
+                if (!this.horarios[dia]) {
+                    this.horarios[dia] = { abertura: '', fechamento: '' };
+                }
+            });
+        },
+
         selecionarDia(dia) {
             this.diaSelecionado = dia;
             if(this.horarios[dia]){
@@ -248,11 +332,34 @@ function horariosApp() {
         },
 
         formatHorario(h) {
-            return h ? h : '--:--';
+            if (!h) return '--:--';
+            return h.substring(0, 5); // Remove segundos se houver
+        },
+
+        getHorarioDisplay(dia) {
+            if (this.isFechado(dia)) {
+                return 'Fechado';
+            }
+            if (this.hasHorario(dia)) {
+                return `${this.formatHorario(this.horarios[dia].abertura)} - ${this.formatHorario(this.horarios[dia].fechamento)}`;
+            }
+            return '--:--';
+        },
+
+        hasHorario(dia) {
+            return this.horarios[dia] && 
+                   this.horarios[dia].abertura && 
+                   this.horarios[dia].fechamento;
+        },
+
+        isFechado(dia) {
+            return this.horarios[dia] && 
+                   !this.horarios[dia].abertura && 
+                   !this.horarios[dia].fechamento;
         },
 
         salvarHorario() {
-            if(this.fechado){
+            if (this.fechado) {
                 this.horarios[this.diaSelecionado] = { abertura: '', fechamento: '' };
             } else {
                 this.horarios[this.diaSelecionado] = {
@@ -260,6 +367,44 @@ function horariosApp() {
                     fechamento: this.horarioFechamento
                 };
             }
+        },
+
+        limparHorario() {
+            this.horarios[this.diaSelecionado] = { abertura: '', fechamento: '' };
+            this.horarioAbertura = '';
+            this.horarioFechamento = '';
+            this.fechado = false;
+        }
+    }
+}
+
+function uploadFotos() {
+    return {
+        files: [],
+        handleFiles(event) {
+            const selectedFiles = Array.from(event.target.files)
+            selectedFiles.forEach(file => {
+                const reader = new FileReader()
+                reader.onload = e => {
+                    this.files.push({
+                        name: file.name,
+                        size: file.size,
+                        url: e.target.result,
+                        data: e.target.result
+                    })
+                }
+                reader.readAsDataURL(file)
+            })
+            // Limpar input para permitir re-seleção do mesmo arquivo
+            event.target.value = null
+        },
+        removeFile(index) {
+            this.files.splice(index, 1)
+        },
+        formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B'
+            else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB'
+            else return (bytes / 1048576).toFixed(1) + ' MB'
         }
     }
 }
