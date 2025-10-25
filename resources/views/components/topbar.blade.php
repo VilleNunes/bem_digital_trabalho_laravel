@@ -21,17 +21,9 @@
             </div>
 
             <div class="relative">
-                @php
-                $avatarPath = $user->avatar ?? $user->foto ?? null;
-                @endphp
-
-                @if($avatarPath)
-                <img src="{{ asset('storage/' . $avatarPath) }}" alt="Foto de perfil"
+                {{-- Use o accessor avatar_url no model User para fornecer o caminho completo (storage ou default image) --}}
+                <img src="{{ $user->avatar_url }}" alt="Foto de perfil"
                     class="w-10 h-10 rounded-full border-2 border-verde-claro shadow-sm">
-                @else
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=10b981&color=fff"
-                    alt="Avatar padrão" class="w-10 h-10 rounded-full border-2 border-verde-claro shadow-sm">
-                @endif
             </div>
         </button>
 

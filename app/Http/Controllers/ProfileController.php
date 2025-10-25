@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use App\Models\Address;
 
 
 class ProfileController extends Controller
@@ -43,23 +44,50 @@ class ProfileController extends Controller
     public function updateAvatar(Request $request): RedirectResponse
     {
         $request->validate([
-            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png'],
+            'avatar' => 'required|image|mimes:jpg,jpeg,png',
         ]);
 
         $user = $request->user();
 
-        // Apagar avatar antigo se existir
-        if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
-            Storage::delete('public/' . $user->avatar);
+        // Apagar avatar antigo (se não for o padrão)
+        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+            Storage::disk('public')->delete($user->avatar);
         }
 
-        // Salvar o novo
+        // Salvar novo
         $path = $request->file('avatar')->store('avatars', 'public');
-        $user->avatar = $path;
-        $user->save();
+        $user->update(['avatar' => $path]);
 
         return back()->with('success', 'Foto de perfil atualizada com sucesso!');
     }
+
+    public function updateAddress(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'zip'           => ['nullable', 'string', 'max:100'],
+            'state'         => ['nullable', 'string', 'max:100'],
+            'city'          => ['nullable', 'string', 'max:100'],
+            'neighborhood'  => ['nullable', 'string', 'max:100'],
+            'road'          => ['nullable', 'string', 'max:100'],
+            'number'        => ['nullable', 'string', 'max:100'],
+            'complement'    => ['nullable', 'string', 'max:100'],
+        ]);
+
+        $user = $request->user();
+
+        // Se já existir um endereço, atualiza
+        if ($user->address) {
+            $user->address->update($validated);
+        } else {
+            // Cria novo endereço e associa ao usuário
+            $address = Address::create($validated);
+            $user->address()->associate($address);
+            $user->save();
+        }
+
+        return back()->with('success', 'Endereço atualizado com sucesso!');
+    }
+
 
     /**
      * Delete the user's account.
