@@ -3,7 +3,7 @@
 @section('content')
 <div class="space-y-8">
     <div class="flex items-center justify-between">
-        <h1 class="text-3xl font-bold text-gray-800">Meu Perfil</h1>
+        <h1 class="text-2xl font-bold mb-2">Você está aqui</h1>
         <div class="relative">
             {{-- espaço para ações rápidas como salvar/voltar se necessário --}}
         </div>
@@ -38,13 +38,12 @@
             @endif
 
             {{-- Card Principal - Informações Básicas --}}
-            <x-card class="p-6">
+            <x-card>
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Informações Pessoais</h3>
 
                 <div class="flex flex-col md:flex-row gap-6">
-                    <div x-data="{
-        preview: '{{ $user->avatar ? asset('storage/' . $user->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=10b981&color=fff' }}'
-    }" class="flex flex-col items-center space-y-4">
+                    <div x-data="{ preview: '{{ $user->avatar_url }}' }" class="flex flex-col items-center space-y-4">
+
                         <!-- Preview com fade -->
                         <div class="relative w-32 h-32 rounded-full overflow-hidden ring-4 ring-verde-claro shadow-md">
                             <img :src="preview" alt="Preview do avatar"
@@ -65,9 +64,7 @@
                    file:bg-verde-claro file:text-white
                    hover:file:bg-verde-medio" @change="
                 const file = $event.target.files[0];
-                if (file) {
-                    preview = URL.createObjectURL(file);
-                }
+                if (file) preview = URL.createObjectURL(file);
             ">
 
                             <x-input-error :messages="$errors->get('avatar')" class="mt-1" />
@@ -104,7 +101,7 @@
                             {{-- Telefone --}}
                             <div>
                                 <x-input-label for="phone" value="Telefone" />
-                                <x-text-input id="phone" name="telefone" type="text" class="mt-1 block w-full"
+                                <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full"
                                     :value="old('phone', $user->phone ?? '')" placeholder="(00) 00000-0000" />
                                 <x-input-error :messages="$errors->get('phone')" class="mt-1" />
                             </div>
@@ -128,82 +125,92 @@
                 </div>
             </x-card>
 
-            {{-- Card Endereço --}}
-            <x-card class="p-6">
+            <x-card>
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Endereço para Recebimento</h3>
-                <p class="text-sm text-gray-600 mb-4">Informe seu endereço para receber certificados ou materiais
-                    relacionados às doações.</p>
+                <p class="text-sm text-gray-600 mb-6">
+                    Informe seu endereço para receber certificados ou materiais relacionados às doações.
+                </p>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {{-- CEP --}}
-                    <div class="md:col-span-2">
-                        <x-input-label for="address_zip" value="CEP" />
-                        <x-text-input id="address_zip" name="address_zip" type="text" class="mt-1 block w-full"
-                            :value="old('address_zip', $user->address_zip ?? '')" placeholder="00000-000" />
-                        <x-input-error :messages="$errors->get('address_zip')" class="mt-1" />
+                <form action="{{ route('profile.update.address') }}" method="POST" class="space-y-6">
+                    @csrf
+                    @method('PATCH')
+
+                    {{-- Campos de endereço --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {{-- CEP --}}
+                        <div>
+                            <x-input-label for="address_zip" value="CEP" />
+                            <x-text-input id="address_zip" name="zip" type="text"
+                                :value="old('zip', $user->address->zip ?? '')" placeholder="00000-000"
+                                class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->get('zip')" class="mt-1" />
+                        </div>
+
+                        {{-- Estado --}}
+                        <div>
+                            <x-input-label for="address_state" value="Estado" />
+                            <x-text-input id="address_state" name="state" type="text"
+                                :value="old('state', $user->address->state ?? '')" class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->get('state')" class="mt-1" />
+                        </div>
+
+                        {{-- Cidade --}}
+                        <div>
+                            <x-input-label for="address_city" value="Cidade" />
+                            <x-text-input id="address_city" name="city" type="text"
+                                :value="old('city', $user->address->city ?? '')" class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->get('city')" class="mt-1" />
+                        </div>
+
+                        {{-- Bairro --}}
+                        <div>
+                            <x-input-label for="address_neighborhood" value="Bairro" />
+                            <x-text-input id="address_neighborhood" name="neighborhood" type="text"
+                                :value="old('neighborhood', $user->address->neighborhood ?? '')"
+                                class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->get('neighborhood')" class="mt-1" />
+                        </div>
+
+                        {{-- Rua --}}
+                        <div class="lg:col-span-2">
+                            <x-input-label for="address_road" value="Rua" />
+                            <x-text-input id="address_road" name="road" type="text"
+                                :value="old('road', $user->address->road ?? '')" class="mt-1 block w-full" />
+                            <x-input-error :messages="$errors->get('road')" class="mt-1" />
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-4 lg:col-span-3">
+                            {{-- Número (1/3 da linha) --}}
+                            <div>
+                                <x-input-label for="address_number" value="Número" />
+                                <x-text-input id="address_number" name="number" type="text"
+                                    :value="old('number', $user->address->number ?? '')" class="mt-1 block w-full" />
+                                <x-input-error :messages="$errors->get('number')" class="mt-1" />
+                            </div>
+
+                            {{-- Complemento (2/3 da linha) --}}
+                            <div class="col-span-2">
+                                <x-input-label for="address_complement" value="Complemento" />
+                                <x-text-input id="address_complement" name="complement" type="text"
+                                    :value="old('complement', $user->address->complement ?? '')"
+                                    class="mt-1 block w-full" />
+                                <x-input-error :messages="$errors->get('complement')" class="mt-1" />
+                            </div>
+                        </div>
                     </div>
 
-                    {{-- Estado --}}
-                    <div>
-                        <x-input-label for="address_state" value="Estado" />
-                        <x-text-input id="address_state" name="address_state" type="text" class="mt-1 block w-full"
-                            :value="old('address_state', $user->address_state ?? '')" />
-                        <x-input-error :messages="$errors->get('address_state')" class="mt-1" />
+                    {{-- Botão no rodapé direito --}}
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="px-4 py-2 bg-verde text-white rounded-md hover:bg-verde-claro transition duration-200 text-sm font-medium">
+                            <i class="fa-solid fa-location-dot mr-2"></i>Salvar Endereço
+                        </button>
                     </div>
-
-                    {{-- Cidade --}}
-                    <div>
-                        <x-input-label for="address_city" value="Cidade" />
-                        <x-text-input id="address_city" name="address_city" type="text" class="mt-1 block w-full"
-                            :value="old('address_city', $user->address_city ?? '')" />
-                        <x-input-error :messages="$errors->get('address_city')" class="mt-1" />
-                    </div>
-
-                    {{-- Bairro --}}
-                    <div>
-                        <x-input-label for="address_neighborhood" value="Bairro" />
-                        <x-text-input id="address_neighborhood" name="address_neighborhood" type="text"
-                            class="mt-1 block w-full"
-                            :value="old('address_neighborhood', $user->address_neighborhood ?? '')" />
-                        <x-input-error :messages="$errors->get('address_neighborhood')" class="mt-1" />
-                    </div>
-
-                    {{-- Rua --}}
-                    <div>
-                        <x-input-label for="address_road" value="Rua" />
-                        <x-text-input id="address_road" name="address_road" type="text" class="mt-1 block w-full"
-                            :value="old('address_road', $user->address_road ?? '')" />
-                        <x-input-error :messages="$errors->get('address_road')" class="mt-1" />
-                    </div>
-
-                    {{-- Número --}}
-                    <div>
-                        <x-input-label for="address_number" value="Número" />
-                        <x-text-input id="address_number" name="address_number" type="text" class="mt-1 block w-full"
-                            :value="old('address_number', $user->address_number ?? '')" />
-                        <x-input-error :messages="$errors->get('address_number')" class="mt-1" />
-                    </div>
-
-                    {{-- Complemento --}}
-                    <div class="md:col-span-2">
-                        <x-input-label for="address_complement" value="Complemento" />
-                        <x-text-input id="address_complement" name="address_complement" type="text"
-                            class="mt-1 block w-full"
-                            :value="old('address_complement', $user->address_complement ?? '')" />
-                        <x-input-error :messages="$errors->get('address_complement')" class="mt-1" />
-                    </div>
-                </div>
-
-                <div class="flex justify-end mt-4">
-                    <button type="button"
-                        class="px-6 py-2 bg-verde-claro text-white rounded-lg hover:bg-verde-medio transition duration-200 font-medium">
-                        <i class="fa-solid fa-location-dot mr-2"></i>Salvar Endereço
-                    </button>
-                </div>
+                </form>
             </x-card>
 
             {{-- Card Exclusão de Conta --}}
-            <x-card class="p-6 border-l-4 border-l-red-500">
+            <x-card class="border-l-4 border-l-red-500">
                 <h3 class="text-lg font-semibold text-red-600 mb-2">Excluir Conta</h3>
                 <p class="text-sm text-gray-600 mb-4">
                     Esta ação é permanente. Todos os seus dados, doações e histórico serão removidos

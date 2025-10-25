@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Atualiza endereço separado
+    Route::patch('/profile/address', [ProfileController::class, 'updateAddress'])->name('profile.update.address');
     Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update.avatar');
 
 
@@ -40,9 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/institutions/{institution}', [InstitutionController::class, 'update'])->name('institutions.update');
     Route::delete('/institutions/{institution}', [InstitutionController::class, 'destroy'])->name('institutions.destroy');
     Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
-    ->name('institutions.active');
+        ->name('institutions.active');
 
-    Route::get('/campaign/create',[CampaignController::class,'create'])->name('campaign');
+    Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign');
 });
 
 
