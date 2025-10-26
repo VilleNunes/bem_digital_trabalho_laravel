@@ -20,13 +20,13 @@
         <!-- Nome e Telefone -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-                <x-input-label for="name" value="Nome" />
+                <x-input-label for="name" required value="Nome" />
                 <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')"
                     required />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
             <div>
-                <x-input-label for="phone" value="Telefone" />
+                <x-input-label for="phone" required value="Telefone" />
                 <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')"
                     required />
                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
@@ -35,7 +35,7 @@
 
         <!-- Email -->
         <div>
-            <x-input-label for="email" value="Email" />
+            <x-input-label for="email" required value="Email" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
                 required />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -44,12 +44,12 @@
         <!-- Senha e Confirmação -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-                <x-input-label for="password" value="Senha" />
+                <x-input-label for="password" required value="Senha" />
                 <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required />
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
             <div>
-                <x-input-label for="password_confirmation" value="Confirmar Senha" />
+                <x-input-label for="password_confirmation" required value="Confirmar Senha" />
                 <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password"
                     name="password_confirmation" required />
             </div>

@@ -19,7 +19,11 @@ return new class extends Migration
             $table->dateTime('beginning');
             $table->dateTime('termination');
             $table->float('mark')->nullable();
+
+            $table->unsignedBigInteger('institution_id');
             $table->unsignedBigInteger('category_id');
+
+            $table->foreign('institution_id')->references('id')->on('institutions');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });

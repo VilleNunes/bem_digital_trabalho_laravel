@@ -28,4 +28,8 @@ class Address extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function collectionPoints(){
+        return $this->hasMany(CollectionPoint::class);
+    }
 }

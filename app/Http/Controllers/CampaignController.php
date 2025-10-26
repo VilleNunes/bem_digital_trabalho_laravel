@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCampaignRequest;
 use App\Http\Requests\UpdateCampaignRequest;
+use App\Models\Address;
 use App\Models\Campaign;
+use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CampaignController extends Controller
 {
@@ -21,7 +25,8 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        return view('backend.campaign.create');
+        $categories = Category::all();
+        return view('backend.campaign.create',['categories'=>$categories]);
     }
 
     /**
@@ -29,7 +34,41 @@ class CampaignController extends Controller
      */
     public function store(StoreCampaignRequest $request)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $data = $request->validated();
+   
+            $address_data = $data['address'] ?? null;
+            $schedules_data = $data['horarios'] ?? [];
+            $title_point = $data['title_point'] ?? 'Ponto de Coleta';
+
+            unset($data['address'], $data['horarios'], $data['photos'], $data['title_point']);
+
+            $campaign = Auth::user()->institution->campaigns()->create($data);
+
+            $collectionPoint = $campaign->collectionPoints()->create([
+                'name' => $title_point,
+                'address_id' => Address::create($address_data)->id
+            ]);
+
+    
+            foreach ($schedules_data as $dia => $horario) {
+                $collectionPoint->schedules()->create([
+                    'dia' => $dia,
+                    'abertura' => $horario['abertura'] ?? null,
+                    'fechamento' => $horario['fechamento'] ?? null,
+                ]);
+            }
+
+            DB::commit();
+
+            return to_route( 'dashboard');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
     }
 
     /**

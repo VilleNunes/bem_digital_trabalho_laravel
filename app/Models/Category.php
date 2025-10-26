@@ -14,4 +14,8 @@ class Category extends Model
         'name',
         'is_active'
     ];
+
+    public function campaigns(){
+        $this->hasMany(Category::class);
+    }
 }

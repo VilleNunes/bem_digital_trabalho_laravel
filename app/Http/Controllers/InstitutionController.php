@@ -42,8 +42,8 @@ class InstitutionController extends Controller
     {
         $data = $request->validated();
 
-        if ($request->hasFile('photo')) {
-            $data['photo_path'] = $request->file('photo')->store('institutions', 'public');
+        if (request()->hasFile('photo')) {
+            $data['photo_path'] = request()->file('photo')->store('institutions', 'public');
         }
 
         \App\Models\Institution::create([
@@ -54,7 +54,6 @@ class InstitutionController extends Controller
             'is_active' => $data['is_active'] ?? false,
             'description' => $data['description'] ?? null,
             'photo_path' => $data['photo_path'] ?? null,
-            // 'address_id' se for setado aqui
         ]);
 
         return redirect()->route('institutions.index')

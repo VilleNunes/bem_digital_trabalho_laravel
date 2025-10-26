@@ -39,6 +39,10 @@
                         ['label' => 'Listar Instituições', 'route' => 'institutions.index', 'icon' => 'fa-list'],
                         ['label' => 'Editar Instituição', 'route' => 'institutions.edit', 'icon' => 'fa-pen-to-square', 'show_on_current_route' => true],
                     ]" />
+                <x-nav-dropdown icon="fa-building" label="Campanhas" routeBase="campaingn" :items="[
+                        ['label' => 'Listar campanhas', 'route' => 'institutions.index', 'icon' => 'fa-list'],
+                        ['label' => 'Criar campanhas', 'route' => 'campaign.create', 'icon' => 'fa-pen-to-square'],
+                    ]" />
 
                 <x-nav-item icon="fa-user" label="Perfil" route="profile.edit" />
                 <x-nav-item icon="fa-chart-line" label="Relatórios" href="#" />

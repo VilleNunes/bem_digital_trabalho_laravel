@@ -32,6 +32,12 @@ class Institution extends Model
     {
         return $this->belongsTo(Address::class);
     }
+
+    public function campaigns(){
+        return $this->hasMany(Campaign::class);
+    }
+
+
     public function getPhotoUrlAttribute(): ?string
     {
         if (!$this->photo_path)
