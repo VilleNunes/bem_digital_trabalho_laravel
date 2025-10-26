@@ -40,6 +40,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/institutions/{institution}', [InstitutionController::class, 'destroy'])->name('institutions.destroy');
     Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
         ->name('institutions.active');
+
+// Página inicial - Home
+Route::get('/', function () {
+    return view('site.home');
+})->name('site.home');
+
+// Página sobre - About
+Route::get('/sobre', function () {
+    return view('site.about');
+})->name('site.about');
+
+// Página de contato - Contact
+Route::get('/contato', function () {
+    return view('site.contact');
+})->name('site.contact');
+
 });
 
 
