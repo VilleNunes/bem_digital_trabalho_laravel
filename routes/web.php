@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
@@ -17,10 +18,12 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     // Routes profile
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::patch('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update.photo');
+    // Atualiza endereço separado
+    Route::patch('/profile/address', [ProfileController::class, 'updateAddress'])->name('profile.update.address');
+    Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update.avatar');
 
 
     // Routes users
@@ -41,21 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
         ->name('institutions.active');
 
-// Página inicial - Home
-Route::get('/', function () {
-    return view('site.home');
-})->name('site.home');
-
-// Página sobre - About
-Route::get('/sobre', function () {
-    return view('site.about');
-})->name('site.about');
-
-// Página de contato - Contact
-Route::get('/contato', function () {
-    return view('site.contact');
-})->name('site.contact');
-
+    //Routes Campaign
+    Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign');
 });
 
 
