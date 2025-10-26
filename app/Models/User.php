@@ -60,6 +60,10 @@ class User extends Authenticatable
         return $this->belongsTo(Institution::class);
     }
 
+    public function campaigns(){
+        return $this->hasMany(Campaign::class);
+    }
+
     public function modules()
     {
         return $this->belongsToMany(Module::class);

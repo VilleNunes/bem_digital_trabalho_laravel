@@ -8,6 +8,7 @@ use App\Models\Address;
 use App\Models\Module;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
@@ -65,7 +66,7 @@ class UsersController extends Controller
         }
 
         $data['password'] = Hash::make($data['password']);
-        $data['institution_id'] = auth()->user()->institution_id;
+        $data['institution_id'] = Auth::user()->institution_id;
         
         if(isset($data['modules'])){
             $modules = $data['modules'];

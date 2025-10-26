@@ -44,7 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
         ->name('institutions.active');
 
-    Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign');
+    Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign.create');
+    Route::post('/campaign/create', [CampaignController::class, 'store'])->name('campaign.store');
 });
 
 

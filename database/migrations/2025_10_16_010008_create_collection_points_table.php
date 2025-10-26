@@ -6,37 +6,37 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-       Schema::create('collection_points', function (Blueprint $table) {
+        Schema::create('collection_points', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->dateTime('beginning');
-            $table->dateTime('termination');
-            $table->unsignedBigInteger('campaign_id');
-            $table->foreign('campaign_id')->references('id')->on('campaigns');
+            $table->string('title');
+            $table->unsignedBigInteger('address_id');
+            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('cascade');
             $table->timestamps();
         });
 
-        Schema::create('addresses_collection_points', function (Blueprint $table) {
+        Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('collection_point_id');
-            $table->unsignedInteger('address_id');
-            $table->foreign('address_id')->references('id')->on('addresses');
-            $table->foreign('collection_point_id')->references('id')->on('unit_measurements');
+            $table->foreignId('collection_point_id')->constrained('collection_points')->onDelete('cascade');
+            $table->string('dia');
+            $table->time('abertura')->nullable();
+            $table->time('fechamento')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('campaign_collection_points', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('collection_point_id')->constrained('collection_points')->onDelete('cascade');
+            $table->foreignId('campaign_id')->constrained('campaigns')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
+        Schema::dropIfExists('campaign_collection_points');
+        Schema::dropIfExists('schedules');
         Schema::dropIfExists('collection_points');
-        Schema::dropIfExists('addresses_collection_points');
     }
 };
