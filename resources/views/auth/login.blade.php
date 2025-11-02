@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="min-h-screen flex items-center justify-center bg-gray-50 white:bg-gray-200 p-4"
+<div class="min-h-screen flex items-center justify-center bg-gray-50 white:bg-gray-700 p-4"
      style="background-image: url({{ asset('login-background.svg') }}); background-size: cover; background-position: center;">
 
     <div class="flex flex-col sm:flex-row w-full max-w-[900px] h-auto sm:h-[500px] rounded-2xl overflow-hidden shadow-lg">
