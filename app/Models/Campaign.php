@@ -12,6 +12,8 @@ class Campaign extends Model
 
     protected $fillable = [
         'name',
+        'phone',
+        'legend_phone',
         'description',
         'is_active',
         'beginning',
@@ -31,11 +33,8 @@ class Campaign extends Model
 
     public function collectionPoints()
     {
-        return $this->belongsToMany(
-            CollectionPoint::class,
-            'campaign_collection_points', 
-            'campaign_id',               
-            'collection_point_id'       
+        return $this->hasMany(
+            CollectionPoint::class,      
         );
     }
 

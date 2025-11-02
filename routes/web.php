@@ -46,6 +46,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign.create');
     Route::post('/campaign/create', [CampaignController::class, 'store'])->name('campaign.store');
+    Route::get('/campaign', [CampaignController::class, 'index'])->name('campaign.index');
+    Route::get('/campaign/{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
+    Route::put('/campaign/{campaign}/update', [CampaignController::class, 'update'])->name('campaign.update');
 });
 
 
