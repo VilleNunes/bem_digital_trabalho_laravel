@@ -12,6 +12,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    return view('home');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -25,7 +29,6 @@ Route::middleware('auth')->group(function () {
     // Atualiza endereço separado
     Route::patch('/profile/address', [ProfileController::class, 'updateAddress'])->name('profile.update.address');
     Route::patch('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update.avatar');
-
 
     // Routes users
     Route::get('/users', [UsersController::class, 'index'])->name('users.index');
