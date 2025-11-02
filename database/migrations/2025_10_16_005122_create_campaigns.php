@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100);
             $table->text('description');
+            $table->string('phone',20);
+            $table->string('legend_phone',100);
             $table->boolean('is_active')->default(false);
             $table->dateTime('beginning');
             $table->dateTime('termination');

@@ -11,7 +11,7 @@ class CollectionPoint extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'title',
         'address_id'
     ];
 
@@ -21,11 +21,9 @@ class CollectionPoint extends Model
 
    public function campaigns()
     {
-        return $this->belongsToMany(
+        return $this->belongsTo(
             Campaign::class,
-            'campaign_collection_points',
-            'collection_point_id',
-            'campaign_id'
+            
         );
     }
 

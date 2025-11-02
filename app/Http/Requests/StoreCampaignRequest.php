@@ -16,7 +16,7 @@ class StoreCampaignRequest extends FormRequest
         $rules = [
             // Endereço
             'address.zip' => 'required|string|max:10',
-            'address.state' => 'required|string|max:2',
+            'address.state' => 'required|string|max:50',
             'address.city' => 'required|string|max:255',
             'address.neighborhood' => 'required|string|max:255',
             'address.road' => 'required|string|max:255',
@@ -28,7 +28,7 @@ class StoreCampaignRequest extends FormRequest
             'name' => 'required|string|max:255',
             'beginning' => 'required|date|before_or_equal:termination',
             'termination' => 'required|date|after_or_equal:beginning',
-            'title' => 'required|string|max:255',
+            'legend_phone' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'category_id' => 'required|exists:categories,id',
             'description' => 'required|string'

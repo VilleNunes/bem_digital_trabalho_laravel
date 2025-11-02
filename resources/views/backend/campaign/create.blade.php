@@ -30,8 +30,14 @@
         </button>
     </div>
 
-    <form action="{{ route('campaign.store') }}" method="post" enctype="multipart/form-data" class="space-y-5">
+    <form action="{{ isset($campaign) ? route('campaign.update', $campaign) : route('campaign.store') }}" method="post"
+        enctype="multipart/form-data" class="space-y-5">
         @csrf
+
+        @if(isset($campaign))
+        @method('put')
+        @endif
+
 
         <!-- Aba Campanha -->
         @include('backend.campaign.partials.form-campaign')

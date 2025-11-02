@@ -27,10 +27,10 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-center mt-4">
         <div class="grid grid-cols-2 gap-5">
             <div>
-                <x-input-label for="title" required value="Legenda do telefone" />
-                <x-text-input placeholder="whatsapp" id="title" class="block mt-1 w-full" type="text" name="title"
-                    :value="old('title', $campaign->title ?? '')" />
-                <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                <x-input-label for="legend_phone" required value="Legenda do telefone" />
+                <x-text-input placeholder="whatsapp" id="legend_phone" class="block mt-1 w-full" type="text"
+                    name="legend_phone" :value="old('legend_phone', $campaign->legend_phone ?? '')" />
+                <x-input-error :messages="$errors->get('legend_phone')" class="mt-2" />
             </div>
             <div>
                 <x-input-label for="phone" required value="Telefone" />
