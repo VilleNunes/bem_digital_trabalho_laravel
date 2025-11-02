@@ -45,7 +45,11 @@
                       
                     ]" />
 
-                <x-nav-item icon="fa-user" label="Perfil" route="profile.edit" />
+                <x-nav-dropdown icon="fa-building" label="Doador" routeBase="donors" :items="[
+                        ['label' => 'Criar doador', 'route' => 'donors.create', 'icon' => 'fa-pen-to-square'],
+                        ['label' => 'Listar doador', 'route' => 'donors.index', 'icon' => 'fa-list'],
+                      
+                    ]" />
                 <x-nav-item icon="fa-chart-line" label="Relatórios" href="#" />
             </ul>
         </nav>

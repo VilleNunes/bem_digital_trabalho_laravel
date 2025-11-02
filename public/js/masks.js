@@ -1,6 +1,3 @@
-
-
-
 export function formatCEP(input) {
     input.value = input.value.replace(/\D/g, '').slice(0, 8);
 }
@@ -32,14 +29,12 @@ export async function fetchAddressByCEP(cep, stateInput, cityInput, neighborhood
     }
 }
 
-
 export function clearAddressFields(stateInput, cityInput, neighborhoodInput, roadInput) {
     stateInput.value = '';
     cityInput.value = '';
     neighborhoodInput.value = '';
     roadInput.value = '';
 }
-
 
 export function initCEPMask(cepInput, stateInput, cityInput, neighborhoodInput, roadInput) {
     if (!cepInput) return;
@@ -68,10 +63,60 @@ export function formatPhone(input) {
     input.value = value;
 }
 
-
 export function initPhoneMask(phoneInput) {
     if (!phoneInput) return;
     phoneInput.addEventListener('input', function() {
         formatPhone(phoneInput);
     });
+}
+
+export function formatCPF(input) {
+    let value = input.value.replace(/\D/g, '').slice(0, 11);
+    if (value.length > 9) {
+        value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+    } else if (value.length > 6) {
+        value = value.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+    } else if (value.length > 3) {
+        value = value.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+    }
+    input.value = value;
+}
+
+export function validateCPF(cpfRaw) {
+    if (!cpfRaw) return false;
+    const cpf = cpfRaw.replace(/\D/g, '');
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+    const calcDigit = (cpfSlice) => {
+        let sum = 0;
+        for (let i = 0; i < cpfSlice.length; i++) {
+            sum += parseInt(cpfSlice.charAt(i), 10) * (cpfSlice.length + 1 - i);
+        }
+        const rest = (sum * 10) % 11;
+        return rest === 10 ? 0 : rest;
+    };
+
+    const digit1 = calcDigit(cpf.slice(0, 9));
+    const digit2 = calcDigit(cpf.slice(0, 9) + digit1);
+
+    return digit1 === parseInt(cpf.charAt(9), 10) && digit2 === parseInt(cpf.charAt(10), 10);
+}
+
+export function initCPFMask(cpfInput, options = {}) {
+    if (!cpfInput) return;
+    const { validateOnBlur = true, showAlertOnInvalid = true } = options;
+
+    cpfInput.addEventListener('input', function() {
+        formatCPF(this);
+    });
+
+    if (validateOnBlur) {
+        cpfInput.addEventListener('blur', function() {
+            const isValid = validateCPF(this.value);
+            if (!isValid && this.value.replace(/\D/g, '').length > 0) {
+                if (showAlertOnInvalid) alert('CPF inválido');
+            }
+        });
+    }
 }

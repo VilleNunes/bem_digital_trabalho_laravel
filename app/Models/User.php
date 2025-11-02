@@ -79,11 +79,13 @@ class User extends Authenticatable
         return $this->belongsTo(Rule::class);
     }
 
-    public function scopeUsersUnit($query)
+    public function scopeUsersUnit($query,$role)
     {
-        return $query->where('institution_id', Auth::user()->institution_id)->whereHas('rule', function ($q) {
-            return $q->where('name', 'user');
-        });
+        if($role){
+            return $query->where('institution_id', currentInstitutionId())->whereRelation('rule','name',$role);
+        }
+
+        return $query;
     }
 
     public function scopeName($query, $name)
@@ -99,6 +101,13 @@ class User extends Authenticatable
     {
         if ($email) {
             return $query->where('email', 'LIKE', "%$email%");
+        }
+        return $query;
+    }
+    public function scopeCpf($query, $cpf)
+    {
+        if ($cpf) {
+            return $query->where('cpf', 'LIKE', "%$cpf%");
         }
         return $query;
     }

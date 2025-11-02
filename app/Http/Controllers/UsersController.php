@@ -18,16 +18,16 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $userActive = User::query()->usersUnit()->where('is_active',true)->count();
-        $userInactive = User::query()->usersUnit()->where('is_active',false)->count();
-        $totalUser= User::query()->usersUnit()->count();
+        $userActive = User::query()->usersUnit('user')->where('is_active',true)->count();
+        $userInactive = User::query()->usersUnit('user')->where('is_active',false)->count();
+        $totalUser= User::query()->usersUnit('user')->count();
         $users = User::query()
-        ->usersUnit()
+        ->usersUnit('user')
         ->email(request()->email)
         ->name(request()->name)
         ->phone(request()->phone)
         ->active(request()->active)
-        ->orderBy('created_at','DESC')
+        ->orderBy('updated_at','DESC')
         ->paginate(10)
         ->appends(request()->query());
         return view('backend.users.index',
@@ -44,6 +44,7 @@ class UsersController extends Controller
     public function create()
     {
         $modules = Module::all();
+
      
         return view('backend.users.create',['modules'=>$modules]);
     }
@@ -57,7 +58,6 @@ class UsersController extends Controller
       try {
         $data = request()->all();
         
-      
         if(isset($data['address'])){
             $address = $data['address'];
             unset($data['address']);
@@ -66,7 +66,7 @@ class UsersController extends Controller
         }
 
         $data['password'] = Hash::make($data['password']);
-        $data['institution_id'] = Auth::user()->institution_id;
+        $data['institution_id'] = currentInstitutionId();
         
         if(isset($data['modules'])){
             $modules = $data['modules'];

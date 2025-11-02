@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\DonorController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
@@ -44,11 +45,21 @@ Route::middleware('auth')->group(function () {
     Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
         ->name('institutions.active');
 
+    // Routes Campaign
     Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign.create');
     Route::post('/campaign/create', [CampaignController::class, 'store'])->name('campaign.store');
     Route::get('/campaign', [CampaignController::class, 'index'])->name('campaign.index');
     Route::get('/campaign/{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
     Route::put('/campaign/{campaign}/update', [CampaignController::class, 'update'])->name('campaign.update');
+
+    // Routes Donors
+    Route::get('/donors/create', [DonorController::class, 'create'])->name('donors.create');
+    Route::post('/donors/create', [DonorController::class, 'store'])->name('donors.store');
+    Route::get('/donors', [DonorController::class, 'index'])->name('donors.index');
+    Route::get('/donors/{donor}', [DonorController::class, 'show'])->name('donors.show');
+    Route::delete('/donors/{donor}/delete', [DonorController::class, 'destroy'])->name('donors.destroy');
+    Route::get('/donors/{donor}/edit', [DonorController::class, 'edit'])->name('donors.edit');
+    Route::put('/donors/{donor}/update', [DonorController::class, 'update'])->name('donors.update');
 });
 
 

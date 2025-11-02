@@ -45,11 +45,9 @@ class CategoryFactory extends Factory
         ];
 
 
-       foreach($categories as $category){
-            return[
-                'name'=>$category,
-                'is_active'=>fake()->boolean(),
-            ];
-        }
+        return [
+            'name' => $this->faker->randomElement($categories),
+            'is_active' => $this->faker->boolean(),
+         ];
     }
 }

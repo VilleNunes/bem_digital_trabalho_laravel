@@ -21,7 +21,8 @@
             </div>
 
             <div class="relative">
-                {{-- Use o accessor avatar_url no model User para fornecer o caminho completo (storage ou default image) --}}
+                {{-- Use o accessor avatar_url no model User para fornecer o caminho completo (storage ou default image)
+                --}}
                 <img src="{{ $user->avatar_url }}" alt="Foto de perfil"
                     class="w-10 h-10 rounded-full border-2 border-verde-claro shadow-sm">
             </div>
@@ -48,11 +49,7 @@
                         <i class="fa-solid fa-user-gear text-salmao-dark w-5"></i> Editar Perfil
                     </a>
                 </li>
-                <li>
-                    <a href="#" class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition">
-                        <i class="fa-solid fa-hand-holding-heart text-salmao-dark w-5"></i> Minhas Doações
-                    </a>
-                </li>
+
             </ul>
 
             <div class="border-t border-gray-100">

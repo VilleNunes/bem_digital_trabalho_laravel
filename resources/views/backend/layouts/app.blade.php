@@ -2,7 +2,7 @@
 <html data-theme="light">
 
 
-<head >
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -15,11 +15,13 @@
     <script type="module">
         import {
             initCEPMask,
-            initPhoneMask
+            initPhoneMask,
+            initCPFMask
         } from '/js/masks.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             const cepInput = document.getElementById('address_zip');
+            const cpfInput = document.getElementById('cpf');
             const stateInput = document.getElementById('address_state');
             const cityInput = document.getElementById('address_city');
             const neighborhoodInput = document.getElementById('address_neighborhood');
@@ -27,6 +29,7 @@
             initCEPMask(cepInput, stateInput, cityInput, neighborhoodInput, roadInput);
             const phoneInput = document.getElementById('phone');
             initPhoneMask(phoneInput);
+            initCPFMask(cpfInput);
         });
     </script>
 
