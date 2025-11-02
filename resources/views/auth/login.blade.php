@@ -48,7 +48,7 @@
 
         <!-- Lado Direito (azul escuro) -->
         <div class="hidden sm:flex w-1/2 bg-[#0e1523] flex-col justify-center items-center text-white p-10 border-l-2 border-red-500">
-            <h2 class="text-3xl font-bold mb-4 text-center">Espaço do(a)<br>Doador(a)</h2>
+            <h2 class="text-3xl font-bold mb-4 text-center">Espaço do(a)<br>Gestor(a)</h2>
             <p class="text-center text-gray-300 mb-8">
                 Para uma melhor experiência, acesse seu painel de controle de um computador.
             </p>
