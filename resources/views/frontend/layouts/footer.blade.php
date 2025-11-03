@@ -38,6 +38,6 @@
       </div>
       
       <div class="border-t border-gray-700 mt-8 pt-6 max-w-6xl mx-auto px-4 text-center">
-        <p class="text-sm text-gray-500">© 2025 Bem Digital — Todos os direitos reservados. Desenvolvido com coração e tecnologia.</p>
+        <p class="text-sm text-gray-500">© 2025 Bem Digital — Todos os direitos reservados. Desenvolvido com coração e tecnologia!</p>
       </div>
     </footer>
