@@ -3,6 +3,9 @@
 @section('content')
 <!-- Navbar -->
 @include('frontend.layouts.header')
+
+<!-- Carousel-->
+@include('frontend.layouts.carousel')
  
 <!-- Hero Section -->
 @include('frontend.layouts.hero-section')
