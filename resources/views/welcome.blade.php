@@ -12,6 +12,7 @@
 
 
     <!-- Campaigns Section -->
+     @include('frontend.layouts.partials.campaigns')
 
     
     <!-- About Us Section -->
