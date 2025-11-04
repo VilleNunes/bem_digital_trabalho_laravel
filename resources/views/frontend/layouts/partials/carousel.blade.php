@@ -1,21 +1,19 @@
-<section class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
+<section class="relative w-full h-[85vh] flex items-center justify-center overflow-hidden">
   <!-- Vídeo de fundo -->
-  <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
-    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
-    <source src="public/videos/videosfundo.mp4" type="video/mp4">
+  <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
+    <source src="videos/videosfundo.mp4" type="video/mp4">
     Seu navegador não suporta vídeos em HTML5.
   </video>
-  </div>
 
   <!-- Sobreposição escura -->
-  <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+  <div class="absolute inset-0 bg-black bg-opacity-30"></div>
 
   <!-- Conteúdo -->
   <div class="relative z-10 text-center text-white">
     <h1 class="text-5xl md:text-6xl font-extrabold mb-8">
       O FUTURO <span id="palavra" class="text-green-500 transition-all duration-700">PASSA</span> AQUI
     </h1>
-    <a href="https://www.youtube.com/watch?v=WtOgMBKpELQ" target="_blank"
+    <a href="videos/videosfundo.mp4" target="_blank"
       class="inline-flex items-center gap-2 px-6 py-3 border border-white rounded-full text-white font-medium hover:bg-white hover:text-black transition">
       Assista o vídeo completo
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -26,12 +24,10 @@
   </div>
 </section>
 
-<!-- Script para trocar as palavras -->
 <script>
   const palavras = ["PASSA", "ESTÁ", "COMEÇA"];
   const palavraEl = document.getElementById("palavra");
   let i = 0;
-
   setInterval(() => {
     palavraEl.textContent = palavras[i];
     i = (i + 1) % palavras.length;
