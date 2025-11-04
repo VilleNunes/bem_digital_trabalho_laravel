@@ -1,4 +1,16 @@
+
+
 <header class="bg-white dark:bg-gray-800 shadow-xl sticky top-0 z-50 transition-all duration-300">
+
+  <!-- Banner discreto de contato -->
+
+  <div class="relative flex border-b border-neutral-300 bg-gray-100 dark:bg-gray-900 p-2 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300">
+    <p class="px-6 text-xs sm:text-sm text-gray-700 dark:text-gray-300 mx-auto">
+      Entre em contato! Explore nossas 
+      <a href="#" class="font-medium text-primary underline-offset-2 hover:underline dark:text-white">opções de atendimento</a>
+    </p>
+  </div>
+
   <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
     
     <a href="#" class="text-3xl font-extrabold text-primary tracking-tight transition-colors duration-300 hover:text-primary-dark">
