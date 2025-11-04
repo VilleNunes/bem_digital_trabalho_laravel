@@ -1,13 +1,10 @@
-<section class="relative w-full h-[90vh] flex items-center justify-center overflow-hidden">
+<section class="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
   <!-- Vídeo de fundo -->
   <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
-    <iframe class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto transform -translate-x-1/2 -translate-y-1/2"
-      src="https://www.youtube.com/embed/WtOgMBKpELQ?autoplay=1&mute=1&loop=1&playlist=WtOgMBKpELQ&controls=0&showinfo=0&modestbranding=1"
-      title="O Futuro"
-      frameborder="0"
-      allow="autoplay; fullscreen"
-      allowfullscreen>
-    </iframe>
+    <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
+    <source src="public/videos/videosfundo.mp4" type="video/mp4">
+    Seu navegador não suporta vídeos em HTML5.
+  </video>
   </div>
 
   <!-- Sobreposição escura -->

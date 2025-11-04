@@ -1,6 +1,7 @@
-<section id="sobre" class="py-24 bg-white dark:bg-gray-800 transition-colors duration-500">
+<section id="sobre" class="py-24 bg-white dark:bg-gray-800 transition-colors duration-500 overflow-hidden">
   <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 px-4 items-center">
-    <div>
+    <!-- Texto -->
+    <div class="fade-left opacity-0 translate-x-[-50px]">
       <span class="text-primary font-bold uppercase text-sm tracking-wider mb-2 block">Nossa Missão</span>
       <h2 class="text-4xl font-extrabold mb-6 text-text-dark dark:text-white">
         Sobre a <span class="text-primary">Bem Digital</span>: Transparência e Confiança
@@ -15,7 +16,9 @@
         <span class="material-symbols-outlined mr-2" :href="">group</span> Ver campanhas
       </x-button-link>
     </div>
-    <div class="order-first md:order-last flex justify-center">
+
+    <!-- Imagem -->
+    <div class="fade-right opacity-0 translate-x-[50px] order-first md:order-last flex justify-center">
       <img 
         src="https://optim.tildacdn.one/tild3031-3230-4861-b964-396466663730/-/format/webp/ilustra-1.png.webp"
         alt="Sobre Bem Digital - Ilustração de colaboração"
@@ -48,3 +51,36 @@
     </div>
   </div>
 </section>
+
+<style>
+  @keyframes fadeLeft {
+    0% { opacity: 0; transform: translateX(-50px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fadeRight {
+    0% { opacity: 0; transform: translateX(50px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  .fade-left.show {
+    animation: fadeLeft 0.8s ease-out forwards;
+  }
+
+  .fade-right.show {
+    animation: fadeRight 0.8s ease-out forwards;
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.fade-left, .fade-right').forEach(el => observer.observe(el));
+</script>
