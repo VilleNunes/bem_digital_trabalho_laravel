@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DonorController;
 use App\Http\Controllers\InstitutionController;
@@ -63,6 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/donors/{donor}/delete', [DonorController::class, 'destroy'])->name('donors.destroy');
     Route::get('/donors/{donor}/edit', [DonorController::class, 'edit'])->name('donors.edit');
     Route::put('/donors/{donor}/update', [DonorController::class, 'update'])->name('donors.update');
+    
+    // Routes Donations
+    Route::resource('donations', DonationController::class);
 });
 
 

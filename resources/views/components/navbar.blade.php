@@ -25,6 +25,10 @@
             </button>
         </div>
 
+        @php
+            $userRole = optional(auth()->user()?->rule)->name;
+        @endphp
+
         <nav class="flex-1">
             <ul class="space-y-2">
 
@@ -50,6 +54,16 @@
                         ['label' => 'Listar doador', 'route' => 'donors.index', 'icon' => 'fa-list'],
                       
                     ]" />
+
+                @if ($userRole === 'admin')
+                <x-nav-dropdown icon="fa-hand-holding-heart" label="Doações" routeBase="donations" :items="[
+                        ['label' => 'Cadastrar doação', 'route' => 'donations.create', 'icon' => 'fa-plus'],
+                        ['label' => 'Listar doações', 'route' => 'donations.index', 'icon' => 'fa-list'],
+                    ]" />
+                @elseif ($userRole === 'donor')
+                <x-nav-item icon="fa-hand-holding-heart" label="Minhas Doações" route="donations.index" />
+                @endif
+
                 <x-nav-item icon="fa-chart-line" label="Relatórios" href="#" />
             </ul>
         </nav>
