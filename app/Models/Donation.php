@@ -8,7 +8,7 @@ class Donation extends Model
 {
     protected $fillable = [
         'user_id',
-        'institution_id',
+        'campaign_id',
         'name',
         'description',
         'quantify',
@@ -20,8 +20,8 @@ class Donation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function institution()
+    public function campaign()
     {
-        return $this->belongsTo(Institution::class);
+        return $this->belongsTo(Campaign::class);
     }
 }

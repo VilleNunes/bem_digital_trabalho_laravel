@@ -3,6 +3,7 @@ $headers = [
     'ID',
     'Doação',
     'Doador',
+    'Campanha',
     'Instituição',
     'Quantidade',
     'Valor',
@@ -28,7 +29,8 @@ $headers = [
                 <td class="px-6 py-2">{{ $donation->id }}</td>
                 <td class="px-6 py-2">{{ $donation->name }}</td>
                 <td class="px-6 py-2">{{ $donation->user->name ?? '-' }}</td>
-                <td class="px-6 py-2">{{ optional($donation->institution)->fantasy_name ?? '-' }}</td>
+                <td class="px-6 py-2">{{ optional($donation->campaign)->name ?? '-' }}</td>
+                <td class="px-6 py-2">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}</td>
                 <td class="px-6 py-2">{{ $donation->quantify ?? '-' }}</td>
                 <td class="px-6 py-2">
                     {{ $donation->amount !== null ? 'R$ ' . number_format($donation->amount, 2, ',', '.') : '-' }}
@@ -78,8 +80,12 @@ $headers = [
                 <span class="text-gray-800">{{ $donation->user->name ?? '-' }}</span>
             </div>
             <div class="flex justify-between">
+                <span class="font-medium text-gray-600">Campanha:</span>
+                <span class="text-gray-800">{{ optional($donation->campaign)->name ?? '-' }}</span>
+            </div>
+            <div class="flex justify-between">
                 <span class="font-medium text-gray-600">Instituição:</span>
-                <span class="text-gray-800">{{ optional($donation->institution)->fantasy_name ?? '-' }}</span>
+                <span class="text-gray-800">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}</span>
             </div>
             <div class="flex justify-between">
                 <span class="font-medium text-gray-600">Quantidade:</span>

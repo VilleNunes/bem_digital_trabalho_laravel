@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DonationRequest;
 use App\Models\Donation;
-use App\Models\Institution;
+use App\Models\Campaign;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,18 +17,31 @@ class DonationController extends Controller
     {
         $user = Auth::user();
         $role = optional($user->rule)->name;
+        $institutionId = currentInstitutionId();
 
         if ($role === 'admin') {
-            $donationsQuery = Donation::with(['user.rule', 'institution'])->latest();
+            $donationsQuery = Donation::with(['user.rule', 'campaign.institution'])
+                ->when($institutionId, fn ($query, $id) => $query->whereHas(
+                    'campaign',
+                    fn ($campaignQuery) => $campaignQuery->where('institution_id', $id)
+                ))
+                ->latest();
+
             $donations = $donationsQuery->paginate();
-            $totalDonations = Donation::count();
-            $totalAmount = (float) Donation::sum('amount');
+            $statsQuery = Donation::query()
+                ->when($institutionId, fn ($query, $id) => $query->whereHas(
+                    'campaign',
+                    fn ($campaignQuery) => $campaignQuery->where('institution_id', $id)
+                ));
+
+            $totalDonations = (clone $statsQuery)->count();
+            $totalAmount = (float) (clone $statsQuery)->sum('amount');
 
             return view('backend.donations.index', compact('donations', 'role', 'totalDonations', 'totalAmount'));
         }
 
         if ($role === 'donor') {
-            $donationsQuery = Donation::with(['user.rule', 'institution'])
+            $donationsQuery = Donation::with(['user.rule', 'campaign.institution'])
                 ->where('user_id', $user->id)
                 ->latest();
 
@@ -54,9 +67,12 @@ class DonationController extends Controller
             ->orderBy('name')
             ->get();
 
-        $institutions = Institution::orderBy('fantasy_name')->get();
+        $campaigns = Campaign::query()
+            ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+            ->orderBy('name')
+            ->get();
 
-        return view('backend.donations.create', compact('donors', 'institutions'));
+        return view('backend.donations.create', compact('donors', 'campaigns'));
     }
 
     /**
@@ -75,6 +91,10 @@ class DonationController extends Controller
                 ->withInput();
         }
 
+        Campaign::query()
+            ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+            ->findOrFail($data['campaign_id']);
+
         Donation::create($data);
 
         return redirect()->route('donations.index')
@@ -89,7 +109,7 @@ class DonationController extends Controller
         $this->ensureCanViewDonation($donation);
 
         return view('backend.donations.show', [
-            'donation' => $donation->load('user.rule', 'institution'),
+            'donation' => $donation->load('user.rule', 'campaign.institution'),
             'role' => optional(Auth::user()->rule)->name,
         ]);
     }
@@ -106,9 +126,12 @@ class DonationController extends Controller
             ->orderBy('name')
             ->get();
 
-        $institutions = Institution::orderBy('fantasy_name')->get();
+        $campaigns = Campaign::query()
+            ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+            ->orderBy('name')
+            ->get();
 
-        return view('backend.donations.edit', compact('donation', 'donors', 'institutions'));
+        return view('backend.donations.edit', compact('donation', 'donors', 'campaigns'));
     }
 
     /**
@@ -132,8 +155,12 @@ class DonationController extends Controller
             $data['user_id'] = $donation->user_id;
         }
 
-        if (! isset($data['institution_id'])) {
-            $data['institution_id'] = $donation->institution_id;
+        if (isset($data['campaign_id'])) {
+            Campaign::query()
+                ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+                ->findOrFail($data['campaign_id']);
+        } else {
+            $data['campaign_id'] = $donation->campaign_id;
         }
 
         $donation->update($data);

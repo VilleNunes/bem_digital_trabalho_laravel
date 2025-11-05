@@ -40,14 +40,22 @@ class DonationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $institutionId = currentInstitutionId();
+
+        $campaignRule = ValidationRule::exists('campaigns', 'id');
+
+        if ($institutionId) {
+            $campaignRule->where(fn ($query) => $query->where('institution_id', $institutionId));
+        }
+
         return [
             'user_id' => [
                 ValidationRule::requiredIf(fn () => ! $this->route('donation')),
                 'exists:users,id',
             ],
-            'institution_id' => [
+            'campaign_id' => [
                 ValidationRule::requiredIf(fn () => ! $this->route('donation')),
-                'exists:institutions,id',
+                $campaignRule,
             ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -61,8 +69,8 @@ class DonationRequest extends FormRequest
         return [
             'user_id.required' => 'Selecione o doador responsável pela doação.',
             'user_id.exists' => 'O doador selecionado não foi encontrado.',
-            'institution_id.required' => 'Selecione a instituição que receberá a doação.',
-            'institution_id.exists' => 'A instituição selecionada não foi encontrada.',
+            'campaign_id.required' => 'Selecione a campanha vinculada à doação.',
+            'campaign_id.exists' => 'A campanha selecionada não foi encontrada ou não pertence à sua instituição.',
             'name.required' => 'Informe o nome da doação.',
             'name.max' => 'O nome da doação não pode ultrapassar 255 caracteres.',
             'quantify.integer' => 'Quantidade deve ser um número inteiro.',
