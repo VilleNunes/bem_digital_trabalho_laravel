@@ -25,7 +25,7 @@ class StoreCampaignRequest extends FormRequest
             'title_point' => 'required|string|max:255',
 
             // Campanha
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:campaigns,name',
             'beginning' => 'required|date|before_or_equal:termination',
             'termination' => 'required|date|after_or_equal:beginning',
             'legend_phone' => 'required|string|max:255',
