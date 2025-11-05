@@ -74,6 +74,11 @@ class User extends Authenticatable
         return $this->belongsTo(Address::class);
     }
 
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
     public function rule()
     {
         return $this->belongsTo(Rule::class);
