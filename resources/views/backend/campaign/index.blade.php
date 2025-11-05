@@ -23,7 +23,7 @@
 
 </div>
 
-@include('backend.users.partials.filter')
+@include('backend.campaign.partials.filter')
 
 
 <x-card>
@@ -34,9 +34,8 @@
     "items"=>$campaigns,
     "title"=>'Lista de Campanhas',
     "edit"=>'campaign.edit',
-    "delete"=>'users.destroy',
-    "show"=>'users.show',
-    "active"=>'users.active'
+    "active"=>'campaign.active',
+    "photo"=>'campaign.photoUpload'
     ])
 </x-card>
 @endsection

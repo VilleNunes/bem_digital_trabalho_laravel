@@ -63,6 +63,7 @@
     </div>
 
     <div class="flex justify-end gap-3 mt-6">
+        <x-button-link :href="route('campaign.index')">Cancelar</x-button-link>
         <x-button type="button" @click="abaAtiva = 'ponto'" color='blue'>Próximo</x-button>
     </div>
 </div>

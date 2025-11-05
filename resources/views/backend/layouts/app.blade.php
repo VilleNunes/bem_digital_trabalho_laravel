@@ -36,7 +36,7 @@
 </head>
 
 <body class="flex  text-gray-800 flex-row  bg-gray-100 min-h-screen">
-
+    @include('backend.partials.toast')
     <x-navbar />
     <!-- Conteúdo principal -->
     <div class="flex-1 flex flex-col">

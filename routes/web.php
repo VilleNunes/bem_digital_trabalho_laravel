@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DonorController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
+use App\Models\Campaign;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -50,10 +52,14 @@ Route::middleware('auth')->group(function () {
 
     // Routes Campaign
     Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign.create');
+    Route::put('/campaign/{campaign}/status', [CampaignController::class, 'active'])->name('campaign.active');
     Route::post('/campaign/create', [CampaignController::class, 'store'])->name('campaign.store');
     Route::get('/campaign', [CampaignController::class, 'index'])->name('campaign.index');
     Route::get('/campaign/{campaign}/edit', [CampaignController::class, 'edit'])->name('campaign.edit');
     Route::put('/campaign/{campaign}/update', [CampaignController::class, 'update'])->name('campaign.update');
+    Route::get('/campaign/{campaign}/upload', [CampaignController::class,'photoUpload'])->name('campaign.photoUpload');
+    Route::post('/campaign/{campaign}/updateImages', [CampaignController::class,'updateImages'])->name('campaign.updateImages');
+    Route::delete('/campaigns/{campaign}/photo/{photo}/delete-image', [CampaignController::class, 'deleteImage'])->name('campaign.deleteImage');
 
     // Routes Donors
     Route::get('/donors/create', [DonorController::class, 'create'])->name('donors.create');
@@ -63,6 +69,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/donors/{donor}/delete', [DonorController::class, 'destroy'])->name('donors.destroy');
     Route::get('/donors/{donor}/edit', [DonorController::class, 'edit'])->name('donors.edit');
     Route::put('/donors/{donor}/update', [DonorController::class, 'update'])->name('donors.update');
+    
+    // Routes Donations
+    Route::resource('donations', DonationController::class);
 });
 
 

@@ -8,8 +8,10 @@ use App\Models\Address;
 use App\Models\Campaign;
 use App\Models\Category;
 use App\Models\CollectionPoint;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CampaignController extends Controller
 {
@@ -18,7 +20,11 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        $campaigns = Campaign::query()->with('category')->paginate(10);
+        $campaigns = Campaign::query()
+        ->name(request()->name)
+        ->date(request()->beginning,request()->termination)
+        ->active(request()->active)
+        ->paginate(10);
         return view('backend.campaign.index',['campaigns'=>$campaigns]);
     }
 
@@ -66,7 +72,7 @@ class CampaignController extends Controller
 
             DB::commit();
 
-            return to_route( 'dashboard');
+            return to_route('campaign.index');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -147,11 +153,55 @@ class CampaignController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Campaign $campaign)
+    public function photoUpload(Campaign $campaign){
+
+        return view('backend.campaign.photo-create',['campaign'=>$campaign]);
+    }
+
+    public function updateImages(Request $request,Campaign $campaign){
+  
+        $request->validate([
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+              
+                $path = $file->store('campaigns/' . $campaign->id, 'public');
+
+                $campaign->photos()->create([
+                    'filename' => '/storage/' . $path,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Imagens atualizadas com sucesso!');
+    }
+
+    public function deleteImage(Campaign $campaign, $photoId)
     {
-        //
+        $image = $campaign->photos()->findOrFail($photoId);
+
+        if ($image->filename) {
+            $path = str_replace('/storage/', '', $image->filename);
+            Storage::disk('public')->delete($path);
+        }
+
+        $image->delete();
+
+        return response()->noContent();
+    }
+
+    public function active(Campaign $campaign){
+        $totalPohotos = $campaign->photos()->count();
+        
+        if($totalPohotos == 0 ){
+            return back()->with('error','Para ativar a campanha precisa ter pelo menos uma foto veinculada');
+        }
+        $campaign->is_active = !$campaign->is_active;
+        $campaign->save();
+
+        return back()->with('success','Status atualizado com sucesso');
     }
 }
