@@ -56,19 +56,23 @@
                 </div>
             </dl>
 
-            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-2">Instituição Destino</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-2">Campanha Destino</h2>
             <dl class="space-y-2 text-sm">
                 <div class="flex justify-between">
-                    <dt class="font-medium text-gray-600">Nome:</dt>
-                    <dd class="text-gray-800">{{ optional($donation->institution)->fantasy_name ?? '-' }}</dd>
+                    <dt class="font-medium text-gray-600">Campanha:</dt>
+                    <dd class="text-gray-800">{{ optional($donation->campaign)->name ?? '-' }}</dd>
+                </div>
+                <div class="flex justify-between">
+                    <dt class="font-medium text-gray-600">Instituição:</dt>
+                    <dd class="text-gray-800">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}</dd>
                 </div>
                 <div class="flex justify-between">
                     <dt class="font-medium text-gray-600">E-mail:</dt>
-                    <dd class="text-gray-800">{{ optional($donation->institution)->email ?? '-' }}</dd>
+                    <dd class="text-gray-800">{{ optional($donation->campaign?->institution)->email ?? '-' }}</dd>
                 </div>
                 <div class="flex justify-between">
                     <dt class="font-medium text-gray-600">Telefone:</dt>
-                    <dd class="text-gray-800">{{ optional($donation->institution)->phone ?? '-' }}</dd>
+                    <dd class="text-gray-800">{{ optional($donation->campaign?->institution)->phone ?? '-' }}</dd>
                 </div>
             </dl>
         </div>
