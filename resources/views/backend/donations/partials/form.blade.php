@@ -1,7 +1,7 @@
 @php
     $donationModel = $donation ?? new \App\Models\Donation();
     $selectedDonor = old('user_id', $donationModel->user_id);
-    $selectedInstitution = old('institution_id', $donationModel->institution_id);
+    $selectedCampaign = old('campaign_id', $donationModel->campaign_id);
     $quantify = old('quantify', $donationModel->quantify ?? 1);
     $amount = old('amount', $donationModel->amount ?? '');
     $description = old('description', $donationModel->description ?? '');
@@ -11,16 +11,16 @@
 <div class="space-y-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-            <x-input-label for="institution_id" required value="Instituição Destino" />
-            <select id="institution_id" name="institution_id" class="select w-full" {{ $isEdit ? '' : 'required' }}>
-                <option value="" disabled {{ $selectedInstitution ? '' : 'selected' }}>Escolha uma instituição</option>
-                @foreach ($institutions as $institution)
-                <option value="{{ $institution->id }}" {{ (string) $selectedInstitution === (string) $institution->id ? 'selected' : '' }}>
-                    {{ $institution->fantasy_name }}
+            <x-input-label for="campaign_id" required value="Selecionar Campanha" />
+            <select id="campaign_id" name="campaign_id" class="select w-full" {{ $isEdit ? '' : 'required' }}>
+                <option value="" disabled {{ $selectedCampaign ? '' : 'selected' }}>Escolha uma campanha</option>
+                @foreach ($campaigns as $campaign)
+                <option value="{{ $campaign->id }}" {{ (string) $selectedCampaign === (string) $campaign->id ? 'selected' : '' }}>
+                    {{ $campaign->name }}
                 </option>
                 @endforeach
             </select>
-            <x-input-error :messages="$errors->get('institution_id')" class="mt-2" />
+            <x-input-error :messages="$errors->get('campaign_id')" class="mt-2" />
         </div>
 
         <div>

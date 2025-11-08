@@ -21,7 +21,7 @@
         @include('backend.donations.partials.form', [
             'donation' => $donation,
             'donors' => $donors,
-            'institutions' => $institutions,
+            'campaigns' => $campaigns,
         ])
 
         <div class="flex justify-end gap-3">

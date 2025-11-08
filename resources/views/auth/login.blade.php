@@ -18,7 +18,7 @@
                 <div class="space-y-2">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email *</label>
                     <input id="email" type="email" name="email" required autofocus
-                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors"
                            placeholder="Seu email">
                     @error('email')
                         <span class="text-sm text-red-500">{{ $message }}</span>
@@ -28,26 +28,26 @@
                 <div class="space-y-2">
                     <label for="password" class="block text-sm font-medium text-gray-700">Senha *</label>
                     <input id="password" type="password" name="password" required
-                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors"
                            placeholder="••••••••">
                     @error('password')
                         <span class="text-sm text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-800 focus:ring-offset-2">
                     Entrar
                 </button>
             </form>
 
             <div class="flex flex-col sm:flex-row justify-between w-full text-sm mt-6 gap-4 sm:gap-0">
-                <a href="{{ route('password.request') }}" class="text-red-500 hover:text-red-600 transition-colors">Recuperar senha</a>
-                <a href="{{ route('register') }}" class="text-red-500 hover:text-red-600 transition-colors">Primeiro acesso</a>
+                <a href="{{ route('password.request') }}" class="text-green-700 hover:text-green-800 transition-colors">Recuperar senha</a>
+                <a href="{{ route('register') }}" class="text-green-700 hover:text-green-800 transition-colors">Primeiro acesso</a>
             </div>
         </div>
 
         <!-- Lado Direito (azul escuro) -->
-        <div class="hidden sm:flex w-1/2 bg-[#0e1523] flex-col justify-center items-center text-white p-10 border-l-2 border-red-500">
+        <div class="hidden sm:flex w-1/2 bg-[#0e1523] flex-col justify-center items-center text-white p-10 border-l-2 border-green-500">
             <h2 class="text-3xl font-bold mb-4 text-center">Espaço do(a)<br>Gestor(a)</h2>
             <p class="text-center text-gray-300 mb-8">
                 Para uma melhor experiência, acesse seu painel de controle de um computador.
