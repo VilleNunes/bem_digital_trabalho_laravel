@@ -2,25 +2,23 @@
 
 <header class="bg-white dark:bg-gray-800 shadow-xl sticky top-0 z-50 transition-all duration-300">
 
- 
+
   <div class="relative flex border-b border-neutral-300 bg-gray-100 dark:bg-gray-900 p-2 text-neutral-600 dark:border-neutral-700 dark:text-neutral-300">
     <p class="px-6 text-xs sm:text-sm text-gray-700 dark:text-gray-300 mx-auto">
-      Dúvidas, precisa de suporte? Entre em contato! 
+      Dúvidas, precisa de suporte? Entre em contato!
       <a href="#" class="font-medium text-primary underline-offset-2 hover:underline dark:text-white">(44)97400-5974</a>
     </p>
   </div>
 
-  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-    
-    <a href="#" class="text-3xl font-extrabold text-primary tracking-tight transition-colors duration-300 hover:text-primary-dark">
-      Bem Digital
-    </a>
-    
+  <div class="max-w-7xl mx-auto px-1 py-4 flex justify-between items-center">
+
+    <img src="{{ asset('logo_BemDigital.png') }}" alt="Doare" class="w-[25vh] h-auto">
+
     <nav class="hidden md:flex items-center space-x-8 text-gray-700 dark:text-gray-300">
       <a href="#impacto" class="hover:text-primary font-medium transition-colors duration-200">Impacto</a>
       <a href="#campanhas" class="hover:text-primary font-medium transition-colors duration-200">Campanhas</a>
       <a href="#sobre" class="hover:text-primary font-medium transition-colors duration-200">Sobre Nós</a>
-      
+
       <a href="{{ route('login') }}" class="bg-primary text-white font-semibold hover:bg-primary-dark px-5 py-2.5 rounded-lg shadow-md transition-all duration-300 inline-flex items-center space-x-2 transform hover:scale-105">
         <span class="material-symbols-outlined text-lg">login</span>
         <span>Entrar</span>
@@ -49,7 +47,7 @@
 
     toggleButton.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
-      
+
       // Altera o ícone do botão
       const icon = toggleButton.querySelector('span');
       if (mobileMenu.classList.contains('hidden')) {
