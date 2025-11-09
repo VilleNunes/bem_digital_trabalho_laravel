@@ -6,9 +6,22 @@
 
 <header class="bg-gelo shadow px-6 flex justify-between items-center">
     <!-- Título -->
-    <a href="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-950 hover:opacity-90">
-        {{ $title }} <span class="text-verde-claro">{{ $subtitle }}</span>
-    </a>
+    <div class="flex gap-10 items-center justify-center">
+        <a href="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-950 hover:opacity-90">
+            {{ $title }} <span class="text-verde-claro">{{ $subtitle }}</span>
+        </a>
+
+        @if(auth()->user()->rule->name === "admin")
+        <div x-data="{modalIsOpen: false}">
+            <button x-on:click="modalIsOpen = true" type="button"
+                class="whitespace-nowrap rounded-sm bg-green-400 px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-100 transition hover:opacity-75 ">Troca
+                de unidade</button>
+            @include('backend.partials.modal')
+        </div>
+        @endif
+    </div>
+
+
 
     <!-- Menu do usuário -->
     <div x-data="{ open: false }" class="relative">
@@ -63,4 +76,5 @@
             </div>
         </div>
     </div>
+
 </header>

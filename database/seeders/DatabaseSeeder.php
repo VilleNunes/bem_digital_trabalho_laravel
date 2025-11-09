@@ -31,9 +31,13 @@ class DatabaseSeeder extends Seeder
         Rule::create(['name' => 'donor']);
         Rule::create(['name' => 'user']);
 
-        Module::create(['title' => 'Usuarios']);
-        Module::create(['title' => 'Doacoes']);
-        Module::create(['title' => 'Estoque']);
+        Module::create(['title' => 'Usuários']);
+        Module::create(['title' => 'Doações']);
+        Module::create(['title' => 'Instituições']);
+        Module::create(['title' => 'Relatórios']);
+        Module::create(['title' => 'Campanhas']);
+        Module::create(['title' => 'Doadores']);
+
 
         $rule = Rule::query()->where('name', 'admin')->first();
         $instituion = Institution::query()->first();

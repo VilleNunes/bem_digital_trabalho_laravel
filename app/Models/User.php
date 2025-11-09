@@ -142,4 +142,22 @@ class User extends Authenticatable
             ? asset('storage/' . $this->avatar)
             : asset('images/default-avatar.png');
     }
+
+    public function hasModules(string $moduleName): bool
+    {
+   
+
+        $modules = $this->modules; 
+
+       $modules = $this->modules; 
+
+   
+        if ($modules->isEmpty()) {
+            return false;
+        }
+
+        return $modules->contains('title', $moduleName);
+ 
+   
+    }
 }
