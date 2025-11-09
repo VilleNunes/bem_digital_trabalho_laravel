@@ -12,16 +12,22 @@ use App\Http\Controllers\UsersController;
 use App\Models\Campaign;
 use Illuminate\Support\Facades\Route;
 
+// ==================== ROTAS PÚBLICAS ====================
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
-Route::get('/home', function () {
-    return view('home');
-});
+// Demo da instituição
+Route::get('/institution-demo', function () {
+    return view('frontend.institution.demo');
+})->name('institution.demo');
 
+// Página pública da instituição
+Route::get('/institution/{institution}', [InstitutionController::class, 'show'])
+    ->name('frontend.institutions.show');
+
+// ==================== ROTAS PROTEGIDAS ====================
 Route::middleware('auth')->group(function () {
-
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -94,7 +100,5 @@ Route::middleware('auth')->group(function () {
     });
 
 });
-
-
 
 require __DIR__ . '/auth.php';

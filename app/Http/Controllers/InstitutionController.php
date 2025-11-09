@@ -65,7 +65,12 @@ class InstitutionController extends Controller
      */
     public function show(Institution $institution)
     {
-        //
+        // Carrega o endereço, campanhas ativas
+        $institution->load(['address', 'campaigns' => function ($query) {
+            $query->where('is_active', true)->where('termination', '>=', now())->where('beginning', '<=', now());
+        }]);
+
+        return view('frontend.institution.show', compact('institution'));
     }
 
     /**
