@@ -64,7 +64,8 @@
                 </div>
                 <div class="flex justify-between">
                     <dt class="font-medium text-gray-600">Instituição:</dt>
-                    <dd class="text-gray-800">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}</dd>
+                    <dd class="text-gray-800">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}
+                    </dd>
                 </div>
                 <div class="flex justify-between">
                     <dt class="font-medium text-gray-600">E-mail:</dt>
@@ -88,7 +89,7 @@
     @endif
 
     <div class="flex justify-end gap-3 mt-8">
-        <x-button-link color="link" :href="route('donations.index')">Voltar</x-button-link>
+        <x-button-link color="link" :href="url()->previous()">Voltar</x-button-link>
 
         @if ($role === 'admin')
         <x-button-link :href="route('donations.edit', $donation)" color="blue">

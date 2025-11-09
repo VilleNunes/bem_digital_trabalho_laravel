@@ -26,7 +26,7 @@ class Campaign extends Model
     ];
 
     public function institution(){
-        return $this->belongsTo(institution::class);
+        return $this->belongsTo(Institution::class);
     }
 
     public function category(){

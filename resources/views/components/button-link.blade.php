@@ -13,7 +13,7 @@ $colors = [
 $colorClass = $colors[$color] ?? $colors['green'];
 @endphp
 
-<a {{ $attributes->merge(['type' => 'submit', 'class' => "inline-flex items-center px-3 py-2 font-bold text-sm rounded
+<a {{ $attributes->merge(['type' => 'submit', 'class' => "inline-flex items-center px-2 py-2 text-xs rounded
     $colorClass"]) }}>
     {{ $slot }}
 </a>

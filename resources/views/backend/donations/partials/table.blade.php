@@ -1,13 +1,12 @@
 @php
 $headers = [
-    'ID',
-    'Doação',
-    'Doador',
-    'Campanha',
-    'Instituição',
-    'Quantidade',
-    'Valor',
-    'Registrada em',
+'ID',
+'Doação',
+'Doador',
+'Campanha',
+'Instituição',
+'Quantidade',
+'Registrada em',
 ];
 @endphp
 
@@ -32,9 +31,6 @@ $headers = [
                 <td class="px-6 py-2">{{ optional($donation->campaign)->name ?? '-' }}</td>
                 <td class="px-6 py-2">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}</td>
                 <td class="px-6 py-2">{{ $donation->quantify ?? '-' }}</td>
-                <td class="px-6 py-2">
-                    {{ $donation->amount !== null ? 'R$ ' . number_format($donation->amount, 2, ',', '.') : '-' }}
-                </td>
                 <td class="px-6 py-2">
                     {{ optional($donation->created_at)->format('d/m/Y H:i') }}
                 </td>
@@ -85,7 +81,8 @@ $headers = [
             </div>
             <div class="flex justify-between">
                 <span class="font-medium text-gray-600">Instituição:</span>
-                <span class="text-gray-800">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}</span>
+                <span class="text-gray-800">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-'
+                    }}</span>
             </div>
             <div class="flex justify-between">
                 <span class="font-medium text-gray-600">Quantidade:</span>

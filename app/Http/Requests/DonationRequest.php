@@ -59,7 +59,7 @@ class DonationRequest extends FormRequest
             ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'quantify' => ['nullable', 'integer', 'min:1'],
+            'quantify' => ['nullable', 'string', 'min:1'],
             'amount' => ['nullable', 'numeric', 'min:0'],
         ];
     }
@@ -79,4 +79,5 @@ class DonationRequest extends FormRequest
             'amount.min' => 'Valor mínimo é zero.',
         ];
     }
+
 }

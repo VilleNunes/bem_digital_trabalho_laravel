@@ -2,49 +2,56 @@
 
 @section('content')
 <div class="space-y-8">
-    <div class="flex items-center justify-between">
-        <h1 class="text-3xl font-bold text-gray-800">Resumo</h1>
-        <div class="relative">
-            <input type="date" class="w-full border border-salmao-dark bg-gelo text-salmao-dark
-           rounded-lg pl-10 pr-3 py-2 text-sm focus:outline-none
-           focus:ring-2 focus:ring-verde focus:border-verde transition" />
-            <span class="absolute left-3 top-1.5 text-salmao-dark">
-                📅
-            </span>
+    <div class="p-6 md:p-10">
+
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Visão Geral do Sistema</h1>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+            <div class="bg-white p-5 rounded-lg shadow-lg border-l-4 border-indigo-500">
+                <div class="text-sm font-medium text-gray-500">Total de Camapanhas</div>
+                <div class="mt-1 text-3xl font-bold text-gray-900">{{$total_campaing}}</div>
+
+            </div>
+
+            <div class="bg-white p-5 rounded-lg shadow-lg border-l-4 border-green-500">
+                <div class="text-sm font-medium text-gray-500">Total de doadores</div>
+                <div class="mt-1 text-3xl font-bold text-gray-900">{{$total_donors}}</div>
+
+            </div>
+
+            <div class="bg-white p-5 rounded-lg shadow-lg border-l-4 border-yellow-500">
+                <div class="text-sm font-medium text-gray-500">Total doado</div>
+                <div class="mt-1 text-3xl font-bold text-gray-900">KG {{number_format($total_donation_sum,2)}}</div>
+
+            </div>
+
+            <div class="bg-white p-5 rounded-lg shadow-lg border-l-4 border-red-500">
+                <div class="text-sm font-medium text-gray-500">Total de usuarios</div>
+                <div class="mt-1 text-3xl font-bold text-gray-900">{{$total_users}}</div>
+
+            </div>
+
         </div>
 
-    </div>
-    <!-- Grid principal: duas áreas (doações ocupa 2/3 e metas 1/3 em md+) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Gráfico de doações (ocupa 2 colunas em md+) -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm md:col-span-2">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">
-                Gráfico de número de doações (período)
-            </h3>
-            @include('backend.partials.charts.grafico_doacoes')
-        </div>
-        <!-- Gráfico de metas -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center md:col-span-1">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4">Metas (%)</h3>
-            @include('backend.partials.charts.grafico_metas')
-        </div>
-    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <!-- Cards inferiores: grid responsiva (1 / 2 / 4 colunas) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-        <div>
-            @include('backend.partials.cards.total')
-        </div>
-        <div>
-            @include('backend.partials.cards.top_ongs')
-        </div>
-        <div>
-            @include('backend.partials.cards.top_doadores')
-        </div>
-        <div>
-            @include('backend.partials.cards.visitantes')
+            <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Ranking Top Campanhas</h2>
+
+                <ul class="divide-y divide-gray-200">
+                    @forelse ($campaings as $campaing )
+                    <li class="py-3 flex justify-between items-center">
+                        <span class="font-medium">{{$campaing->id}} - {{$campaing->name}}</span>
+
+                    </li>
+                    @empty
+                    <p>Nenhuma campanha</p>
+                    @endforelse
+
+                </ul>
+            </div>
+
         </div>
     </div>
-</div>
-</div>
-@endsection
+    @endsection

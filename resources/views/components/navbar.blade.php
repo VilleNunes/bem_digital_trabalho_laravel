@@ -26,7 +26,7 @@
         </div>
 
         @php
-            $userRole = optional(auth()->user()?->rule)->name;
+        $userRole = optional(auth()->user()?->rule)->name;
         @endphp
 
         <nav class="flex-1">
@@ -43,13 +43,13 @@
                         ['label' => 'Listar Instituições', 'route' => 'institutions.index', 'icon' => 'fa-list'],
                         ['label' => 'Editar Instituição', 'route' => 'institutions.edit', 'icon' => 'fa-pen-to-square', 'show_on_current_route' => true],
                     ]" />
-                <x-nav-dropdown icon="fa-building" label="Campanhas" routeBase="campaingn" :items="[
+                <x-nav-dropdown icon="fa-solid fa-campground" label="Campanhas" routeBase="campaingn" :items="[
                         ['label' => 'Criar campanhas', 'route' => 'campaign.create', 'icon' => 'fa-pen-to-square'],
                         ['label' => 'Listar campanhas', 'route' => 'campaign.index', 'icon' => 'fa-list'],
                       
                     ]" />
 
-                <x-nav-dropdown icon="fa-building" label="Doador" routeBase="donors" :items="[
+                <x-nav-dropdown icon="fa-solid fa-people-arrows" label="Doador" routeBase="donors" :items="[
                         ['label' => 'Criar doador', 'route' => 'donors.create', 'icon' => 'fa-pen-to-square'],
                         ['label' => 'Listar doador', 'route' => 'donors.index', 'icon' => 'fa-list'],
                       
@@ -64,7 +64,7 @@
                 <x-nav-item icon="fa-hand-holding-heart" label="Minhas Doações" route="donations.index" />
                 @endif
 
-                <x-nav-item icon="fa-chart-line" label="Relatórios" href="#" />
+                <x-nav-item icon="fa-chart-line" label="Relatórios" href="{{ route('reports.index') }}" />
             </ul>
         </nav>
     </div>

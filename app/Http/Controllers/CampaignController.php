@@ -161,7 +161,7 @@ class CampaignController extends Controller
     public function updateImages(Request $request,Campaign $campaign){
   
         $request->validate([
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
         ]);
 
 

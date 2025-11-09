@@ -3,9 +3,11 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DonorController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
 use App\Models\Campaign;
 use Illuminate\Support\Facades\Route;
@@ -17,10 +19,6 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('home');
 });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
 
@@ -72,6 +70,12 @@ Route::middleware('auth')->group(function () {
     
     // Routes Donations
     Route::resource('donations', DonationController::class);
+
+    //Reports 
+    Route::get("/reports",[ReportsController::class, 'index'])->name('reports.index');
+
+    //Dashboard
+    Route::get("/dashboard",[DashboardController::class,'index'])->name('dashboard');
 });
 
 

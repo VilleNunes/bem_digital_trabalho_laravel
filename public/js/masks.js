@@ -120,3 +120,41 @@ export function initCPFMask(cpfInput, options = {}) {
         });
     }
 }
+
+export function formatKg(input) {
+    let value = input.value.replace(/\D/g, '');
+
+    if (value === '') {
+        input.value = '';
+        return;
+    }
+
+
+    while (value.length < 3) {
+        value = '0' + value;
+    }
+
+    let cents = value.slice(-2); 
+    let kilos = value.slice(0, -2); 
+  
+    kilos = kilos.replace(/^0+/, '');
+    if (kilos === '') kilos = '0';
+
+
+    kilos = kilos.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+
+    input.value = `${kilos},${cents}`;
+}
+
+export function initKgMask(weightInput) {
+    if (!weightInput) return;
+    
+
+    weightInput.addEventListener('input', function() {
+        formatKg(weightInput);
+    });
+    
+  
+    formatKg(weightInput);
+}
