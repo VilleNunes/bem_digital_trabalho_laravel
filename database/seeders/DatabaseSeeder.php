@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Campaign;
 use App\Models\Institution;
 use App\Models\Module;
 use App\Models\Rule;
@@ -51,6 +52,6 @@ class DatabaseSeeder extends Seeder
             'institution_id' => $instituion->id
         ]);
 
-        $this->call([InstitutionSeeder::class,CategorySeeder::class]);
+        $this->call([InstitutionSeeder::class, CategorySeeder::class, CampaignSeeder::class]);
     }
 }
