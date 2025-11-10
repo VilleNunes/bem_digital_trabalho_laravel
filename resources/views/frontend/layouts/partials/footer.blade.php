@@ -27,6 +27,8 @@
 
         <nav>
           <h4 class="footer-title text-white font-bold mb-2">Fale Conosco</h4>
+          <p class="text-sm"><a href="{{ route('contato') }}"
+          class="hover:text-primary">Contato</a></p>
           <p class="text-sm">Email: <a href="mailto:contato@bemdigital.org" class="hover:text-primary">contato@bemdigital.org</a></p>
           <p class="text-sm">Telefone: (44)97400-5974</p>
 

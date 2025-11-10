@@ -45,6 +45,7 @@ class InstitutionSeeder extends Seeder
                 'address_id'   => $address->id,
                 'description'  => $faker->optional()->sentence(12),
                 'photo_path'   => null,                        // ou: 'institutions/placeholder.jpg'
+            
             ]);
         }
     }

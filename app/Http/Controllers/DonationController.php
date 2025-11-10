@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DonationRequest;
 use App\Models\Donation;
-use App\Models\Institution;
+use App\Models\Campaign;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,18 +17,31 @@ class DonationController extends Controller
     {
         $user = Auth::user();
         $role = optional($user->rule)->name;
+        $institutionId = currentInstitutionId();
 
         if ($role === 'admin') {
-            $donationsQuery = Donation::with(['user.rule', 'institution'])->latest();
+            $donationsQuery = Donation::with(['user.rule', 'campaign.institution'])
+                ->when($institutionId, fn ($query, $id) => $query->whereHas(
+                    'campaign',
+                    fn ($campaignQuery) => $campaignQuery->where('institution_id', $id)
+                ))
+                ->latest();
+
             $donations = $donationsQuery->paginate();
-            $totalDonations = Donation::count();
-            $totalAmount = (float) Donation::sum('amount');
+            $statsQuery = Donation::query()
+                ->when($institutionId, fn ($query, $id) => $query->whereHas(
+                    'campaign',
+                    fn ($campaignQuery) => $campaignQuery->where('institution_id', $id)
+                ));
+
+            $totalDonations = (clone $statsQuery)->count();
+            $totalAmount = (float) (clone $statsQuery)->sum('amount');
 
             return view('backend.donations.index', compact('donations', 'role', 'totalDonations', 'totalAmount'));
         }
 
-        if ($role === 'donor') {
-            $donationsQuery = Donation::with(['user.rule', 'institution'])
+        if ($role === 'user') {
+            $donationsQuery = Donation::with(['user.rule', 'campaign.institution'])
                 ->where('user_id', $user->id)
                 ->latest();
 
@@ -47,16 +60,18 @@ class DonationController extends Controller
      */
     public function create()
     {
-        $this->ensureAdmin();
 
         $donors = User::with('rule')
             ->whereHas('rule', fn ($query) => $query->where('name', 'donor'))
             ->orderBy('name')
             ->get();
 
-        $institutions = Institution::orderBy('fantasy_name')->get();
+        $campaigns = Campaign::query()
+            ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+            ->orderBy('name')
+            ->get();
 
-        return view('backend.donations.create', compact('donors', 'institutions'));
+        return view('backend.donations.create', compact('donors', 'campaigns'));
     }
 
     /**
@@ -64,7 +79,7 @@ class DonationController extends Controller
      */
     public function store(DonationRequest $request)
     {
-        $this->ensureAdmin();
+
 
         $data = $request->validated();
         $donor = User::with('rule')->findOrFail($data['user_id']);
@@ -74,6 +89,10 @@ class DonationController extends Controller
                 ->withErrors(['user_id' => 'Selecione um usuário do tipo doador.'])
                 ->withInput();
         }
+
+        Campaign::query()
+            ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+            ->findOrFail($data['campaign_id']);
 
         Donation::create($data);
 
@@ -86,10 +105,9 @@ class DonationController extends Controller
      */
     public function show(Donation $donation)
     {
-        $this->ensureCanViewDonation($donation);
 
         return view('backend.donations.show', [
-            'donation' => $donation->load('user.rule', 'institution'),
+            'donation' => $donation->load('user.rule', 'campaign.institution'),
             'role' => optional(Auth::user()->rule)->name,
         ]);
     }
@@ -99,16 +117,18 @@ class DonationController extends Controller
      */
     public function edit(Donation $donation)
     {
-        $this->ensureAdmin();
 
         $donors = User::with('rule')
             ->whereHas('rule', fn ($query) => $query->where('name', 'donor'))
             ->orderBy('name')
             ->get();
 
-        $institutions = Institution::orderBy('fantasy_name')->get();
+        $campaigns = Campaign::query()
+            ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+            ->orderBy('name')
+            ->get();
 
-        return view('backend.donations.edit', compact('donation', 'donors', 'institutions'));
+        return view('backend.donations.edit', compact('donation', 'donors', 'campaigns'));
     }
 
     /**
@@ -116,7 +136,7 @@ class DonationController extends Controller
      */
     public function update(DonationRequest $request, Donation $donation)
     {
-        $this->ensureAdmin();
+
 
         $data = $request->validated();
 
@@ -132,8 +152,12 @@ class DonationController extends Controller
             $data['user_id'] = $donation->user_id;
         }
 
-        if (! isset($data['institution_id'])) {
-            $data['institution_id'] = $donation->institution_id;
+        if (isset($data['campaign_id'])) {
+            Campaign::query()
+                ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+                ->findOrFail($data['campaign_id']);
+        } else {
+            $data['campaign_id'] = $donation->campaign_id;
         }
 
         $donation->update($data);
@@ -153,32 +177,4 @@ class DonationController extends Controller
         return redirect()->route('donations.index')->with('status', 'Doação removida com sucesso!');
     }
 
-    /**
-     * Garante acesso de administradores ou doadores donos.
-     */
-    protected function ensureCanViewDonation(Donation $donation): void
-    {
-        $user = Auth::user();
-
-        $role = optional($user?->rule)->name;
-
-        if ($role === 'admin') {
-            return;
-        }
-
-        if ($role === 'donor' && $donation->user_id === $user->id) {
-            return;
-        }
-
-        abort(403, 'Acesso não autorizado à doação informada.');
-    }
-
-    protected function ensureAdmin(): void
-    {
-        $role = optional(Auth::user()?->rule)->name;
-
-        if ($role !== 'admin') {
-            abort(403, 'Somente administradores podem realizar esta ação.');
-        }
-    }
 }

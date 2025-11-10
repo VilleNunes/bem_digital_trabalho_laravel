@@ -54,6 +54,27 @@
         </div>
     </div>
 
+    <div class="mt-4 grid grid-cols-2 ">
+        <div class="grid grid-cols-2 gap-2">
+            <div>
+                <x-input-label for="unit" required value="Unidade de medida" />
+                <select class="select w-full" required name="unit">
+                    <option disabled>Selecione uma categoria</option>
+                    <option {{ old('unit',$campaign->unit ?? 'kg') === "unit" ? 'selected':'' }} value="unit">Unitário
+                    </option>
+                    <option {{ old('unit',$campaign->unit ?? 'kg') === 'kg' ? 'selected':'' }} value="kg">KG</option>
+                </select>
+                <x-input-error :messages="$errors->get('unit')" class="mt-2" />
+            </div>
+            <div>
+                <x-input-label for="mark" value="Meta da campanha" />
+                <x-text-input id="mark" class="block mt-1 w-full" type="number" name="mark"
+                    :value="old('mark', $campaign->mark ?? '')" />
+                <x-input-error :messages="$errors->get('mark')" class="mt-2" />
+            </div>
+        </div>
+    </div>
+
     <div class="mt-4">
         <x-input-label for="description" required value="Descrição" />
         <div id="editor" style="height: 300px; background: white;"></div>

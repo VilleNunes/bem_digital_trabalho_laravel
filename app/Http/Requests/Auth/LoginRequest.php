@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User; // Importa o modelo User
 
 class LoginRequest extends FormRequest
 {
@@ -41,6 +42,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+      
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -49,9 +51,35 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+      
+        $user = Auth::user();
+
+        
+        if (! $user->is_active) {
+            Auth::logout(); 
+            RateLimiter::hit($this->throttleKey());
+            
+            throw ValidationException::withMessages([
+                'email' => 'Sua conta está inativa. Por favor, contate o administrador.',
+            ]);
+        }
+
+      
+        if ($user->institution && ! $user->institution->is_active) {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'A instituição à qual você pertence está inativa. Acesso negado.',
+            ]);
+        }
+
+      
         RateLimiter::clear($this->throttleKey());
     }
 
+  
+    
     /**
      * Ensure the login request is not rate limited.
      *
@@ -75,9 +103,7 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
+   
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());

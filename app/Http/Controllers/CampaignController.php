@@ -26,6 +26,12 @@ class CampaignController extends Controller
             ->active(request()->active)
             ->paginate(10);
         return view('backend.campaign.index', ['campaigns' => $campaigns]);
+        ->where('institution_id',currentInstitutionId())
+        ->name(request()->name)
+        ->date(request()->beginning,request()->termination)
+        ->active(request()->active)
+        ->paginate(10);
+        return view('backend.campaign.index',['campaigns'=>$campaigns]);
     }
 
     /**
@@ -96,6 +102,11 @@ class CampaignController extends Controller
         $ponto = $campaign->collectionPoints()->first();
         $agendas = $ponto->schedules()->orderBy('dia', 'asc')->get()->toArray();
         return view('backend.campaign.create', ['campaign' => $campaign, 'categories' => $categories, 'ponto' => $ponto, 'agendas' => $agendas]);
+        $agendas = [];
+        if($ponto){
+            $agendas = $ponto->schedules()->orderBy('dia','asc')->get()->toArray();
+        }
+        return view('backend.campaign.create',['campaign'=>$campaign,'categories'=>$categories,'ponto'=>$ponto,'agendas'=>$agendas]);
     }
 
     /**
@@ -161,7 +172,7 @@ class CampaignController extends Controller
     {
 
         $request->validate([
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp',
         ]);
 
 
@@ -199,6 +210,12 @@ class CampaignController extends Controller
 
         if ($totalPohotos == 0) {
             return back()->with('error', 'Para ativar a campanha precisa ter pelo menos uma foto veinculada');
+        $ponto = $campaign->collectionPoints->count();
+        if($ponto == 0 ){
+            return back()->with('error','Para ativar a campanha precisa ter pelo menos uma ponto cadastrado');
+        }
+        if($totalPohotos == 0 ){
+            return back()->with('error','Para ativar a campanha precisa ter pelo menos uma foto veinculada');
         }
         $campaign->is_active = !$campaign->is_active;
         $campaign->save();
@@ -215,4 +232,15 @@ class CampaignController extends Controller
         // retorna a view do frontend passando os dados
         return view('frontend.layouts.partials.campaignsViews', compact('campaigns'));
     }
+
+    // Página pública da campanha
+    public function showPublic($id)
+{
+    $campaign = \App\Models\Campaign::with(['institution', 'category'])
+        ->where('is_active', true)
+        ->findOrFail($id);
+
+    return view('frontend.campaign.show', compact('campaign'));
+}
+
 }

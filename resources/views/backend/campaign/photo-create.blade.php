@@ -17,13 +17,8 @@
 
 <x-card>
 
-    <form 
-        action="{{ route('campaign.updateImages', $campaign) }}" 
-        method="POST" 
-        enctype="multipart/form-data"
-        x-data="imageManager({{ $campaign->id }}, {{ $campaign->photos->toJson() }})"
-        @submit.prevent="submitForm"
-    >
+    <form action="{{ route('campaign.updateImages', $campaign) }}" method="POST" enctype="multipart/form-data"
+        x-data="imageManager({{ $campaign->id }}, {{ $campaign->photos->toJson() }})" @submit.prevent="submitForm">
         @csrf
         @method('POST')
 
@@ -34,11 +29,8 @@
                 <template x-for="(img, index) in savedImages" :key="img.id">
                     <div class="relative">
                         <img :src="img.filename" class="rounded shadow-md w-full h-32 object-cover">
-                        <button 
-                            type="button" 
-                            @click="deleteSavedImage(img.id, index)"
-                            class="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700"
-                        >
+                        <button type="button" @click="deleteSavedImage(img.id, index)"
+                            class="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700">
                             Excluir
                         </button>
                     </div>
@@ -52,24 +44,15 @@
         {{-- Upload de novas imagens --}}
         <div class="mb-6">
             <h2 class="text-lg font-semibold mb-2">Adicionar novas imagens</h2>
-            <input 
-                type="file" 
-                multiple 
-                accept="image/*"
-                @change="previewFiles"
-                name="images[]"
-                class="block w-full text-sm text-gray-700 border border-gray-300 rounded-md p-2 mb-3"
-            >
-
+            <input type="file" multiple accept="image/*" @change="previewFiles" name="images[]"
+                class="block w-full text-sm text-gray-700 border border-gray-300 rounded-md p-2 mb-3">
+            <span class="text-red-500">{{$errors->first('images')}}</span>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 <template x-for="(img, index) in newImages" :key="index">
                     <div class="relative">
                         <img :src="img.filename" class="rounded shadow-md w-full h-32 object-cover">
-                        <button 
-                            type="button" 
-                            @click="removeNewImage(index)"
-                            class="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700"
-                        >
+                        <button type="button" @click="removeNewImage(index)"
+                            class="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700">
                             Remover
                         </button>
                     </div>
@@ -79,7 +62,7 @@
 
         <div class="flex justify-end gap-3">
             <x-button-link :href="route('campaign.index')">Cancelar</x-button-link>
-            <x-button color="blue" type="submit" > Salvar alterações</x-button>
+            <x-button color="blue" type="submit"> Salvar alterações</x-button>
         </div>
 
     </form>
