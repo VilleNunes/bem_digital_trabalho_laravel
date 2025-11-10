@@ -16,11 +16,13 @@
         import {
             initCEPMask,
             initPhoneMask,
-            initCPFMask
+            initCPFMask,
+            initKgMask
         } from '/js/masks.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             const cepInput = document.getElementById('address_zip');
+            const kgInput = document.getElementById('kg')
             const cpfInput = document.getElementById('cpf');
             const stateInput = document.getElementById('address_state');
             const cityInput = document.getElementById('address_city');
@@ -30,6 +32,7 @@
             const phoneInput = document.getElementById('phone');
             initPhoneMask(phoneInput);
             initCPFMask(cpfInput);
+            initKgMask(kgInput);
         });
     </script>
 

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Schema\Blueprint;
 
 class Campaign extends Model
 {
@@ -23,11 +22,12 @@ class Campaign extends Model
         'termination',
         'mark',
         'category_id',
-        'institution_id'
+        'institution_id',
+        'unit'
     ];
 
     public function institution(){
-        return $this->belongsTo(institution::class);
+        return $this->belongsTo(Institution::class);
     }
 
     public function category(){
@@ -43,6 +43,11 @@ class Campaign extends Model
 
     public function photos(){
         return $this->morphMany(Photo::class,'imageable');
+    }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
     }
 
     public function scopeName($query,$name){

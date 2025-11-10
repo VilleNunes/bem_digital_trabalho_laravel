@@ -26,45 +26,59 @@
         </div>
 
         @php
-            $userRole = optional(auth()->user()?->rule)->name;
+        $userRole = optional(auth()->user()?->rule)->name;
         @endphp
 
         <nav class="flex-1">
             <ul class="space-y-2">
 
                 <x-nav-item icon="fa-gauge" label="Dashboard" route="dashboard" />
-
+                @if (Auth::user()->hasModules('Usuários') || $userRole === "admin")
                 <x-nav-dropdown icon="fa-users" label="Usuários" routeBase="users" :items="[
                         ['label' => 'Listar Usuários', 'route' => 'users.index', 'icon' => 'fa-list'],
                         ['label' => 'Cadastrar Usuário', 'route' => 'users.create', 'icon' => 'fa-user-plus'],
                     ]" />
+                @endif
 
+                @if($userRole === 'admin' )
                 <x-nav-dropdown icon="fa-building" label="Instituições" routeBase="institutions" :items="[
                         ['label' => 'Listar Instituições', 'route' => 'institutions.index', 'icon' => 'fa-list'],
-                        ['label' => 'Editar Instituição', 'route' => 'institutions.edit', 'icon' => 'fa-pen-to-square', 'show_on_current_route' => true],
                     ]" />
-                <x-nav-dropdown icon="fa-building" label="Campanhas" routeBase="campaingn" :items="[
+                @endif
+
+                @if($userRole === 'user' && Auth::user()->hasModules('Instituições') )
+                <x-nav-dropdown icon="fa-building" label="Instituições" routeBase="institutions" :items="[
+                        ['label' => 'Editar Instituição', 'route' => 'institutions.edit', 'icon' => 'fa-pen-to-square'],
+                    ]" />
+                @endif
+
+                @if (Auth::user()->hasModules('Campanhas') || $userRole === "admin")
+                <x-nav-dropdown icon="fa-solid fa-campground" label="Campanhas" routeBase="campaingn" :items="[
                         ['label' => 'Criar campanhas', 'route' => 'campaign.create', 'icon' => 'fa-pen-to-square'],
                         ['label' => 'Listar campanhas', 'route' => 'campaign.index', 'icon' => 'fa-list'],
-                      
                     ]" />
+                @endif
 
-                <x-nav-dropdown icon="fa-building" label="Doador" routeBase="donors" :items="[
+                @if (Auth::user()->hasModules('Doadores') || $userRole === "admin")
+                <x-nav-dropdown icon="fa-solid fa-people-arrows" label="Doador" routeBase="donors" :items="[
                         ['label' => 'Criar doador', 'route' => 'donors.create', 'icon' => 'fa-pen-to-square'],
                         ['label' => 'Listar doador', 'route' => 'donors.index', 'icon' => 'fa-list'],
                       
                     ]" />
+                @endif
 
-                @if ($userRole === 'admin')
+                @if ($userRole === 'admin' || Auth::user()->hasModules('Doações') )
                 <x-nav-dropdown icon="fa-hand-holding-heart" label="Doações" routeBase="donations" :items="[
                         ['label' => 'Cadastrar doação', 'route' => 'donations.create', 'icon' => 'fa-plus'],
                         ['label' => 'Listar doações', 'route' => 'donations.index', 'icon' => 'fa-list'],
                     ]" />
-                @elseif ($userRole === 'donor')
-                <x-nav-item icon="fa-hand-holding-heart" label="Minhas Doações" route="donations.index" />
                 @endif
 
-                <x-nav-item icon="fa-chart-line" label="Relatórios" href="#" />
+                @if (Auth::user()->hasModules('Relatórios') || $userRole === "admin")
+                <x-nav-item icon="fa-chart-line" label="Relatórios" href="{{ route('reports.index') }}" />
+                @endif
+
+                <x-nav-item label="www.bemdigital.com" href="{{ route('home') }}" />
             </ul>
         </nav>
     </div>

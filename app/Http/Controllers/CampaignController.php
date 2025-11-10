@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateCampaignRequest;
 use App\Models\Address;
 use App\Models\Campaign;
 use App\Models\Category;
-use App\Models\CollectionPoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,169 +15,162 @@ use Illuminate\Support\Facades\Storage;
 class CampaignController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Exibe a lista de campanhas.
      */
     public function index()
     {
         $campaigns = Campaign::query()
+            ->where('institution_id', currentInstitutionId())
             ->name(request()->name)
             ->date(request()->beginning, request()->termination)
             ->active(request()->active)
             ->paginate(10);
-        return view('backend.campaign.index', ['campaigns' => $campaigns]);
+
+        return view('backend.campaign.index', compact('campaigns'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Exibe o formulário de criação de campanha.
      */
     public function create()
     {
         $categories = Category::all();
-        return view('backend.campaign.create', ['categories' => $categories]);
+        return view('backend.campaign.create', compact('categories'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Salva uma nova campanha.
      */
     public function store(StoreCampaignRequest $request)
     {
-
         try {
             DB::beginTransaction();
 
             $data = $request->validated();
-
-            $address_data = $data['address'] ?? null;
-            $agendas = json_decode(request()->agenda, true);
-            $title_point = $data['title_point'] ?? 'Ponto de Coleta';
+            $addressData = $data['address'] ?? null;
+            $agendas = json_decode($request->agenda, true);
+            $titlePoint = $data['title_point'] ?? 'Ponto de Coleta';
 
             unset($data['address'], $data['agenda'], $data['photos'], $data['title_point']);
 
+            // Cria a campanha vinculada à instituição do usuário
             $campaign = Auth::user()->institution->campaigns()->create($data);
 
+            // Cria o ponto de coleta e endereço
             $collectionPoint = $campaign->collectionPoints()->create([
-                'title' => $title_point,
-                'address_id' => Address::create($address_data)->id
+                'title' => $titlePoint,
+                'address_id' => Address::create($addressData)->id
             ]);
 
-
+            // Cria os horários de funcionamento
             foreach ($agendas as $agenda) {
                 $collectionPoint->schedules()->create([
                     'dia' => $agenda['dia'],
-                    'abertura' => $agenda['fechado'] ? null : ($agenda['abertura'] ?: null),
-                    'fechamento' => $agenda['fechado'] ? null : ($agenda['fechamento'] ?: null)
+                    'abertura' => $agenda['fechado'] ? null : ($agenda['abertura'] ?? null),
+                    'fechamento' => $agenda['fechado'] ? null : ($agenda['fechamento'] ?? null)
                 ]);
             }
 
             DB::commit();
-
-            return to_route('campaign.index');
+            return to_route('campaign.index')->with('success', 'Campanha criada com sucesso!');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            report($th);
+            return back()->with('error', 'Erro ao criar campanha.');
         }
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Campaign $campaign)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
+     * Exibe o formulário de edição de uma campanha.
      */
     public function edit(Campaign $campaign)
     {
-        $categories = Category::query()->get();
+        $categories = Category::all();
         $ponto = $campaign->collectionPoints()->first();
-        $agendas = $ponto->schedules()->orderBy('dia', 'asc')->get()->toArray();
-        return view('backend.campaign.create', ['campaign' => $campaign, 'categories' => $categories, 'ponto' => $ponto, 'agendas' => $agendas]);
+        $agendas = $ponto ? $ponto->schedules()->orderBy('dia', 'asc')->get()->toArray() : [];
+
+        return view('backend.campaign.create', compact('campaign', 'categories', 'ponto', 'agendas'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Atualiza uma campanha existente.
      */
-    public function update(StoreCampaignRequest $request, Campaign $campaign)
+    public function update(UpdateCampaignRequest $request, Campaign $campaign)
     {
         try {
             DB::beginTransaction();
 
             $data = $request->validated();
-
-            $address_data = $data['address'];
-            $agendas = json_decode(request()->agenda, true);
-            $title_point = $data['title_point'] ?? 'Ponto de Coleta';
+            $addressData = $data['address'];
+            $agendas = json_decode($request->agenda, true);
+            $titlePoint = $data['title_point'] ?? 'Ponto de Coleta';
 
             unset($data['address'], $data['agenda'], $data['photos'], $data['title_point']);
 
             $campaign->update($data);
 
-
-            $collectionPoint =  $campaign->collectionPoints()->first();
-            $collectionPoint->address()->update($address_data);
-
-            $collectionPoint->update([
-                'title' => $title_point
-            ]);
-
+            $collectionPoint = $campaign->collectionPoints()->first();
+            $collectionPoint->address()->update($addressData);
+            $collectionPoint->update(['title' => $titlePoint]);
 
             foreach ($agendas as $agenda) {
                 $schedule = $collectionPoint->schedules()->where('dia', $agenda['dia'])->first();
+
                 if ($schedule) {
                     $schedule->update([
-                        'dia' => $agenda['dia'],
-                        'abertura' => $agenda['fechado'] ? null : ($agenda['abertura'] ?: null),
-                        'fechamento' => $agenda['fechado'] ? null : ($agenda['fechamento'] ?: null)
+                        'abertura' => $agenda['fechado'] ? null : ($agenda['abertura'] ?? null),
+                        'fechamento' => $agenda['fechado'] ? null : ($agenda['fechamento'] ?? null),
                     ]);
                 } else {
                     $collectionPoint->schedules()->create([
                         'dia' => $agenda['dia'],
-                        'abertura' => $agenda['fechado'] ? null : ($agenda['abertura'] ?: null),
-                        'fechamento' => $agenda['fechado'] ? null : ($agenda['fechamento'] ?: null)
+                        'abertura' => $agenda['fechado'] ? null : ($agenda['abertura'] ?? null),
+                        'fechamento' => $agenda['fechado'] ? null : ($agenda['fechamento'] ?? null),
                     ]);
                 }
             }
 
             DB::commit();
-
-            return to_route('dashboard');
+            return to_route('dashboard')->with('success', 'Campanha atualizada com sucesso!');
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            report($th);
+            return back()->with('error', 'Erro ao atualizar campanha.');
         }
     }
 
+    /**
+     * Exibe o formulário para upload de fotos.
+     */
     public function photoUpload(Campaign $campaign)
     {
-
-        return view('backend.campaign.photo-create', ['campaign' => $campaign]);
+        return view('backend.campaign.photo-create', compact('campaign'));
     }
 
+    /**
+     * Atualiza as imagens de uma campanha.
+     */
     public function updateImages(Request $request, Campaign $campaign)
     {
-
         $request->validate([
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB máx
         ]);
-
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-
-                $path = $file->store('campaigns/' . $campaign->id, 'public');
-
+                $path = $file->store("campaigns/{$campaign->id}", 'public');
                 $campaign->photos()->create([
-                    'filename' => '/storage/' . $path,
+                    'filename' => "/storage/{$path}",
                 ]);
             }
         }
 
-        return redirect()->back()->with('success', 'Imagens atualizadas com sucesso!');
+        return back()->with('success', 'Imagens atualizadas com sucesso!');
     }
 
+    /**
+     * Exclui uma imagem específica.
+     */
     public function deleteImage(Campaign $campaign, $photoId)
     {
         $image = $campaign->photos()->findOrFail($photoId);
@@ -189,37 +181,49 @@ class CampaignController extends Controller
         }
 
         $image->delete();
-
         return response()->noContent();
     }
 
+    /**
+     * Ativa ou desativa uma campanha.
+     */
     public function active(Campaign $campaign)
     {
-        $totalPohotos = $campaign->photos()->count();
+        $totalPhotos = $campaign->photos()->count();
+        $totalPoints = $campaign->collectionPoints()->count();
 
-        if ($totalPohotos == 0) {
-            return back()->with('error', 'Para ativar a campanha precisa ter pelo menos uma foto veinculada');
+        if ($totalPoints == 0) {
+            return back()->with('error', 'Para ativar a campanha precisa ter pelo menos um ponto cadastrado.');
         }
+
+        if ($totalPhotos == 0) {
+            return back()->with('error', 'Para ativar a campanha precisa ter pelo menos uma foto vinculada.');
+        }
+
         $campaign->is_active = !$campaign->is_active;
         $campaign->save();
 
-        return back()->with('success', 'Status atualizado com sucesso');
+        return back()->with('success', 'Status da campanha atualizado com sucesso!');
     }
 
-    //adicionado com chat so para fazer rodar o frontend de campanhas
+    /**
+     * Mostra campanhas públicas (frontend).
+     */
     public function showFrontend()
     {
-        // pega apenas campanhas ativas
         $campaigns = Campaign::where('is_active', true)->latest()->get();
-
-        // retorna a view do frontend passando os dados
         return view('frontend.layouts.partials.campaignsViews', compact('campaigns'));
     }
 
-    //adicionado com chat só para fazer rodar o frontend da campanha
-    public function showFrontendDetail($id)
+    /**
+     * Mostra página pública de uma campanha.
+     */
+    public function showPublic($id)
     {
-        $campaign = \App\Models\Campaign::with(['photos', 'category', 'institution'])->findOrFail($id);
-        return view('frontend.layouts.partials.campaign', compact('campaign'));
+        $campaign = Campaign::with(['institution', 'category'])
+            ->where('is_active', true)
+            ->findOrFail($id);
+
+        return view('frontend.campaign.show', compact('campaign'));
     }
 }

@@ -23,6 +23,7 @@ class UsersController extends Controller
         $totalUser= User::query()->usersUnit('user')->count();
         $users = User::query()
         ->usersUnit('user')
+        ->where('id', "!=", auth()->user()->id)
         ->email(request()->email)
         ->name(request()->name)
         ->phone(request()->phone)
@@ -114,6 +115,12 @@ class UsersController extends Controller
             unset($data['address']);
         }
 
+        if(isset($data['password'])){
+            $data['password'] = Hash::make($data['password']);
+        }
+
+  
+
         $user->address()->update($address);
 
         if(isset($data['modules'])){
@@ -144,4 +151,15 @@ class UsersController extends Controller
         $user->save();
         return redirect()->route('users.index')->with('success','Status atualizado com sucesso!');
     }
+
+    public function changeInstitution(Request $request){
+        $user = auth()->user();
+        if(!$user->rule->name == "admin"){
+            return abort(403,"Usuario não permitido");
+        }
+        $user->institution_id = $request->institution_id;
+        $user->save();
+        return back();
+    }
+
 }

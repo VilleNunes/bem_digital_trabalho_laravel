@@ -18,9 +18,9 @@
         @csrf
 
         @include('backend.donations.partials.form', [
-            'donation' => null,
-            'donors' => $donors,
-            'institutions' => $institutions,
+        'donation' => null,
+        'donors' => $donors,
+        'campaigns' => $campaigns,
         ])
 
         <div class="flex justify-end gap-3">

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Campaign;
 use App\Models\Institution;
 use App\Models\Module;
 use App\Models\Rule;
@@ -31,9 +32,13 @@ class DatabaseSeeder extends Seeder
         Rule::create(['name' => 'donor']);
         Rule::create(['name' => 'user']);
 
-        Module::create(['title' => 'Usuarios']);
-        Module::create(['title' => 'Doacoes']);
-        Module::create(['title' => 'Estoque']);
+        Module::create(['title' => 'Usuários']);
+        Module::create(['title' => 'Doações']);
+        Module::create(['title' => 'Instituições']);
+        Module::create(['title' => 'Relatórios']);
+        Module::create(['title' => 'Campanhas']);
+        Module::create(['title' => 'Doadores']);
+
 
         $rule = Rule::query()->where('name', 'admin')->first();
         $instituion = Institution::query()->first();
@@ -42,7 +47,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
             'rule_id' => $rule->id,
-            'institution_id' => $instituion->id
+            'institution_id' => $instituion->id,
+            'is_active'=>true
 
         ]);
 
@@ -51,6 +57,6 @@ class DatabaseSeeder extends Seeder
             'institution_id' => $instituion->id
         ]);
 
-        $this->call([InstitutionSeeder::class,CategorySeeder::class]);
+        $this->call([InstitutionSeeder::class, CategorySeeder::class, CampaignSeeder::class]);
     }
 }

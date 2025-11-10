@@ -1,4 +1,4 @@
-<section class="relative w-full h-[85vh] flex items-center justify-center overflow-hidden">
+<section class="relative w-full h-[100vh] flex items-center justify-center overflow-hidden">
   <!-- Vídeo de fundo -->
   <video autoplay muted loop playsinline class="absolute top-0 left-0 w-full h-full object-cover">
     <source src="videos/videosfundo.mp4" type="video/mp4">
