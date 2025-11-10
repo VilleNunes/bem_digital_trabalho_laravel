@@ -20,6 +20,11 @@ Route::get('/', function () {
 // Página pública de uma campanha
 Route::get('/campanhas/{id}', [CampaignController::class, 'showPublic'])->name('campaign.show.public');
 
+//cadastro instituicoes
+Route::get('/cadastro-instituicoes', function () {
+    return view('frontend.register-institution');
+})->name('cadastro.instituicoes');
+
 //contato
 Route::get('/contato', function () {
     return view('frontend.contact');
