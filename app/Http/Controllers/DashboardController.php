@@ -15,9 +15,13 @@ class DashboardController extends Controller
         $total_campaing = Campaign::query()->where('institution_id',currentInstitutionId())->count();
         $total_donors = User::usersUnit('donor')->where('institution_id',currentInstitutionId())->count();
         $total_users = User::usersUnit('user')->count();
-        $total_donation_sum = Donation::whereHas('campaign', function ($query) {
-            $query->where('institution_id', currentInstitutionId());
+        $total_donation_sum_kg = Donation::whereHas('campaign', function ($query) {
+            $query->where('institution_id', currentInstitutionId())->where('unit','kg');
         })->sum('quantify');
-        return view('dashboard',[ 'campaings'=>$campaings,'total_donors'=>$total_donors,'total_campaing'=>$total_campaing,'total_users'=>$total_users,'total_donation_sum'=>$total_donation_sum]);
+        $total_donation_sum_unit = Donation::whereHas('campaign', function ($query) {
+            $query->where('institution_id', currentInstitutionId())->where('unit','unit');
+        })->sum('quantify');
+        return view('dashboard',[ 'campaings'=>$campaings,'total_donors'=>$total_donors,
+        'total_campaing'=>$total_campaing,'total_users'=>$total_users,'total_donation_sum_kg'=>$total_donation_sum_kg,'total_donation_sum_unit'=>$total_donation_sum_unit]);
     }
 }

@@ -22,7 +22,8 @@ class Campaign extends Model
         'termination',
         'mark',
         'category_id',
-        'institution_id'
+        'institution_id',
+        'unit'
     ];
 
     public function institution(){

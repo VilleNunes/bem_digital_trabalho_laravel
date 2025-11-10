@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UsersController;
 use App\Models\Campaign;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 // ==================== ROTAS PÚBLICAS ====================
@@ -87,6 +88,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/donors/{donor}/edit', [DonorController::class, 'edit'])->name('donors.edit');
         Route::put('/donors/{donor}/update', [DonorController::class, 'update'])->name('donors.update');
     });
+
+    Route::patch('/change/institution',[UsersController::class,'changeInstitution'])->name('changeInstitution');
 
 
     // ROTAS DE DOAÇÕES (Resource)

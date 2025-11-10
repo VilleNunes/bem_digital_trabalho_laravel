@@ -8,7 +8,7 @@
     <!-- Título -->
     <div class="flex gap-10 items-center justify-center">
         <a href="{{ route('dashboard') }}" class="font-semibold text-xl text-gray-950 hover:opacity-90">
-            {{ $title }} <span class="text-verde-claro">{{ $subtitle }}</span>
+            Instituição <span class="text-verde-claro"> {{auth()->user()->institution->fantasy_name}}</span>
         </a>
 
         @if(auth()->user()->rule->name === "admin")

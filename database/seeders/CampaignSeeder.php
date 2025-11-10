@@ -29,6 +29,7 @@ class CampaignSeeder extends Seeder
                 'beginning' => Carbon::now()->subDays(15),
                 'termination' => Carbon::now()->addDays(45),
                 'mark' => 65,
+                'unit'=>"kg"
             ],
             [
                 'name' => 'Material Escolar Solidário',
@@ -38,6 +39,7 @@ class CampaignSeeder extends Seeder
                 'beginning' => Carbon::now()->subDays(30),
                 'termination' => Carbon::now()->addDays(60),
                 'mark' => 42,
+                'unit'=>"kg"
             ],
             [
                 'name' => 'Alimentos Não Perecíveis',
@@ -47,6 +49,7 @@ class CampaignSeeder extends Seeder
                 'beginning' => Carbon::now()->subDays(10),
                 'termination' => Carbon::now()->addDays(50),
                 'mark' => 78,
+                'unit'=>"kg"
             ],
             [
                 'name' => 'Brinquedos para o Natal',
@@ -56,6 +59,7 @@ class CampaignSeeder extends Seeder
                 'beginning' => Carbon::now()->subDays(5),
                 'termination' => Carbon::now()->addDays(25),
                 'mark' => 23,
+                'unit'=>"kg"
             ],
         ];
 
@@ -68,7 +72,5 @@ class CampaignSeeder extends Seeder
                 ]));
             }
         }
-
-        $this->command->info('Campanhas criadas com sucesso!');
     }
 }

@@ -32,7 +32,11 @@
     <x-card>
 
         <div class="grid grid-cols-1  sm:grid-cols-1 md:grid-cols-4 gap-3 mb-5">
-            <x-card-metrics value="KG {{  number_format($campaing_donotions,2)  }}" color="green" label="Total Doado" />
+            <x-card-metrics
+                value="{{ number_format($campaign_donations, 2, '.', '') }} {{ $campaign->unit === 'unit' ? 'uni' : 'kg' }}"
+                color="green" label="Total Doado" />
+
+
             <x-card-metrics value="{{ $donation_count }}" color="blue" label="Quantidade de doações" />
             <x-card-metrics value="{{ $donors_count }}" color="blue" label="Total de Doadores" />
         </div>
