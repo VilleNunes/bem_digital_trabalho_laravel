@@ -33,8 +33,7 @@
     </div>
 
     <div id="mobile-menu" class="hidden md:hidden px-4 pb-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-        <a href="{{ route('home') }}" class="block py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 rounded-md transition-colors">Início</a>
-        <a href="#instituicoes" class="block py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 rounded-md transition-colors">Instituições</a>
+        <a href="{{ route('cadastro.instituicoes')}}" class="block py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 rounded-md transition-colors">Cadastrar Instituições</a>
         <a href="{{ route('institution.demo') }}" class="block py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 rounded-md transition-colors">Demo</a>
         <a href="#sobre" class="block py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-2 rounded-md transition-colors">Sobre Nós</a>
 
