@@ -204,4 +204,15 @@ class CampaignController extends Controller
 
         return back()->with('success','Status atualizado com sucesso');
     }
+
+    // Página pública da campanha
+    public function showPublic($id)
+{
+    $campaign = \App\Models\Campaign::with(['institution', 'category'])
+        ->where('is_active', true)
+        ->findOrFail($id);
+
+    return view('frontend.campaign.show', compact('campaign'));
+}
+
 }
