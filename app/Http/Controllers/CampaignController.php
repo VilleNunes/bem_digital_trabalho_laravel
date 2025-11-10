@@ -215,4 +215,11 @@ class CampaignController extends Controller
         // retorna a view do frontend passando os dados
         return view('frontend.layouts.partials.campaignsViews', compact('campaigns'));
     }
+
+    //adicionado com chat só para fazer rodar o frontend da campanha
+    public function showFrontendDetail($id)
+    {
+        $campaign = \App\Models\Campaign::with(['photos', 'category', 'institution'])->findOrFail($id);
+        return view('frontend.layouts.partials.campaign', compact('campaign'));
+    }
 }

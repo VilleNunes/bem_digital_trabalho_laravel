@@ -10,7 +10,11 @@ use App\Http\Controllers\UsersController;
 use App\Models\Campaign;
 use Illuminate\Support\Facades\Route;
 
-//adicionado com chat so para fazer rodar o frontend de campanhas
+//adicionado com chat só para fazer rodar o frontend da campanha
+Route::get('/campanhas/{id}', [App\Http\Controllers\CampaignController::class, 'showFrontendDetail'])
+    ->name('frontend.campaigns.show');
+
+//adicionado com chat só para fazer rodar o frontend de campanhas
 Route::get('/campanhas', [CampaignController::class, 'showFrontend'])->name('frontend.campaigns');
 
 Route::get('/', function () {
