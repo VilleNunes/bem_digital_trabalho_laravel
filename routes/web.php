@@ -10,6 +10,9 @@ use App\Http\Controllers\UsersController;
 use App\Models\Campaign;
 use Illuminate\Support\Facades\Route;
 
+//adicionado com chat so para fazer rodar o frontend de campanhas
+Route::get('/campanhas', [CampaignController::class, 'showFrontend'])->name('frontend.campaigns');
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -69,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/donors/{donor}/delete', [DonorController::class, 'destroy'])->name('donors.destroy');
     Route::get('/donors/{donor}/edit', [DonorController::class, 'edit'])->name('donors.edit');
     Route::put('/donors/{donor}/update', [DonorController::class, 'update'])->name('donors.update');
-    
+
     // Routes Donations
     Route::resource('donations', DonationController::class);
 });

@@ -21,11 +21,11 @@ class CampaignController extends Controller
     public function index()
     {
         $campaigns = Campaign::query()
-        ->name(request()->name)
-        ->date(request()->beginning,request()->termination)
-        ->active(request()->active)
-        ->paginate(10);
-        return view('backend.campaign.index',['campaigns'=>$campaigns]);
+            ->name(request()->name)
+            ->date(request()->beginning, request()->termination)
+            ->active(request()->active)
+            ->paginate(10);
+        return view('backend.campaign.index', ['campaigns' => $campaigns]);
     }
 
     /**
@@ -34,7 +34,7 @@ class CampaignController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('backend.campaign.create',['categories'=>$categories]);
+        return view('backend.campaign.create', ['categories' => $categories]);
     }
 
     /**
@@ -42,12 +42,12 @@ class CampaignController extends Controller
      */
     public function store(StoreCampaignRequest $request)
     {
- 
+
         try {
             DB::beginTransaction();
 
             $data = $request->validated();
-   
+
             $address_data = $data['address'] ?? null;
             $agendas = json_decode(request()->agenda, true);
             $title_point = $data['title_point'] ?? 'Ponto de Coleta';
@@ -60,8 +60,8 @@ class CampaignController extends Controller
                 'title' => $title_point,
                 'address_id' => Address::create($address_data)->id
             ]);
-        
-    
+
+
             foreach ($agendas as $agenda) {
                 $collectionPoint->schedules()->create([
                     'dia' => $agenda['dia'],
@@ -77,7 +77,6 @@ class CampaignController extends Controller
             DB::rollBack();
             throw $th;
         }
-
     }
 
     /**
@@ -95,8 +94,8 @@ class CampaignController extends Controller
     {
         $categories = Category::query()->get();
         $ponto = $campaign->collectionPoints()->first();
-        $agendas = $ponto->schedules()->orderBy('dia','asc')->get()->toArray();
-        return view('backend.campaign.create',['campaign'=>$campaign,'categories'=>$categories,'ponto'=>$ponto,'agendas'=>$agendas]);
+        $agendas = $ponto->schedules()->orderBy('dia', 'asc')->get()->toArray();
+        return view('backend.campaign.create', ['campaign' => $campaign, 'categories' => $categories, 'ponto' => $ponto, 'agendas' => $agendas]);
     }
 
     /**
@@ -108,7 +107,7 @@ class CampaignController extends Controller
             DB::beginTransaction();
 
             $data = $request->validated();
-   
+
             $address_data = $data['address'];
             $agendas = json_decode(request()->agenda, true);
             $title_point = $data['title_point'] ?? 'Ponto de Coleta';
@@ -124,8 +123,8 @@ class CampaignController extends Controller
             $collectionPoint->update([
                 'title' => $title_point
             ]);
-        
-    
+
+
             foreach ($agendas as $agenda) {
                 $schedule = $collectionPoint->schedules()->where('dia', $agenda['dia'])->first();
                 if ($schedule) {
@@ -145,21 +144,22 @@ class CampaignController extends Controller
 
             DB::commit();
 
-            return to_route( 'dashboard');
+            return to_route('dashboard');
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-
     }
 
-    public function photoUpload(Campaign $campaign){
+    public function photoUpload(Campaign $campaign)
+    {
 
-        return view('backend.campaign.photo-create',['campaign'=>$campaign]);
+        return view('backend.campaign.photo-create', ['campaign' => $campaign]);
     }
 
-    public function updateImages(Request $request,Campaign $campaign){
-  
+    public function updateImages(Request $request, Campaign $campaign)
+    {
+
         $request->validate([
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
@@ -167,7 +167,7 @@ class CampaignController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-              
+
                 $path = $file->store('campaigns/' . $campaign->id, 'public');
 
                 $campaign->photos()->create([
@@ -193,15 +193,26 @@ class CampaignController extends Controller
         return response()->noContent();
     }
 
-    public function active(Campaign $campaign){
+    public function active(Campaign $campaign)
+    {
         $totalPohotos = $campaign->photos()->count();
-        
-        if($totalPohotos == 0 ){
-            return back()->with('error','Para ativar a campanha precisa ter pelo menos uma foto veinculada');
+
+        if ($totalPohotos == 0) {
+            return back()->with('error', 'Para ativar a campanha precisa ter pelo menos uma foto veinculada');
         }
         $campaign->is_active = !$campaign->is_active;
         $campaign->save();
 
-        return back()->with('success','Status atualizado com sucesso');
+        return back()->with('success', 'Status atualizado com sucesso');
+    }
+
+    //adicionado com chat so para fazer rodar o frontend de campanhas
+    public function showFrontend()
+    {
+        // pega apenas campanhas ativas
+        $campaigns = Campaign::where('is_active', true)->latest()->get();
+
+        // retorna a view do frontend passando os dados
+        return view('frontend.layouts.partials.campaignsViews', compact('campaigns'));
     }
 }
