@@ -16,6 +16,7 @@
 
         <nav class="hidden md:flex items-center space-x-8 text-gray-700 dark:text-gray-300">
             <a href="{{ route('home') }}" class="hover:text-primary font-medium transition-colors duration-200">Início</a>
+             <a href="{{ route('contato') }}" class="text-gray-700 hover:text-green-700 font-medium transition"> Contato </a>
             <a href="#instituicoes" class="hover:text-primary font-medium transition-colors duration-200">Instituições</a>
             <a href="{{ route('institution.demo') }}" class="hover:text-primary font-medium transition-colors duration-200">Demo</a>
             <a href="#sobre" class="hover:text-primary font-medium transition-colors duration-200">Sobre Nós</a>
