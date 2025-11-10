@@ -14,7 +14,7 @@
                     <img src="https://placehold.co/600x400/eee/333?text=Solidariedade" class="w-full object-cover" alt="Imagem 2">
                 </div>
 
-                
+
                 <button id="prevBtn" class="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-3 py-2 rounded-r-lg">‹</button>
                 <button id="nextBtn" class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800 bg-opacity-50 text-white px-3 py-2 rounded-l-lg">›</button>
             </div>

@@ -19,7 +19,8 @@
                     <span>Início: {{ \Carbon\Carbon::parse($campaign->beginning)->format('d/m/Y') }}</span>
                     <span>Fim: {{ \Carbon\Carbon::parse($campaign->termination)->format('d/m/Y') }}</span>
                 </div>
-                <a href="#" class="mt-4 block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
+                <a href="{{ route('frontend.campaigns.show', $campaign->id) }}"
+                    class="mt-4 block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
                     Ver Detalhes
                 </a>
             </div>
