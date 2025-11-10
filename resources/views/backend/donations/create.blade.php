@@ -12,6 +12,9 @@
         <li class="text-gray-700 font-semibold">Cadastrar Doação</li>
     </ol>
 </nav>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <x-card-metrics value="{{0 }}" label="Total em Estoque" icon="fa-hand-holding-heart" color="blue" />
+</div>
 
 <x-card>
     <form action="{{ route('donations.store') }}" method="POST" class="space-y-6">

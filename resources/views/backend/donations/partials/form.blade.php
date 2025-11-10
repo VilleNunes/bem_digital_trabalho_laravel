@@ -9,6 +9,14 @@ $isEdit = $donationModel->exists;
 @endphp
 
 <div class="space-y-5">
+    <div>
+        <x-input-label for="type" required value="Tipo da doação" />
+        <select name="type" required class="select" id="type">
+            <option value="">Entrada</option>
+            <option value="">Saida</option>
+        </select>
+        <x-input-error :messages="$errors->get('type')" class="mt-2" />
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
             <x-input-label for="campaign_id" required value="Selecionar Campanha" />

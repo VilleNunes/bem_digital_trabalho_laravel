@@ -45,6 +45,7 @@ Route::get('/institution/{institution}', [InstitutionController::class, 'show'])
 
 // ==================== ROTAS PROTEGIDAS ====================
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -62,13 +63,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/users/{user}/delete', [UsersController::class, 'destroy'])->name('users.destroy');
     ROute::put('/users/{user}/active', [UsersController::class, 'active'])->name('users.active');
 
-    //Routes Institution
-    Route::get('/institutions', [InstitutionController::class, 'index'])->name('institutions.index');
-    Route::get('/institutions/{institution}/edit', [InstitutionController::class, 'edit'])->name('institutions.edit');
-    Route::put('/institutions/{institution}', [InstitutionController::class, 'update'])->name('institutions.update');
-    Route::delete('/institutions/{institution}', [InstitutionController::class, 'destroy'])->name('institutions.destroy');
-    Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
-        ->name('institutions.active');
 
     // Routes Campaign
     Route::get('/campaign/create', [CampaignController::class, 'create'])->name('campaign.create');
@@ -92,15 +86,15 @@ Route::middleware('auth')->group(function () {
 
     // Routes Donations
     Route::resource('donations', DonationController::class);
-});
+
 
 
     // ROTAS DE INSTITUIÇÕES
     Route::middleware('module:Instituições')->group(function () {
         Route::get('/institutions', [InstitutionController::class, 'index'])->name('institutions.index');
         Route::get('/institutions/{institution}/edit', [InstitutionController::class, 'edit'])->name('institutions.edit');
-        Route::put('/institutions/{institution}', [InstitutionController::class, 'update'])->name('institutions.update');
-        Route::delete('/institutions/{institution}', [InstitutionController::class, 'destroy'])->name('institutions.destroy');
+        Route::put('/institutions/{institution}/store', [InstitutionController::class, 'update'])->name('institutions.update');
+        Route::delete('/institutions/{institution}/delete', [InstitutionController::class, 'destroy'])->name('institutions.destroy');
         Route::put('/institutions/{institution}/active', [InstitutionController::class, 'active'])
             ->name('institutions.active');
     });
