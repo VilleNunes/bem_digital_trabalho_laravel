@@ -21,6 +21,7 @@ class CampaignController extends Controller
     public function index()
     {
         $campaigns = Campaign::query()
+        ->where('institution_id',currentInstitutionId())
         ->name(request()->name)
         ->date(request()->beginning,request()->termination)
         ->active(request()->active)
@@ -95,7 +96,10 @@ class CampaignController extends Controller
     {
         $categories = Category::query()->get();
         $ponto = $campaign->collectionPoints()->first();
-        $agendas = $ponto->schedules()->orderBy('dia','asc')->get()->toArray();
+        $agendas = [];
+        if($ponto){
+            $agendas = $ponto->schedules()->orderBy('dia','asc')->get()->toArray();
+        }
         return view('backend.campaign.create',['campaign'=>$campaign,'categories'=>$categories,'ponto'=>$ponto,'agendas'=>$agendas]);
     }
 
@@ -195,7 +199,10 @@ class CampaignController extends Controller
 
     public function active(Campaign $campaign){
         $totalPohotos = $campaign->photos()->count();
-        
+        $ponto = $campaign->collectionPoints->count();
+        if($ponto == 0 ){
+            return back()->with('error','Para ativar a campanha precisa ter pelo menos uma ponto cadastrado');
+        }
         if($totalPohotos == 0 ){
             return back()->with('error','Para ativar a campanha precisa ter pelo menos uma foto veinculada');
         }

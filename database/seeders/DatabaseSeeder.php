@@ -47,7 +47,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
             'rule_id' => $rule->id,
-            'institution_id' => $instituion->id
+            'institution_id' => $instituion->id,
+            'is_active'=>true
 
         ]);
 

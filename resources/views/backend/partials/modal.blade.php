@@ -21,25 +21,35 @@
         </div>
         <!-- Dialog Body -->
         <div class="px-4 py-8">
-            @foreach (institutions() as $institution )
-            <div class="flex flex-col gap-2 w-[500px]">
-                <div
-                    class="flex items-center justify-start gap-2 font-medium text-on-surface has-disabled:opacity-75 dark:text-on-surface-dark">
-                    <input id={{ $institution->id }} type="radio"
-                    class="before:content[''] relative h-4 w-4 appearance-none rounded-full border border-outline"
-                    name="radioDefault" value={{ $institution->id }}>
-                    <label for={{ $institution->id }} class="text-sm">{{$institution->fantasy_name}}</label>
-                </div>
+            <div class="px-4 py-8">
+                <form id="changeInstitutionForm" action="{{ route('changeInstitution') }}" method="post">
+                    @method('patch')
+                    @csrf
+
+                    <div class="flex flex-col gap-3 w-[500px]">
+                        @foreach (institutions() as $institution)
+                        <div
+                            class="flex items-center gap-2 font-medium text-on-surface has-disabled:opacity-75 dark:text-on-surface-dark">
+                            <input id="institution_{{ $institution->id }}" type="radio" name="institution_id"
+                                value="{{ $institution->id }}"
+                                class="relative h-4 w-4 appearance-none rounded-full border border-outline checked:bg-primary checked:border-primary transition-colors cursor-pointer"
+                                {{ $institution->id === auth()->user()->institution_id ? 'checked' : '' }}
+                            onchange="document.getElementById('changeInstitutionForm').submit();">
+                            <label for="institution_{{ $institution->id }}" class="text-sm cursor-pointer">
+                                {{ $institution->fantasy_name }}
+                            </label>
+                        </div>
+                        @endforeach
+                    </div>
+                </form>
             </div>
-            @endforeach
+
         </div>
         <!-- Dialog Footer -->
         <div
             class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20 sm:flex-row sm:items-center md:justify-end">
             <button x-on:click="modalIsOpen = false" type="button"
                 class="whitespace-nowrap rounded-sm px-4 py-2 text-center text-sm font-medium tracking-wide  text-neutral-600 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:text-neutral-300 dark:focus-visible:outline-white">Fechar</button>
-            <button x-on:click="modalIsOpen = false" type="button"
-                class="whitespace-nowrap rounded-sm px-4 py-2 text-center text-sm font-medium tracking-wide bg-blue-600 text-white ">Trocar</button>
         </div>
     </div>
 </div>

@@ -31,7 +31,9 @@ class StoreCampaignRequest extends FormRequest
             'legend_phone' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'category_id' => 'required|exists:categories,id',
-            'description' => 'required|string'
+            'description' => 'required|string',
+            'unit'=>'required|string',
+            'mark'=>'required|numeric'
         ];
 
    

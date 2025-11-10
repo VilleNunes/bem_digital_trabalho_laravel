@@ -41,7 +41,7 @@ $isEdit = $donationModel->exists;
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-            <x-input-label for="kg" value="Quantidade em KG" />
+            <x-input-label for="kg" value="Quantidade em KG/Unitário" />
             <x-text-input id="" class="block mt-1 w-full" name="quantify" :value="$quantify" />
             <x-input-error :messages="$errors->get('quantify')" class="mt-2" />
         </div>

@@ -77,6 +77,8 @@
                 @if (Auth::user()->hasModules('Relatórios') || $userRole === "admin")
                 <x-nav-item icon="fa-chart-line" label="Relatórios" href="{{ route('reports.index') }}" />
                 @endif
+
+                <x-nav-item label="www.bemdigital.com" href="{{ route('home') }}" />
             </ul>
         </nav>
     </div>
