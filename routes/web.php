@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BeneficiaryController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DashboardController;
