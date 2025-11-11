@@ -17,7 +17,7 @@ $hasCampaign = !empty($selectedCampaign);
     campaignSelected: {{ $hasCampaign ? 'true' : 'false' }}
 }" class="space-y-5">
     
-    {{-- PRIMEIRO: Selecionar Campanha --}}
+
     <div>
         <x-input-label for="campaign_id" required value="Selecionar Campanha" />
         <select name="campaign_id" id="campaign_id" class="select w-full" 
@@ -57,7 +57,7 @@ $hasCampaign = !empty($selectedCampaign);
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <div>
-            {{-- Doador (só aparece para entrada) --}}
+
             <div x-show="type === 'entrada'" x-transition>
                 <x-input-label for="user_id" required value="Selecionar Doador" />
                 <select id="user_id" name="user_id" class="select w-full" 
@@ -90,7 +90,7 @@ $hasCampaign = !empty($selectedCampaign);
         </div>
     </div>
 
-    {{-- TERCEIRO: Outros campos (só habilitados depois de selecionar tipo) --}}
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
             <x-input-label for="kg" value="Quantidade em KG/Unitário" />
