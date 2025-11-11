@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->enum('type', ['entrada', 'saida'])->default('entrada');
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('quantify')->default(1);
+            $table->text('recipient_name')->nullable();
             $table->decimal('amount', 10, 2)->nullable();
             $table->timestamps();
         });

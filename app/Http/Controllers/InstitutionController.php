@@ -6,6 +6,8 @@ use App\Http\Requests\StoreInstitutionRequest;
 use App\Http\Requests\UpdateInstitutionRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Institution;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class InstitutionController extends Controller
 {
@@ -42,7 +44,27 @@ class InstitutionController extends Controller
     {
         $data = $request->validated();
 
-        dd($data);
+        $institution = Institution::create([
+            'fantasy_name'=>$data['fantasy_name'],
+            'cnpj'=>$data['cnpj'],
+            'phone'=>$data['phone'],
+            'email'=>$data['email'],
+            'is_active'=>false,
+            'address_id'=>null,
+        ]);
+
+        $user = User::create([
+            'name'=>$data['name_admin'],
+            'email'=>$data['email_adm'],
+            'password'=>Hash::make($data['password']),
+            'institution_id'=>$institution->id,
+            'rule_id'=>3,
+            'is_active'=>true,
+            'cpf'=>$data['cpf']
+        ]);
+
+        $user->modules()->sync([1,2,3,4,5,6]);
+        return redirect()->route('cadastro.instituicoes')->with('success', 'Instituição criada com sucesso! Aguarde a aprovação do administrador para ativar a instituição. ');
     }
 
     /**

@@ -40,21 +40,37 @@
         </div>
 
         <div>
-            <h2 class="text-lg font-semibold text-gray-800 mb-2">Dados do Doador</h2>
-            <dl class="space-y-2 text-sm">
-                <div class="flex justify-between">
-                    <dt class="font-medium text-gray-600">Nome:</dt>
-                    <dd class="text-gray-800">{{ $donation->user->name ?? '-' }}</dd>
-                </div>
-                <div class="flex justify-between">
-                    <dt class="font-medium text-gray-600">E-mail:</dt>
-                    <dd class="text-gray-800">{{ $donation->user->email ?? '-' }}</dd>
-                </div>
-                <div class="flex justify-between">
-                    <dt class="font-medium text-gray-600">Perfil:</dt>
-                    <dd class="text-gray-800">{{ optional($donation->user->rule)->name }}</dd>
-                </div>
-            </dl>
+            <div class="mb-4">
+                <span class="px-3 py-1 text-sm font-semibold rounded-full {{ $donation->isEntrada() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                    {{ $donation->type_formatted }}
+                </span>
+            </div>
+
+            @if($donation->isEntrada())
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Dados do Doador</h2>
+                <dl class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <dt class="font-medium text-gray-600">Nome:</dt>
+                        <dd class="text-gray-800">{{ $donation->user->name ?? '-' }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="font-medium text-gray-600">E-mail:</dt>
+                        <dd class="text-gray-800">{{ $donation->user->email ?? '-' }}</dd>
+                    </div>
+                    <div class="flex justify-between">
+                        <dt class="font-medium text-gray-600">Perfil:</dt>
+                        <dd class="text-gray-800">{{ optional($donation->user->rule)->name ?? '-' }}</dd>
+                    </div>
+                </dl>
+            @else
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Dados do Receptor</h2>
+                <dl class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <dt class="font-medium text-gray-600">Nome:</dt>
+                        <dd class="text-gray-800">{{ $donation->recipient_name ?? '-' }}</dd>
+                    </div>
+                </dl>
+            @endif
 
             <h2 class="text-lg font-semibold text-gray-800 mt-6 mb-2">Campanha Destino</h2>
             <dl class="space-y-2 text-sm">

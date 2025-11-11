@@ -95,7 +95,12 @@ class CampaignController extends Controller
     {
         $categories = Category::query()->get();
         $ponto = $campaign->collectionPoints()->first();
-        $agendas = $ponto->schedules()->orderBy('dia', 'asc')->get()->toArray();
+        if($ponto){
+            $agendas = $ponto->schedules()->orderBy('dia', 'asc')->get()->toArray();
+        }else{
+            $agendas = [];
+        }
+       
         return view('backend.campaign.create', ['campaign' => $campaign, 'categories' => $categories, 'ponto' => $ponto, 'agendas' => $agendas]);
         $agendas = [];
         if($ponto){
@@ -216,7 +221,7 @@ class CampaignController extends Controller
     public function showFrontend()
     {
         // pega apenas campanhas ativas
-        $campaigns = Campaign::where('is_active', true)->get();
+        $campaigns = Campaign::where('is_active', true)->paginate(12)->appends(request()->query());
 
         // retorna a view do frontend passando os dados
         return view('frontend.layouts.partials.campaignsViews', compact('campaigns'));

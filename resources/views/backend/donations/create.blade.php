@@ -12,9 +12,11 @@
         <li class="text-gray-700 font-semibold">Cadastrar Doação</li>
     </ol>
 </nav>
+@if(isset($campaignId) && $campaignId)
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-    <x-card-metrics value="{{0 }}" label="Total em Estoque" icon="fa-hand-holding-heart" color="blue" />
+    <x-card-metrics value="{{ $estoque ?? 0 }}" label="Estoque Disponível" icon="fa-box" color="{{ ($estoque ?? 0) > 0 ? 'blue' : 'red' }}" />
 </div>
+@endif
 
 <x-card>
     <form action="{{ route('donations.store') }}" method="POST" class="space-y-6">

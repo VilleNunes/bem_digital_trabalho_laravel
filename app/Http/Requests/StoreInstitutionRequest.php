@@ -28,7 +28,7 @@ class StoreInstitutionRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', 'unique:institutions,email'],
             'email_adm'=>['required','email','unique:users,email'],
             'cpf'=>['required','min:11','max:20'],
-            'name'=>['required'],
+            'name_admin'=>['required'],
             'password'=>['required','min:8','confirmed']
         ];
     }

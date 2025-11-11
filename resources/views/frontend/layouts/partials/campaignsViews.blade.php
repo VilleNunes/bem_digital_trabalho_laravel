@@ -3,10 +3,10 @@
 @section('content')
 @include('frontend.layouts.partials.header')
 @include('frontend.layouts.partials.carousel')
-<section class="min-h-screen bg-gray-50 py-12 px-6" id="campanhas">
+<section class="min-h-screen  py-12 px-6 max-w-screen-2xl mx-auto " id="campanhas">
     <h1 class="text-4xl font-bold text-green-700 my-20 ">Campanhas em Destaques</h1>
 
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
 
         @forelse($campaigns as $campaign)
         <div class="bg-white rounded shadow-md overflow-hidden hover:shadow-xl transition-all duration-200">
@@ -30,6 +30,9 @@
         <p class="text-center text-gray-500 col-span-full">Nenhuma campanha ativa no momento.</p>
         @endforelse
 
+    </div>
+    <div class=" mt-10">
+        {{ $campaigns->links() }}
     </div>
 </section>
 

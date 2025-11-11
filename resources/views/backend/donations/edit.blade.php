@@ -22,6 +22,7 @@
             'donation' => $donation,
             'donors' => $donors,
             'campaigns' => $campaigns,
+            'estoque' => $estoque ?? 0,
         ])
 
         <div class="flex justify-end gap-3">

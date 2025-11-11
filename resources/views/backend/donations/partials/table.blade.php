@@ -1,8 +1,9 @@
 @php
 $headers = [
 'ID',
+'Tipo',
 'Doação',
-'Doador',
+'Doador/Receptor',
 'Campanha',
 'Instituição',
 'Quantidade',
@@ -26,8 +27,19 @@ $headers = [
             @forelse ($donations as $donation)
             <tr class="hover:bg-gray-50 transition-colors even:bg-gray-50 odd:bg-gray-100">
                 <td class="px-6 py-2">{{ $donation->id }}</td>
+                <td class="px-6 py-2">
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $donation->isEntrada() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                        {{ $donation->type_formatted }}
+                    </span>
+                </td>
                 <td class="px-6 py-2">{{ $donation->name }}</td>
-                <td class="px-6 py-2">{{ $donation->user->name ?? '-' }}</td>
+                <td class="px-6 py-2">
+                    @if($donation->isEntrada())
+                        {{ $donation->user->name ?? '-' }}
+                    @else
+                        {{ $donation->recipient_name ?? '-' }}
+                    @endif
+                </td>
                 <td class="px-6 py-2">{{ optional($donation->campaign)->name ?? '-' }}</td>
                 <td class="px-6 py-2">{{ optional($donation->campaign?->institution)->fantasy_name ?? '-' }}</td>
                 <td class="px-6 py-2">{{ $donation->quantify ?? '-' }}</td>
@@ -68,12 +80,24 @@ $headers = [
         @forelse ($donations as $donation)
         <div class="bg-white p-4 border border-gray-200 rounded-lg shadow-sm space-y-2">
             <div class="flex justify-between">
+                <span class="font-medium text-gray-600">Tipo:</span>
+                <span class="px-2 py-1 text-xs font-semibold rounded-full {{ $donation->isEntrada() ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                    {{ $donation->type_formatted }}
+                </span>
+            </div>
+            <div class="flex justify-between">
                 <span class="font-medium text-gray-600">Doação:</span>
                 <span class="text-gray-800">{{ $donation->name }}</span>
             </div>
             <div class="flex justify-between">
-                <span class="font-medium text-gray-600">Doador:</span>
-                <span class="text-gray-800">{{ $donation->user->name ?? '-' }}</span>
+                <span class="font-medium text-gray-600">{{ $donation->isEntrada() ? 'Doador:' : 'Receptor:' }}</span>
+                <span class="text-gray-800">
+                    @if($donation->isEntrada())
+                        {{ $donation->user->name ?? '-' }}
+                    @else
+                        {{ $donation->recipient_name ?? '-' }}
+                    @endif
+                </span>
             </div>
             <div class="flex justify-between">
                 <span class="font-medium text-gray-600">Campanha:</span>

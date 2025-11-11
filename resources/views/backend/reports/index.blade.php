@@ -39,7 +39,7 @@
 
             <x-card-metrics value="{{ $donation_count }}" color="blue" label="Total de doações" />
             <x-card-metrics value="{{ $donors_count }}" color="blue" label="Total de Doadores" />
-            <x-card-metrics value="{{ $donors_count }}" color="gray" label="Estoque" />
+            <x-card-metrics value="{{ $estoque }}" color="gray" label="Estoque" />
         </div>
 
     </x-card>
@@ -54,6 +54,7 @@
                         <th>Nome da doaçao</th>
                         <th>Quantidade</th>
                         <th>Nome do Doador</th>
+                        <th>Tipo</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -63,7 +64,8 @@
                         <th>{{$donation->id}}</th>
                         <td>{{$donation->name}}</td>
                         <td>{{$donation->quantify}}</td>
-                        <td>{{$donation->user->name}}</td>
+                        <td>{{$donation->user->name ?? $donation->recipient_name}}</td>
+                        <td class="text-center" >{{$donation->type_formatted}}</td>
                         <td class="text-blue-700"><a href="{{ route('donations.show', $donation) }}">Ver Doação</a></td>
                     </tr>
                     @empty

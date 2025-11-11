@@ -48,20 +48,37 @@ class DonationRequest extends FormRequest
             $campaignRule->where(fn ($query) => $query->where('institution_id', $institutionId));
         }
 
-        return [
-            'user_id' => [
-                ValidationRule::requiredIf(fn () => ! $this->route('donation')),
-                'exists:users,id',
-            ],
+        $type = $this->input('type');
+        $isEdit = $this->route('donation') !== null;
+
+        $rules = [
             'campaign_id' => [
-                ValidationRule::requiredIf(fn () => ! $this->route('donation')),
+                'required',
                 $campaignRule,
             ],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'quantify' => ['nullable', 'string', 'min:1'],
+            'quantify' => ['nullable', 'integer', 'min:1'],
             'amount' => ['nullable', 'numeric', 'min:0'],
+            'recipient_name' => [
+                ValidationRule::requiredIf(fn () => $type === 'saida'),
+                'nullable',
+                'string',
+                'max:255',
+            ],
+            'type' => ['required', 'string', 'in:entrada,saida'],
         ];
+
+        // Adiciona validação de user_id apenas se não for saída
+        if ($type !== 'saida') {
+            $rules['user_id'] = [
+                ValidationRule::requiredIf(fn () => $type === 'entrada' && ! $isEdit),
+                'nullable',
+                'exists:users,id',
+            ];
+        }
+
+        return $rules;
     }
 
     public function messages(): array
@@ -77,6 +94,10 @@ class DonationRequest extends FormRequest
             'quantify.min' => 'Quantidade mínima é 1.',
             'amount.numeric' => 'Valor deve ser numérico.',
             'amount.min' => 'Valor mínimo é zero.',
+            'recipient_name.required' => 'Informe o nome de quem recebeu a doação.',
+            'recipient_name.max' => 'O nome do receptor não pode ultrapassar 255 caracteres.',
+            'type.required' => 'Selecione o tipo da doação.',
+            'type.in' => 'O tipo da doação deve ser entrada ou saída.',
         ];
     }
 

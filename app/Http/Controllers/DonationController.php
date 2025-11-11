@@ -60,6 +60,15 @@ class DonationController extends Controller
      */
     public function create()
     {
+        $campaignId = request('campaign_id');
+        $estoque = 0;
+
+        if ($campaignId) {
+            $campaign = Campaign::find($campaignId);
+            if ($campaign) {
+                $estoque = $this->calculateStock($campaign->id);
+            }
+        }
 
         $donors = User::with('rule')
             ->whereHas('rule', fn ($query) => $query->where('name', 'donor'))
@@ -71,7 +80,7 @@ class DonationController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('backend.donations.create', compact('donors', 'campaigns'));
+        return view('backend.donations.create', compact('donors', 'campaigns', 'estoque', 'campaignId'));
     }
 
     /**
@@ -79,20 +88,47 @@ class DonationController extends Controller
      */
     public function store(DonationRequest $request)
     {
-
-
         $data = $request->validated();
-        $donor = User::with('rule')->findOrFail($data['user_id']);
 
-        if (optional($donor->rule)->name !== 'donor') {
-            return back()
-                ->withErrors(['user_id' => 'Selecione um usuário do tipo doador.'])
-                ->withInput();
+        // Validação de doador apenas para entrada
+        if ($data['type'] === 'entrada') {
+            if (empty($data['user_id'])) {
+                return back()
+                    ->withErrors(['user_id' => 'Selecione um doador para doações de entrada.'])
+                    ->withInput();
+            }
+            
+            $donor = User::with('rule')->findOrFail($data['user_id']);
+
+            if (optional($donor->rule)->name !== 'donor') {
+                return back()
+                    ->withErrors(['user_id' => 'Selecione um usuário do tipo doador.'])
+                    ->withInput();
+            }
+        } else {
+            // Para saída, não precisa de user_id
+            $data['user_id'] = null;
         }
 
-        Campaign::query()
+        // Validação de campanha
+        $campaign = Campaign::query()
             ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
             ->findOrFail($data['campaign_id']);
+
+        // Validação de estoque para saída
+        if ($data['type'] === 'saida') {
+            $estoque = $this->calculateStock($campaign->id);
+            $quantify = (int) ($data['quantify'] ?? 1);
+
+            if ($quantify > $estoque) {
+                return back()
+                    ->withErrors(['quantify' => "Estoque insuficiente. Disponível: {$estoque} unidades."])
+                    ->withInput();
+            }
+        } else {
+            // Limpa recipient_name para entrada
+            $data['recipient_name'] = null;
+        }
 
         Donation::create($data);
 
@@ -117,7 +153,6 @@ class DonationController extends Controller
      */
     public function edit(Donation $donation)
     {
-
         $donors = User::with('rule')
             ->whereHas('rule', fn ($query) => $query->where('name', 'donor'))
             ->orderBy('name')
@@ -128,7 +163,14 @@ class DonationController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('backend.donations.edit', compact('donation', 'donors', 'campaigns'));
+        // Calcula estoque para a campanha da doação
+        $estoque = $this->calculateStock($donation->campaign_id);
+        // Se estiver editando uma saída, adiciona a quantidade atual ao estoque
+        if ($donation->isSaida()) {
+            $estoque += $donation->quantify;
+        }
+
+        return view('backend.donations.edit', compact('donation', 'donors', 'campaigns', 'estoque'));
     }
 
     /**
@@ -136,28 +178,53 @@ class DonationController extends Controller
      */
     public function update(DonationRequest $request, Donation $donation)
     {
-
-
         $data = $request->validated();
 
-        if (isset($data['user_id'])) {
-            $donor = User::with('rule')->findOrFail($data['user_id']);
+        // Validação de doador apenas para entrada
+        if ($data['type'] === 'entrada') {
+            if (empty($data['user_id'])) {
+                // Se não foi informado, mantém o doador atual se existir
+                $data['user_id'] = $donation->user_id ?? null;
+            }
+            
+            if (!empty($data['user_id'])) {
+                $donor = User::with('rule')->findOrFail($data['user_id']);
 
-            if (optional($donor->rule)->name !== 'donor') {
+                if (optional($donor->rule)->name !== 'donor') {
+                    return back()
+                        ->withErrors(['user_id' => 'Selecione um usuário do tipo doador.'])
+                        ->withInput();
+                }
+            }
+        } else {
+            // Para saída, não precisa de user_id
+            $data['user_id'] = null;
+        }
+
+        // Validação de campanha
+        $campaignId = $data['campaign_id'] ?? $donation->campaign_id;
+        $campaign = Campaign::query()
+            ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
+            ->findOrFail($campaignId);
+
+        // Validação de estoque para saída
+        if ($data['type'] === 'saida') {
+            $quantify = (int) ($data['quantify'] ?? 1);
+            $estoque = $this->calculateStock($campaignId);
+
+            // Se estiver editando uma saída existente, adiciona a quantidade atual ao estoque
+            if ($donation->isSaida() && $donation->campaign_id === $campaignId) {
+                $estoque += $donation->quantify;
+            }
+
+            if ($quantify > $estoque) {
                 return back()
-                    ->withErrors(['user_id' => 'Selecione um usuário do tipo doador.'])
+                    ->withErrors(['quantify' => "Estoque insuficiente. Disponível: {$estoque} unidades."])
                     ->withInput();
             }
         } else {
-            $data['user_id'] = $donation->user_id;
-        }
-
-        if (isset($data['campaign_id'])) {
-            Campaign::query()
-                ->when(currentInstitutionId(), fn ($query, $institutionId) => $query->where('institution_id', $institutionId))
-                ->findOrFail($data['campaign_id']);
-        } else {
-            $data['campaign_id'] = $donation->campaign_id;
+            // Limpa recipient_name para entrada
+            $data['recipient_name'] = null;
         }
 
         $donation->update($data);
@@ -177,4 +244,19 @@ class DonationController extends Controller
         return redirect()->route('donations.index')->with('status', 'Doação removida com sucesso!');
     }
 
+    /**
+     * Calcula o estoque disponível de uma campanha
+     */
+    private function calculateStock(int $campaignId): int
+    {
+        $entradas = Donation::byCampaign($campaignId)
+            ->entradas()
+            ->sum('quantify');
+
+        $saidas = Donation::byCampaign($campaignId)
+            ->saidas()
+            ->sum('quantify');
+
+        return max(0, (int) $entradas - (int) $saidas);
+    }
 }

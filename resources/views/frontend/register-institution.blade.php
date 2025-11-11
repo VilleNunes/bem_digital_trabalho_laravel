@@ -18,10 +18,11 @@
     </button>
   </div>
   <section id="cadastro-instituicoes" class="py-20 dark:bg-gray-800 transition-colors duration-500">
-
-    @php
-    var_dump($errors)
-    @endphp
+    @if(session('success'))
+    <div class="bg-green-100 p-4 rounded-md shadow-lg max-w-3xl mx-auto mb-5">
+      <p class="text-green-800">{{ session('success') }}</p>
+    </div>
+    @endif
     <div class="bg-green-100 p-8 rounded-md shadow-lg max-w-3xl mx-auto">
       <form action="{{ route('institution.store') }}" method="POST" class="space-y-3">
         @csrf
@@ -30,6 +31,9 @@
           <label class="block text-sm font-medium text-green-800 mb-1">Nome Fantasia da instituição*</label>
           <input type="text" name="fantasy_name"
             class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none">
+            @error('fantasy_name')
+            <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- CNPJ + Email juntos -->
@@ -39,12 +43,18 @@
             <input type="text" name="cnpj"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
+              @error('cnpj')
+              <p class="text-red-500 text-sm">{{ $message }}</p>
+              @enderror
           </div>
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">E-mail*</label>
             <input type="email" name="email"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
+              @error('email')
+              <p class="text-red-500 text-sm">{{ $message }}</p>
+              @enderror
           </div>
         </div>
 
@@ -54,21 +64,30 @@
           <input type="tel" name="phone"
             class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
             required>
+            @error('phone')
+            <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Sócio + CPF juntos -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">Sócio Administrativo*</label>
-            <input type="text" name="name"
+            <input type="text" name="name_admin"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
+              @error('name_admin')
+              <p class="text-red-500 text-sm">{{ $message }}</p>
+              @enderror
           </div>
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">CPF*</label>
             <input type="text" name="cpf"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
+              @error('cpf')
+              <p class="text-red-500 text-sm">{{ $message }}</p>
+              @enderror
           </div>
         </div>
 
@@ -78,6 +97,9 @@
           <input type="email" name="email_adm"
             class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
             required>
+            @error('email_adm')
+            <p class="text-red-500 text-sm">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="grid grid-cols-2 gap-5">
@@ -86,12 +108,18 @@
             <input type="password" name="password"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
+              @error('password')
+              <p class="text-red-500 text-sm">{{ $message }}</p>
+              @enderror
           </div>
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">Confirmar Senha*</label>
-            <input type="password" name="password_confirm"
+            <input type="password" name="password_confirmation"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
+              @error('password_confirmation')
+              <p class="text-red-500 text-sm">{{ $message }}</p>
+              @enderror
           </div>
         </div>
     </div>
@@ -109,6 +137,3 @@
 </div>
 </section>
 @include('frontend.layouts.partials.footer')
-@endsection
-
-<?php

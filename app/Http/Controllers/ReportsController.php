@@ -21,6 +21,7 @@ class ReportsController extends Controller
     $donation_count = 0;
     $donors_count = 0;
     $campaign_donations = 0;
+    $estoque = 0;
     $donations= [];
 
 
@@ -37,7 +38,9 @@ class ReportsController extends Controller
                 ->distinct('user_id')
                 ->count('user_id');
                 
-            $campaign_donations = $campaing_reports->donations()->sum('quantify');
+            $campaign_donations = $campaing_reports->donations()->where('type', 'entrada')->sum('quantify');
+            $campaign_donations_saida = $campaing_reports->donations()->where('type', 'saida')->sum('quantify');
+            $estoque = $campaign_donations - $campaign_donations_saida;
 
             $donations = $campaing_reports->donations()->with('user')->get();
 
@@ -55,7 +58,8 @@ class ReportsController extends Controller
             'donation_count' => $donation_count,
             'donors_count' => $donors_count,
             'campaign_donations' => $campaign_donations,
-            'donations'=>$donations
+            'donations'=>$donations,
+            'estoque' => $estoque,
         ]);
     }
 }
