@@ -14,6 +14,10 @@ use App\Models\Campaign;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
+
+// Página pública de uma campanha
+Route::get('/campanhas/{id}', [CampaignController::class, 'showPublic'])->name('campaign.show.public');
+
 //adicionado com chat so para fazer rodar o frontend de campanhas
 Route::get('/campanhas', [CampaignController::class, 'showFrontend'])->name('frontend.campaigns');
 
@@ -21,13 +25,14 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Página pública de uma campanha
-Route::get('/campanhas/{id}', [CampaignController::class, 'showPublic'])->name('campaign.show.public');
 
 //cadastro instituicoes
 Route::get('/cadastro-instituicoes', function () {
     return view('frontend.register-institution');
 })->name('cadastro.instituicoes');
+
+Route::post('/cadastro-instituicoes/registro',[InstitutionController::class,'store'])->name('institution.store');
+
 
 //contato
 Route::get('/contato', function () {
@@ -35,7 +40,7 @@ Route::get('/contato', function () {
 })->name('contato');
 
 // Demo da instituição
-Route::get('/institution-demo', function () {
+Route::get('/instituicao', function () {
     return view('frontend.institution.demo');
 })->name('institution.demo');
 

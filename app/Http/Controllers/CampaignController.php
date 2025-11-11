@@ -21,11 +21,6 @@ class CampaignController extends Controller
     public function index()
     {
         $campaigns = Campaign::query()
-            ->name(request()->name)
-            ->date(request()->beginning, request()->termination)
-            ->active(request()->active)
-            ->paginate(10);
-        return view('backend.campaign.index', ['campaigns' => $campaigns]);
         ->where('institution_id',currentInstitutionId())
         ->name(request()->name)
         ->date(request()->beginning,request()->termination)
@@ -210,12 +205,6 @@ class CampaignController extends Controller
 
         if ($totalPohotos == 0) {
             return back()->with('error', 'Para ativar a campanha precisa ter pelo menos uma foto veinculada');
-        $ponto = $campaign->collectionPoints->count();
-        if($ponto == 0 ){
-            return back()->with('error','Para ativar a campanha precisa ter pelo menos uma ponto cadastrado');
-        }
-        if($totalPohotos == 0 ){
-            return back()->with('error','Para ativar a campanha precisa ter pelo menos uma foto veinculada');
         }
         $campaign->is_active = !$campaign->is_active;
         $campaign->save();
@@ -227,7 +216,7 @@ class CampaignController extends Controller
     public function showFrontend()
     {
         // pega apenas campanhas ativas
-        $campaigns = Campaign::where('is_active', true)->latest()->get();
+        $campaigns = Campaign::where('is_active', true)->get();
 
         // retorna a view do frontend passando os dados
         return view('frontend.layouts.partials.campaignsViews', compact('campaigns'));
@@ -235,12 +224,12 @@ class CampaignController extends Controller
 
     // Página pública da campanha
     public function showPublic($id)
-{
-    $campaign = \App\Models\Campaign::with(['institution', 'category'])
-        ->where('is_active', true)
-        ->findOrFail($id);
+    {
+        $campaign = \App\Models\Campaign::with(['institution', 'category'])
+            ->where('is_active', true)
+            ->findOrFail($id);
 
-    return view('frontend.campaign.show', compact('campaign'));
-}
+        return view('frontend.campaign.show', compact('campaign'));
+    }
 
 }

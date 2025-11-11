@@ -40,15 +40,18 @@ $verificada = $inst ? ($inst->is_active ?? false) : false;
                 <div class="flex w-full flex-col gap-8 sm:flex-row sm:justify-between items-start">
                     <div class="flex flex-col sm:flex-row gap-6 w-full">
                         {{-- Logo com cor sólida --}}
-                        <div class="bg-gray-300 dark:bg-gray-700 aspect-square rounded-xl shadow-md min-h-32 w-32 flex items-center justify-center">
-                            <span class="text-gray-500 dark:text-gray-300 text-xs text-center">Logo<br>Indisponível</span>
+                        <div
+                            class="bg-gray-300 dark:bg-gray-700 aspect-square rounded-xl shadow-md min-h-32 w-32 flex items-center justify-center">
+                            <span
+                                class="text-gray-500 dark:text-gray-300 text-xs text-center">Logo<br>Indisponível</span>
                         </div>
 
                         <div class="flex flex-col gap-2">
                             <div class="flex items-center gap-2">
                                 <h1 class="text-gray-900 dark:text-white text-3xl font-bold">{{ $nome }}</h1>
                                 @if($verificada)
-                                <span class="material-symbols-outlined text-green-500" title="Instituição Verificada">verified</span>
+                                <span class="material-symbols-outlined text-green-500"
+                                    title="Instituição Verificada">verified</span>
                                 @endif
                             </div>
 
@@ -82,7 +85,8 @@ $verificada = $inst ? ($inst->is_active ?? false) : false;
                         </div>
                     </div>
                     <a href="#" class="flex items-center">
-                        <button class="flex items-center justify-center rounded-xl h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 shadow-sm">
+                        <button
+                            class="flex items-center justify-center rounded-xl h-12 px-6 bg-primary text-white text-base font-bold hover:bg-primary/90 shadow-sm">
                             Fazer Doação
                         </button>
                     </a>

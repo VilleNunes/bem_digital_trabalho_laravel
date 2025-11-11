@@ -20,7 +20,7 @@
                     <h3 class="font-bold text-lg text-gray-800 dark:text-gray-200">{{ $campanha->name }}</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">{{ $campanha->description }}</p>
                     <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">
-                        📅 De {{ \Carbon\Carbon::parse($campanha->beginning)->format('d/m/Y') }}
+                        De {{ \Carbon\Carbon::parse($campanha->beginning)->format('d/m/Y') }}
                         até {{ \Carbon\Carbon::parse($campanha->termination)->format('d/m/Y') }}
                     </p>
                     @if($campanha->phone)
@@ -35,7 +35,8 @@
                         <span class="text-sm text-gray-500 dark:text-gray-400">{{ $campanha->mark ?? 0 }}%</span>
                     </div>
                     <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
-                        {{-- não tenho certeza mas preciso adicionar progress como caracteristicas de campaign par funcionar aqui ne? --}}
+                        {{-- não tenho certeza mas preciso adicionar progress como caracteristicas de campaign par
+                        funcionar aqui ne? --}}
                         <div class="bg-primary h-2.5 rounded-full progress-bar" style="--progress: %"></div>
                     </div>
                 </div>

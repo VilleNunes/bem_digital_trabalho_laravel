@@ -2,15 +2,16 @@
 
 @section('content')
 @include('frontend.layouts.partials.header')
-
+@include('frontend.layouts.partials.carousel')
 <section class="min-h-screen bg-gray-50 py-12 px-6" id="campanhas">
-    <h1 class="text-3xl font-bold text-green-700 mb-10 text-center">Campanhas Ativas</h1>
+    <h1 class="text-4xl font-bold text-green-700 my-20 ">Campanhas em Destaques</h1>
 
     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
         @forelse($campaigns as $campaign)
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-200">
-            <img src="{{ asset('exemplo.jpg') }}" alt="{{ $campaign->name }}" class="w-full h-48 object-cover">
+        <div class="bg-white rounded shadow-md overflow-hidden hover:shadow-xl transition-all duration-200">
+            <img src="{{ asset($campaign->photos->first()->filename ?? "") }}" alt="{{ $campaign->name }}"
+                class="w-full h-64 object-cover">
 
             <div class="p-5">
                 <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $campaign->title }}</h2>
@@ -19,7 +20,8 @@
                     <span>Início: {{ \Carbon\Carbon::parse($campaign->beginning)->format('d/m/Y') }}</span>
                     <span>Fim: {{ \Carbon\Carbon::parse($campaign->termination)->format('d/m/Y') }}</span>
                 </div>
-                <a href="#" class="mt-4 block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors">
+                <a href="{{ route('campaign.show.public',$campaign) }}"
+                    class="mt-4 block text-center w-32 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-1 rounded transition-colors">
                     Ver Detalhes
                 </a>
             </div>

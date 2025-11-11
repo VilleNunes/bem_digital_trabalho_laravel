@@ -22,8 +22,8 @@
                 class="hover:text-primary font-medium transition-colors duration-200">Início</a>
             <a href="{{ route('cadastro.instituicoes') }}"
                 class="hover:text-primary font-medium transition-colors duration-200">Instituições</a>
-            <a href="{{ route('institution.demo') }}"
-                class="hover:text-primary font-medium transition-colors duration-200">Demo</a>
+            <a href="{{ route('frontend.campaigns') }}"
+                class="hover:text-primary font-medium transition-colors duration-200">Campanhas</a>
 
             <a href="{{ route('login') }}"
                 class="bg-primary text-white font-semibold hover:bg-primary-dark px-5 py-2.5 rounded-lg shadow-md transition-all duration-300 inline-flex items-center space-x-2 transform hover:scale-105">

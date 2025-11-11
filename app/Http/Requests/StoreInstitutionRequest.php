@@ -26,9 +26,10 @@ class StoreInstitutionRequest extends FormRequest
             'cnpj' => ['required', 'string', 'max:50'],
             'phone' => ['required', 'string', 'max:20'],
             'email' => ['required', 'email', 'max:255', 'unique:institutions,email'],
-            'is_active' => ['nullable'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'], // até 4MB
+            'email_adm'=>['required','email','unique:users,email'],
+            'cpf'=>['required','min:11','max:20'],
+            'name'=>['required'],
+            'password'=>['required','min:8','confirmed']
         ];
     }
     public function messages(): array

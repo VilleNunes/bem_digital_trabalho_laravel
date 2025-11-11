@@ -19,17 +19,12 @@
   </div>
   <section id="cadastro-instituicoes" class="py-20 dark:bg-gray-800 transition-colors duration-500">
 
-
+    @php
+    var_dump($errors)
+    @endphp
     <div class="bg-green-100 p-8 rounded-md shadow-lg max-w-3xl mx-auto">
-      <form action="#" method="POST" class="space-y-3">
+      <form action="{{ route('institution.store') }}" method="POST" class="space-y-3">
         @csrf
-
-        <div>
-          <label class="block text-sm font-medium text-green-800 mb-1">Razão Social da instituição*</label>
-          <input type="text" name="name_institution"
-            class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
-            required>
-        </div>
 
         <div>
           <label class="block text-sm font-medium text-green-800 mb-1">Nome Fantasia da instituição*</label>
@@ -47,7 +42,7 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">E-mail*</label>
-            <input type="email" name="email_institution"
+            <input type="email" name="email"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
           </div>
@@ -65,7 +60,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">Sócio Administrativo*</label>
-            <input type="text" name="representative_institution"
+            <input type="text" name="name"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
           </div>
@@ -80,7 +75,7 @@
         <!-- E-mail do representante -->
         <div>
           <label class="block text-sm font-medium text-green-800 mb-1">E-mail do Sócio Administrativo*</label>
-          <input type="email" name="email_representative"
+          <input type="email" name="email_adm"
             class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
             required>
         </div>
@@ -88,13 +83,13 @@
         <div class="grid grid-cols-2 gap-5">
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">Senha*</label>
-            <input type="email" name="password"
+            <input type="password" name="password"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
           </div>
           <div>
             <label class="block text-sm font-medium text-green-800 mb-1">Confirmar Senha*</label>
-            <input type="email" name="password_confirm"
+            <input type="password" name="password_confirm"
               class="w-full border border-green-300 rounded-md p-3 focus:ring-2 focus:ring-green-500 outline-none"
               required>
           </div>
@@ -115,3 +110,5 @@
 </section>
 @include('frontend.layouts.partials.footer')
 @endsection
+
+<?php

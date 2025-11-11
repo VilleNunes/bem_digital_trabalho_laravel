@@ -42,22 +42,7 @@ class InstitutionController extends Controller
     {
         $data = $request->validated();
 
-        if (request()->hasFile('photo')) {
-            $data['photo_path'] = request()->file('photo')->store('institutions', 'public');
-        }
-
-        \App\Models\Institution::create([
-            'fantasy_name' => $data['fantasy_name'],
-            'cnpj' => $data['cnpj'],
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'is_active' => $data['is_active'] ?? false,
-            'description' => $data['description'] ?? null,
-            'photo_path' => $data['photo_path'] ?? null,
-        ]);
-
-        return redirect()->route('institutions.index')
-            ->with('success', 'Instituição criada com sucesso!');
+        dd($data);
     }
 
     /**
