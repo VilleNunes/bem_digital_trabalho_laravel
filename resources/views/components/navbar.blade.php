@@ -33,6 +33,11 @@
             <ul class="space-y-2">
 
                 <x-nav-item icon="fa-gauge" label="Dashboard" route="dashboard" />
+
+                @if($userRole === 'user' && Auth::user()->hasModules('Instituições') )
+                    <x-nav-item icon="fa-building" label="Editar Instituição" href="{{ route('institutions.edit', Auth::user()->institution->id) }}" />
+                @endif
+
                 @if (Auth::user()->hasModules('Usuários') || $userRole === "admin")
                 <x-nav-dropdown icon="fa-users" label="Usuários" routeBase="users" :items="[
                         ['label' => 'Listar Usuários', 'route' => 'users.index', 'icon' => 'fa-list'],
@@ -40,17 +45,15 @@
                     ]" />
                 @endif
 
+          
+
                 @if($userRole === 'admin' )
                 <x-nav-dropdown icon="fa-building" label="Instituições" routeBase="institutions" :items="[
                         ['label' => 'Listar Instituições', 'route' => 'institutions.index', 'icon' => 'fa-list'],
                     ]" />
                 @endif
 
-                @if($userRole === 'user' && Auth::user()->hasModules('Instituições') )
-                <x-nav-dropdown icon="fa-building" label="Instituições" routeBase="institutions" :items="[
-                        ['label' => 'Editar Instituição', 'route' => 'institutions.edit', 'icon' => 'fa-pen-to-square'],
-                    ]" />
-                @endif
+                
 
                 @if (Auth::user()->hasModules('Campanhas') || $userRole === "admin")
                 <x-nav-dropdown icon="fa-solid fa-campground" label="Campanhas" routeBase="campaingn" :items="[

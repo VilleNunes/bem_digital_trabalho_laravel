@@ -15,44 +15,11 @@ class DonationController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $role = optional($user->rule)->name;
-        $institutionId = currentInstitutionId();
+        $campaigns = Campaign::query()->where('institution_id', currentInstitutionId())->pluck('id');
+        $donations = Donation::query()->whereIn('campaign_id', $campaigns)->paginate(10);
 
-        if ($role === 'admin') {
-            $donationsQuery = Donation::with(['user.rule', 'campaign.institution'])
-                ->when($institutionId, fn ($query, $id) => $query->whereHas(
-                    'campaign',
-                    fn ($campaignQuery) => $campaignQuery->where('institution_id', $id)
-                ))
-                ->latest();
+        return view('backend.donations.index', compact('donations'));
 
-            $donations = $donationsQuery->paginate();
-            $statsQuery = Donation::query()
-                ->when($institutionId, fn ($query, $id) => $query->whereHas(
-                    'campaign',
-                    fn ($campaignQuery) => $campaignQuery->where('institution_id', $id)
-                ));
-
-            $totalDonations = (clone $statsQuery)->count();
-            $totalAmount = (float) (clone $statsQuery)->sum('amount');
-
-            return view('backend.donations.index', compact('donations', 'role', 'totalDonations', 'totalAmount'));
-        }
-
-        if ($role === 'user') {
-            $donationsQuery = Donation::with(['user.rule', 'campaign.institution'])
-                ->where('user_id', $user->id)
-                ->latest();
-
-            $donations = $donationsQuery->paginate();
-            $totalDonations = Donation::where('user_id', $user->id)->count();
-            $totalAmount = (float) Donation::where('user_id', $user->id)->sum('amount');
-
-            return view('backend.donations.index', compact('donations', 'role', 'totalDonations', 'totalAmount'));
-        }
-
-        abort(403, 'Acesso não autorizado.');
     }
 
     /**

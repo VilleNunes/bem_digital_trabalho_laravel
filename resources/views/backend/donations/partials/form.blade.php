@@ -38,7 +38,7 @@ $hasCampaign = !empty($selectedCampaign);
         @endif
     </div>
 
-    {{-- SEGUNDO: Selecionar Tipo (só habilitado depois de selecionar campanha) --}}
+
     <div>
         <x-input-label for="type" required value="Tipo da doação" />
         <select name="type" required class="select" id="type" 

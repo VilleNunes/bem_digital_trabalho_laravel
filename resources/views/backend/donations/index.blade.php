@@ -23,7 +23,7 @@ $formattedAmount = 'R$ ' . number_format($totalAmount ?? 0, 2, ',', '.');
 @endif
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-    <x-card-metrics value="{{ $totalDonations ?? 0 }}" label="Total de Doações" icon="fa-hand-holding-heart"
+    <x-card-metrics value="{{ $donations->count() ?? 0 }}" label="Total de Doações" icon="fa-hand-holding-heart"
         color="green" />
 </div>
 

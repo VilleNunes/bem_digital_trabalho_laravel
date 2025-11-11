@@ -14,23 +14,16 @@ class DonationRequest extends FormRequest
     public function authorize(): bool
     {
         $user = Auth::user();
-        $donation = $this->route('donation');
 
         if (! $user) {
             return false;
         }
 
-        $role = optional($user->rule)->name;
+        // Carrega o relacionamento rule se não estiver carregado
+    
 
-        if ($role === 'admin') {
-            return true;
-        }
-
-        if ($role === 'donor') {
-            return $donation && $donation->user_id === $user->id;
-        }
-
-        return false;
+     
+        return true;
     }
 
     /**
@@ -51,6 +44,7 @@ class DonationRequest extends FormRequest
         $type = $this->input('type');
         $isEdit = $this->route('donation') !== null;
 
+        $donation = $this->route('donation');
         $rules = [
             'campaign_id' => [
                 'required',
