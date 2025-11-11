@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $total_donation_sum_kg = Donation::query()->where('type','entrada')->whereHas('campaign', function ($query) {
             $query->where('institution_id', currentInstitutionId())->where('unit','kg');
         })->sum('quantify');
-        $total_donation_sum_unit = Donation::query()->where('type','saida')->whereHas('campaign', function ($query) {
+        $total_donation_sum_unit = Donation::query()->where('type','entrada')->whereHas('campaign', function ($query) {
             $query->where('institution_id', currentInstitutionId())->where('unit','unit');
         })->sum('quantify');
         return view('dashboard',[ 'campaings'=>$campaings,'total_donors'=>$total_donors,
