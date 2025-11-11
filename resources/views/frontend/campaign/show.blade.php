@@ -31,7 +31,7 @@
             </div>
             <div class="p-8 flex flex-col justify-center">
                 <h1 class="text-3xl font-bold text-green-700 mb-4">{{ $campaign->name }}</h1>
-                <p class="text-gray-700 leading-relaxed mb-6">{{ $campaign->description }}</p>
+                <p class="text-gray-700 leading-relaxed mb-6">{!! $campaign->description !!}</p>
 
                 <div class="space-y-2 mb-6 text-gray-700">
                     <p><span class="font-semibold">Instituição:</span> {{ $campaign->institution->fantasy_name ?? 'Não

@@ -27,7 +27,7 @@
             </div>
             <div class="bg-white p-5 rounded-lg shadow-lg border-l-4 border-yellow-500">
                 <div class="text-sm font-medium text-gray-500">Total Arrecadado Unitário</div>
-                <div class="mt-1 text-3xl font-bold text-gray-900">KG {{number_format($total_donation_sum_unit,2)}}
+                <div class="mt-1 text-3xl font-bold text-gray-900">UNI {{number_format($total_donation_sum_unit)}}
                 </div>
 
             </div>

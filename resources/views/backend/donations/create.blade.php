@@ -14,7 +14,8 @@
 </nav>
 @if(isset($campaignId) && $campaignId)
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-    <x-card-metrics value="{{ $estoque ?? 0 }}" label="Estoque Disponível" icon="fa-box" color="{{ ($estoque ?? 0) > 0 ? 'blue' : 'red' }}" />
+    <x-card-metrics value="{{ $estoque ?? 0 }}" label="Estoque Disponível" icon="fa-box"
+        color="{{ ($estoque ?? 0) > 0 ? 'blue' : 'red' }}" />
 </div>
 @endif
 

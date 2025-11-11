@@ -57,6 +57,6 @@ class DatabaseSeeder extends Seeder
             'institution_id' => $instituion->id
         ]);
 
-        $this->call([InstitutionSeeder::class, CategorySeeder::class, CampaignSeeder::class]);
+        $this->call([CategorySeeder::class]);
     }
 }
