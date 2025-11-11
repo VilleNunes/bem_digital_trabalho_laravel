@@ -15,7 +15,7 @@
 
             <div class="p-5">
                 <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ $campaign->title }}</h2>
-                <p class="text-gray-600 text-sm mb-4">{{ Str::limit($campaign->description, 100) }}</p>
+                <p class="text-gray-600 text-sm mb-4">{!! Str::limit($campaign->description, 100) !!}</p>
                 <div class="flex items-center justify-between text-sm text-gray-500">
                     <span>Início: {{ \Carbon\Carbon::parse($campaign->beginning)->format('d/m/Y') }}</span>
                     <span>Fim: {{ \Carbon\Carbon::parse($campaign->termination)->format('d/m/Y') }}</span>

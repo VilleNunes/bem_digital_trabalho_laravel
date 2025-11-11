@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('beginning');
             $table->dateTime('termination');
             $table->float('mark')->nullable();
-            $table->string('unit',10);
+            $table->string('unit',10)->nullable();
 
             $table->unsignedBigInteger('institution_id');
             $table->unsignedBigInteger('category_id');

@@ -52,11 +52,7 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        User::factory(50)->create([
-            'rule_id' => 3,
-            'institution_id' => $instituion->id
-        ]);
 
-        $this->call([InstitutionSeeder::class, CategorySeeder::class, CampaignSeeder::class]);
+        $this->call([CategorySeeder::class]);
     }
 }

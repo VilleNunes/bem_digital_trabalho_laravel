@@ -32,8 +32,8 @@ class StoreCampaignRequest extends FormRequest
             'phone' => 'required|string|max:20',
             'category_id' => 'required|exists:categories,id',
             'description' => 'required|string',
-            'unit'=>'required|string',
-            'mark'=>'required|numeric'
+            'unit'=>'string',
+            'mark'=>'numeric'
         ];
 
    
